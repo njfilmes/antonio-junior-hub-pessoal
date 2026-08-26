@@ -83,13 +83,13 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
   function enforce(){
     const root=document.getElementById('root'); if(!root) return;
     const page=root.querySelector('.auth-page'); if(!page) return;
-    const h1=root.querySelector('h1'); if(h1) h1.textContent='Entrar no seu hub';
-    const subtitle=root.querySelector('.auth-subtitle'); if(subtitle) subtitle.textContent='Acesso privado ao seu espaço pessoal de rotina, metas e finanças.';
-    const sw=root.querySelector('.auth-switch'); if(sw) sw.style.display='none';
-    const note=[...root.querySelectorAll('.auth-note')].find(x=>x.textContent.includes('Primeiro acesso')); if(note) note.textContent='Acesso exclusivo ao proprietário. Não há novos cadastros.';
+    const h1=root.querySelector('h1'); if(h1&&h1.textContent!=='Entrar no seu hub') h1.textContent='Entrar no seu hub';
+    const subtitle=root.querySelector('.auth-subtitle'); if(subtitle&&subtitle.textContent!=='Acesso privado ao seu espaço pessoal de rotina, metas e finanças.') subtitle.textContent='Acesso privado ao seu espaço pessoal de rotina, metas e finanças';
+    const sw=root.querySelector('.auth-switch'); if(sw&&sw.style.display!=='none') sw.style.display='none';
+    const note=[...root.querySelectorAll('.auth-note')].find(x=>x.textContent.includes('Primeiro acesso')); if(note&&note.textContent!=='Acesso exclusivo ao proprietário. Não há novos cadastros.') note.textContent='Acesso exclusivo ao proprietário. Não há novos cadastros.';
     const btn=[...root.querySelectorAll('button')].find(x=>/Criar acesso|Entrar no hub/.test(x.textContent));
     if(!btn) return;
-    btn.textContent='Entrar';
+    if(btn.textContent!=='Entrar') btn.textContent='Entrar';
     if(!btn.dataset.privateGate){
       btn.dataset.privateGate='1';
       btn.addEventListener('click',function(e){
