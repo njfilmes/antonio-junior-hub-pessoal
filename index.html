@@ -75,5 +75,35 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
   </head>
   <body>
     <div id="root"></div>
-  </body>
+  <style>
+.private-badge{display:block;margin:16px 0 4px;padding:8px 10px;border-radius:8px;background:#edf5ef;color:#4f7d5e;font-size:11px;text-align:center;font-weight:700}.forgot-button{display:block;width:100%;border:0;background:transparent;color:#b64c4c;text-decoration:underline;padding:12px 0 0;font-size:12px;cursor:pointer}
+</style><script>
+(function(){
+  const OWNER='njfilmes1@gmail.com';
+  function enforce(){
+    const root=document.getElementById('root'); if(!root) return;
+    const page=root.querySelector('.auth-page'); if(!page) return;
+    const h1=root.querySelector('h1'); if(h1) h1.textContent='Entrar no seu hub';
+    const subtitle=root.querySelector('.auth-subtitle'); if(subtitle) subtitle.textContent='Acesso privado ao seu espaço pessoal de rotina, metas e finanças.';
+    const sw=root.querySelector('.auth-switch'); if(sw) sw.style.display='none';
+    const note=[...root.querySelectorAll('.auth-note')].find(x=>x.textContent.includes('Primeiro acesso')); if(note) note.textContent='Acesso exclusivo ao proprietário. Não há novos cadastros.';
+    const btn=[...root.querySelectorAll('button')].find(x=>/Criar acesso|Entrar no hub/.test(x.textContent));
+    if(!btn) return;
+    btn.textContent='Entrar';
+    if(!btn.dataset.privateGate){
+      btn.dataset.privateGate='1';
+      btn.addEventListener('click',function(e){
+        const inputs=[...root.querySelectorAll('input')]; const email=(inputs.find(x=>x.type==='email')||{}).value||''; const pass=(inputs.find(x=>x.type==='password')||{}).value||'';
+        if(email.trim().toLowerCase()!==OWNER){e.preventDefault();e.stopImmediatePropagation();alert('Acesso restrito ao proprietário.');return;}
+        if(pass.length<4){e.preventDefault();e.stopImmediatePropagation();alert('Informe a sua senha.');return;}
+      },true);
+      const forgot=document.createElement('button'); forgot.className='forgot-button'; forgot.textContent='Esqueci minha senha';
+      forgot.addEventListener('click',function(){if(confirm('Isto apagará o acesso local deste dispositivo. Continuar?')){localStorage.removeItem('ajh-personal-account');localStorage.removeItem('ajh-personal-password');localStorage.removeItem('ajh-personal-session');location.reload();}});
+      btn.insertAdjacentElement('afterend',forgot);
+      const badge=document.createElement('div'); badge.className='private-badge'; badge.textContent='Acesso restrito ao proprietário'; btn.parentElement.insertBefore(badge,btn);
+    }
+  }
+  new MutationObserver(enforce).observe(document.documentElement,{childList:true,subtree:true}); setTimeout(enforce,50); setTimeout(enforce,500); setTimeout(enforce,1500);
+})();
+</script></body>
 </html>
