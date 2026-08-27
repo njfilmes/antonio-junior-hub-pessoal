@@ -1,5 +1,5 @@
-const CACHE = 'antonio-junior-hub-v10-photo-v4'
-const APP_SHELL = ['./', './index.html', './manifest.webmanifest', './antonio-junior-photo-banner-v3.webp', './antonio-junior-photo-icon-64-v4.png', './antonio-junior-photo-icon-180-v4.png', './antonio-junior-photo-icon-192-v4.png', './antonio-junior-photo-icon-512-v4.png', './antonio-junior.webp']
+const CACHE = 'antonio-junior-hub-mobile-v5-photo-v5'
+const APP_SHELL = ['./', './index.html', './manifest.webmanifest', './antonio-junior-photo-icon-512-v5.png', './antonio-junior-photo-icon-64-v5.png', './antonio-junior-photo-icon-180-v5.png', './antonio-junior-photo-icon-192-v5.png', './antonio-junior-photo-icon-512-v5.png', './antonio-junior.webp']
 self.addEventListener('install', event => {
   self.skipWaiting()
   event.waitUntil(caches.open(CACHE).then(cache => cache.addAll(APP_SHELL).catch(() => undefined)))

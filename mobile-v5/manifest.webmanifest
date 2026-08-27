@@ -8,7 +8,7 @@
   "theme_color": "#182f42",
   "lang": "pt-BR",
   "icons": [
-    { "src": "./antonio-junior-photo-icon-192-v4.png", "sizes": "192x192", "type": "image/png", "purpose": "any maskable" },
-    { "src": "./antonio-junior-photo-icon-512-v4.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
+    { "src": "./antonio-junior-photo-icon-192-v5.png", "sizes": "192x192", "type": "image/png", "purpose": "any maskable" },
+    { "src": "./antonio-junior-photo-icon-512-v5.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
   ]
 }
