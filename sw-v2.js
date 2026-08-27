@@ -1,4 +1,4 @@
-const CACHE = 'antonio-junior-hub-v5'
+const CACHE = 'antonio-junior-hub-v6'
 const APP_SHELL = ['./', './index.html', './manifest.webmanifest', './favicon.svg', './icons.svg', './antonio-junior.webp']
 self.addEventListener('install', event => {
   event.waitUntil(caches.open(CACHE).then(cache => cache.addAll(APP_SHELL)))
