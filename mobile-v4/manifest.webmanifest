@@ -1,0 +1,11 @@
+{
+  "name": "Antonio Junior Hub",
+  "short_name": "NJFILMES Hub",
+  "description": "Hub pessoal de rotina, tarefas, metas e finanças.",
+  "start_url": ".",
+  "display": "standalone",
+  "background_color": "#f4f3ef",
+  "theme_color": "#182f42",
+  "lang": "pt-BR",
+  "icons": [{ "src": "./njfilmes-app-icon.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }]
+}
