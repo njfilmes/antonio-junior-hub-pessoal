@@ -331,5 +331,382 @@ React keys must be passed directly to JSX without using spread:
   </head>
   <body>
     <div id="root"></div>
+
+  <button id="ajh-hist-btn" type="button" aria-label="Histórico">
+    <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M18 17V9"/><path d="M13 17V5"/><path d="M8 17v-3"/></svg>
+    <span>Histórico</span>
+  </button>
+
+  <div id="ajh-hist-overlay" aria-hidden="true">
+    <div id="ajh-hist-painel">
+      <div id="ajh-hist-topo">
+        <div id="ajh-hist-titulo-bloco">
+          <h2>Histórico</h2>
+          <p>Seus meses e anos, tudo num lugar só.</p>
+        </div>
+        <button id="ajh-hist-fechar" type="button" aria-label="Fechar">✕</button>
+      </div>
+
+      <div id="ajh-hist-nav-ano">
+        <button id="ajh-hist-ano-anterior" type="button" aria-label="Ano anterior">‹</button>
+        <select id="ajh-hist-select-ano"></select>
+        <button id="ajh-hist-ano-seguinte" type="button" aria-label="Próximo ano">›</button>
+      </div>
+
+      <div id="ajh-hist-resumo-ano"></div>
+
+      <div class="ajh-hist-secao">
+        <h3>Finanças — entradas x despesas por mês</h3>
+        <div id="ajh-hist-grafico-financas" class="ajh-hist-grafico"></div>
+      </div>
+
+      <div class="ajh-hist-secao">
+        <h3>Missões concluídas por mês</h3>
+        <div id="ajh-hist-grafico-missoes" class="ajh-hist-grafico"></div>
+      </div>
+
+      <div class="ajh-hist-secao">
+        <h3>Clique num mês pra ver os detalhes</h3>
+        <div id="ajh-hist-meses-grade"></div>
+      </div>
+
+      <div id="ajh-hist-detalhe-mes" class="ajh-hist-secao" hidden>
+        <h3 id="ajh-hist-detalhe-titulo">Detalhe do mês</h3>
+        <div id="ajh-hist-detalhe-conteudo"></div>
+      </div>
+    </div>
+  </div>
+
+  <style>
+    #ajh-hist-btn {
+      position: fixed; right: 20px; bottom: 20px; z-index: 9998;
+      display: flex; align-items: center; gap: 8px;
+      background: #102a3c; color: #f6f5f1; border: none; border-radius: 999px;
+      padding: 12px 18px; font: 700 13px "DM Sans", sans-serif; cursor: pointer;
+      box-shadow: 0 8px 20px rgba(16,42,60,.28);
+    }
+    #ajh-hist-btn:hover { background: #0b1722; }
+    #ajh-hist-overlay {
+      position: fixed; inset: 0; z-index: 9999; background: rgba(11,23,34,.55);
+      display: none; align-items: flex-start; justify-content: center;
+      padding: 24px 16px; overflow-y: auto; font-family: "DM Sans", sans-serif;
+    }
+    #ajh-hist-overlay.ajh-hist-aberto { display: flex; }
+    #ajh-hist-painel {
+      background: #f6f5f1; color: #24313d; width: 100%; max-width: 860px;
+      border-radius: 20px; padding: 24px; box-shadow: 0 20px 60px rgba(0,0,0,.3);
+    }
+    #ajh-hist-topo { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 16px; }
+    #ajh-hist-titulo-bloco h2 { margin: 0 0 4px; font-size: 22px; font-weight: 800; color: #102a3c; }
+    #ajh-hist-titulo-bloco p { margin: 0; color: #6b7a86; font-size: 13px; }
+    #ajh-hist-fechar {
+      background: #ece9e2; border: none; border-radius: 999px; width: 34px; height: 34px;
+      font-size: 15px; cursor: pointer; color: #24313d;
+    }
+    #ajh-hist-fechar:hover { background: #ddd8cd; }
+    #ajh-hist-nav-ano { display: flex; align-items: center; gap: 10px; margin-bottom: 18px; }
+    #ajh-hist-nav-ano button {
+      background: #ece9e2; border: none; border-radius: 10px; width: 34px; height: 34px;
+      font-size: 18px; cursor: pointer; color: #102a3c;
+    }
+    #ajh-hist-nav-ano button:hover { background: #ddd8cd; }
+    #ajh-hist-select-ano {
+      font: 800 17px "DM Sans", sans-serif; border: 1.5px solid #ddd8cd; border-radius: 10px;
+      padding: 6px 10px; background: #fff; color: #102a3c;
+    }
+    #ajh-hist-resumo-ano {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 10px;
+      margin-bottom: 22px;
+    }
+    .ajh-hist-card {
+      background: #fff; border: 1px solid #ece9e2; border-radius: 14px; padding: 12px 14px;
+    }
+    .ajh-hist-card span { display: block; font-size: 11px; color: #6b7a86; margin-bottom: 4px; }
+    .ajh-hist-card strong { font-size: 18px; font-weight: 800; color: #102a3c; }
+    .ajh-hist-secao { margin-bottom: 24px; }
+    .ajh-hist-secao h3 { font-size: 14px; font-weight: 800; color: #102a3c; margin: 0 0 10px; }
+    .ajh-hist-grafico { background: #fff; border: 1px solid #ece9e2; border-radius: 14px; padding: 12px; }
+    #ajh-hist-meses-grade { display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 8px; }
+    .ajh-hist-mes-botao {
+      background: #fff; border: 1.5px solid #ece9e2; border-radius: 12px; padding: 10px;
+      cursor: pointer; text-align: left; font-family: "DM Sans", sans-serif;
+    }
+    .ajh-hist-mes-botao:hover { border-color: #65d6cf; }
+    .ajh-hist-mes-botao.ajh-hist-mes-ativo { border-color: #102a3c; background: #eef6f4; }
+    .ajh-hist-mes-botao .ajh-hist-mes-nome { display: block; font-weight: 800; color: #102a3c; font-size: 13px; }
+    .ajh-hist-mes-botao .ajh-hist-mes-sub { display: block; font-size: 11px; color: #6b7a86; margin-top: 2px; }
+    .ajh-hist-mes-botao.ajh-hist-mes-vazio { opacity: .45; }
+    #ajh-hist-detalhe-conteudo { background: #fff; border: 1px solid #ece9e2; border-radius: 14px; padding: 14px; }
+    .ajh-hist-linha-item {
+      display: flex; justify-content: space-between; gap: 10px; padding: 7px 0;
+      border-bottom: 1px solid #f0efe9; font-size: 13px;
+    }
+    .ajh-hist-linha-item:last-child { border-bottom: none; }
+    .ajh-hist-linha-item small { display: block; color: #6b7a86; font-size: 11px; }
+    .ajh-hist-vazio-msg { color: #6b7a86; font-size: 13px; padding: 6px 0; }
+    .ajh-hist-legenda { display: flex; gap: 16px; font-size: 12px; color: #6b7a86; margin-top: 8px; }
+    .ajh-hist-legenda span { display: inline-flex; align-items: center; gap: 5px; }
+    .ajh-hist-legenda i { width: 10px; height: 10px; border-radius: 3px; display: inline-block; }
+    @media (max-width: 520px) {
+      #ajh-hist-btn span { display: none; }
+      #ajh-hist-btn { padding: 12px; }
+    }
+  </style>
+
+  <script>
+  (function () {
+    "use strict";
+
+    var NOMES_MES = ["Jan","Fev","Mar","Abr","Mai","Jun","Jul","Ago","Set","Out","Nov","Dez"];
+    var COR_ENTRADA = "#8fc9a0";
+    var COR_DESPESA = "#f0b27a";
+    var COR_MISSAO = "#8d7cff";
+
+    function carregar(chave) {
+      try {
+        var v = JSON.parse(localStorage.getItem(chave));
+        return Array.isArray(v) ? v : [];
+      } catch (e) { return []; }
+    }
+
+    function formatarMoeda(v) {
+      return (v || 0).toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
+    }
+
+    function anosComDados() {
+      var tasks = carregar("ajh-tasks");
+      var trans = carregar("ajh-transactions");
+      var anos = {};
+      tasks.concat(trans).forEach(function (item) {
+        if (item && item.date && item.date.length >= 4) anos[item.date.slice(0, 4)] = true;
+      });
+      anos[String(new Date().getFullYear())] = true;
+      return Object.keys(anos).sort().reverse();
+    }
+
+    function calcularMeses(ano) {
+      var tasks = carregar("ajh-tasks");
+      var trans = carregar("ajh-transactions");
+      var meses = [];
+      for (var m = 1; m <= 12; m++) {
+        var prefixo = ano + "-" + String(m).padStart(2, "0");
+        var tarefasFeitas = tasks.filter(function (t) { return t && t.date && t.date.indexOf(prefixo) === 0 && t.done; });
+        var transMes = trans.filter(function (t) { return t && t.date && t.date.indexOf(prefixo) === 0; });
+        var entradas = transMes.filter(function (t) { return t.type === "Entrada"; }).reduce(function (s, t) { return s + (Number(t.value) || 0); }, 0);
+        var despesas = transMes.filter(function (t) { return t.type === "Despesa"; }).reduce(function (s, t) { return s + (Number(t.value) || 0); }, 0);
+        var xp = tarefasFeitas.reduce(function (s, t) { return s + (Number(t.xp) || 0); }, 0);
+        meses.push({
+          mes: m, nome: NOMES_MES[m - 1], prefixo: prefixo,
+          entradas: entradas, despesas: despesas, saldo: entradas - despesas,
+          missoes: tarefasFeitas.length, xp: xp,
+          transacoes: transMes, tarefas: tarefasFeitas
+        });
+      }
+      return meses;
+    }
+
+    function svgEl(tag, attrs) {
+      var el = document.createElementNS("http://www.w3.org/2000/svg", tag);
+      for (var k in attrs) el.setAttribute(k, attrs[k]);
+      return el;
+    }
+
+    function desenharGraficoDuplo(container, meses, chaveA, chaveB, corA, corB) {
+      container.innerHTML = "";
+      var largura = 780, altura = 170, margem = 24, larguraMes = (largura - margem * 2) / 12;
+      var maxValor = 1;
+      meses.forEach(function (m) { maxValor = Math.max(maxValor, m[chaveA], m[chaveB]); });
+      var svg = svgEl("svg", { viewBox: "0 0 " + largura + " " + (altura + 26), width: "100%", height: altura + 26, preserveAspectRatio: "xMidYMid meet" });
+      meses.forEach(function (m, i) {
+        var x = margem + i * larguraMes;
+        var barraLargura = larguraMes * 0.32;
+        var altA = maxValor ? (m[chaveA] / maxValor) * (altura - 20) : 0;
+        var altB = maxValor ? (m[chaveB] / maxValor) * (altura - 20) : 0;
+        svg.appendChild(svgEl("rect", { x: x + larguraMes * 0.08, y: altura - altA, width: barraLargura, height: Math.max(altA, m[chaveA] > 0 ? 2 : 0), rx: 3, fill: corA }));
+        svg.appendChild(svgEl("rect", { x: x + larguraMes * 0.5, y: altura - altB, width: barraLargura, height: Math.max(altB, m[chaveB] > 0 ? 2 : 0), rx: 3, fill: corB }));
+        var rotulo = svgEl("text", { x: x + larguraMes / 2, y: altura + 18, "text-anchor": "middle", "font-size": "11", fill: "#6b7a86", "font-family": "DM Sans, sans-serif" });
+        rotulo.textContent = m.nome;
+        svg.appendChild(rotulo);
+      });
+      container.appendChild(svg);
+    }
+
+    function desenharGraficoSimples(container, meses, chave, cor) {
+      container.innerHTML = "";
+      var largura = 780, altura = 150, margem = 24, larguraMes = (largura - margem * 2) / 12;
+      var maxValor = 1;
+      meses.forEach(function (m) { maxValor = Math.max(maxValor, m[chave]); });
+      var svg = svgEl("svg", { viewBox: "0 0 " + largura + " " + (altura + 26), width: "100%", height: altura + 26, preserveAspectRatio: "xMidYMid meet" });
+      meses.forEach(function (m, i) {
+        var x = margem + i * larguraMes;
+        var barraLargura = larguraMes * 0.6;
+        var alt = maxValor ? (m[chave] / maxValor) * (altura - 20) : 0;
+        svg.appendChild(svgEl("rect", { x: x + larguraMes * 0.2, y: altura - alt, width: barraLargura, height: Math.max(alt, m[chave] > 0 ? 2 : 0), rx: 3, fill: cor }));
+        if (m[chave] > 0) {
+          var num = svgEl("text", { x: x + larguraMes / 2, y: altura - alt - 4, "text-anchor": "middle", "font-size": "10", fill: "#102a3c", "font-family": "DM Sans, sans-serif", "font-weight": "700" });
+          num.textContent = m[chave];
+          svg.appendChild(num);
+        }
+        var rotulo = svgEl("text", { x: x + larguraMes / 2, y: altura + 18, "text-anchor": "middle", "font-size": "11", fill: "#6b7a86", "font-family": "DM Sans, sans-serif" });
+        rotulo.textContent = m.nome;
+        svg.appendChild(rotulo);
+      });
+      container.appendChild(svg);
+    }
+
+    function renderResumoAno(container, meses) {
+      var entradas = meses.reduce(function (s, m) { return s + m.entradas; }, 0);
+      var despesas = meses.reduce(function (s, m) { return s + m.despesas; }, 0);
+      var missoes = meses.reduce(function (s, m) { return s + m.missoes; }, 0);
+      var xp = meses.reduce(function (s, m) { return s + m.xp; }, 0);
+      var cartoes = [
+        { rotulo: "Entradas no ano", valor: formatarMoeda(entradas) },
+        { rotulo: "Despesas no ano", valor: formatarMoeda(despesas) },
+        { rotulo: "Saldo do ano", valor: formatarMoeda(entradas - despesas) },
+        { rotulo: "Missões concluídas", valor: String(missoes) },
+        { rotulo: "XP conquistado", valor: String(xp) }
+      ];
+      container.innerHTML = cartoes.map(function (c) {
+        return '<div class="ajh-hist-card"><span>' + c.rotulo + "</span><strong>" + c.valor + "</strong></div>";
+      }).join("");
+    }
+
+    function renderGradeMeses(container, meses, aoClicar) {
+      var hoje = new Date();
+      container.innerHTML = "";
+      meses.forEach(function (m) {
+        var temDado = m.entradas > 0 || m.despesas > 0 || m.missoes > 0;
+        var btn = document.createElement("button");
+        btn.type = "button";
+        btn.className = "ajh-hist-mes-botao" + (temDado ? "" : " ajh-hist-mes-vazio");
+        btn.innerHTML = '<span class="ajh-hist-mes-nome">' + m.nome + '</span><span class="ajh-hist-mes-sub">' +
+          (temDado ? (formatarMoeda(m.saldo) + " · " + m.missoes + " missões") : "sem registros") + "</span>";
+        btn.addEventListener("click", function () {
+          Array.prototype.forEach.call(container.querySelectorAll(".ajh-hist-mes-botao"), function (b) { b.classList.remove("ajh-hist-mes-ativo"); });
+          btn.classList.add("ajh-hist-mes-ativo");
+          aoClicar(m);
+        });
+        container.appendChild(btn);
+      });
+    }
+
+    function renderDetalheMes(m) {
+      var painel = document.getElementById("ajh-hist-detalhe-mes");
+      var titulo = document.getElementById("ajh-hist-detalhe-titulo");
+      var conteudo = document.getElementById("ajh-hist-detalhe-conteudo");
+      painel.hidden = false;
+      titulo.textContent = m.nome + " — detalhes";
+
+      var partes = [];
+      partes.push('<div class="ajh-hist-legenda"><span><i style="background:' + COR_ENTRADA + '"></i>Entradas ' + formatarMoeda(m.entradas) +
+        '</span><span><i style="background:' + COR_DESPESA + '"></i>Despesas ' + formatarMoeda(m.despesas) + "</span></div>");
+
+      if (m.transacoes.length === 0) {
+        partes.push('<p class="ajh-hist-vazio-msg">Nenhum lançamento financeiro nesse mês.</p>');
+      } else {
+        partes.push(m.transacoes.slice().sort(function (a, b) { return (a.date || "").localeCompare(b.date || ""); }).map(function (t) {
+          var cor = t.type === "Entrada" ? COR_ENTRADA : COR_DESPESA;
+          var sinal = t.type === "Entrada" ? "+" : "-";
+          return '<div class="ajh-hist-linha-item"><span>' + (t.description || "Lançamento") + "<small>" + (t.category || "") + " · " + (t.date || "") +
+            '</small></span><strong style="color:' + cor + '">' + sinal + formatarMoeda(t.value) + "</strong></div>";
+        }).join(""));
+      }
+
+      if (m.tarefas.length > 0) {
+        partes.push('<h4 style="margin:14px 0 6px;font-size:13px;color:#102a3c;">Missões concluídas (' + m.tarefas.length + ")</h4>");
+        partes.push(m.tarefas.map(function (t) {
+          return '<div class="ajh-hist-linha-item"><span>' + (t.title || "Missão") + "<small>" + (t.area || "") + " · " + (t.date || "") +
+            "</small></span><strong>+" + (t.xp || 0) + " XP</strong></div>";
+        }).join(""));
+      }
+
+      conteudo.innerHTML = partes.join("");
+      painel.scrollIntoView({ behavior: "smooth", block: "nearest" });
+    }
+
+    function renderAno(ano) {
+      var meses = calcularMeses(ano);
+      renderResumoAno(document.getElementById("ajh-hist-resumo-ano"), meses);
+      desenharGraficoDuplo(document.getElementById("ajh-hist-grafico-financas"), meses, "entradas", "despesas", COR_ENTRADA, COR_DESPESA);
+      desenharGraficoSimples(document.getElementById("ajh-hist-grafico-missoes"), meses, "missoes", COR_MISSAO);
+      renderGradeMeses(document.getElementById("ajh-hist-meses-grade"), meses, renderDetalheMes);
+      document.getElementById("ajh-hist-detalhe-mes").hidden = true;
+
+      var mesAtual = new Date().getMonth() + 1;
+      var anoAtual = String(new Date().getFullYear());
+      if (ano === anoAtual) {
+        var idx = mesAtual - 1;
+        var botoes = document.querySelectorAll("#ajh-hist-meses-grade .ajh-hist-mes-botao");
+        if (botoes[idx]) botoes[idx].click();
+      }
+    }
+
+    function popularSelectAnos() {
+      var select = document.getElementById("ajh-hist-select-ano");
+      var anos = anosComDados();
+      select.innerHTML = anos.map(function (a) { return '<option value="' + a + '">' + a + "</option>"; }).join("");
+      return anos;
+    }
+
+    function iniciar() {
+      var btnAbrir = document.getElementById("ajh-hist-btn");
+      var overlay = document.getElementById("ajh-hist-overlay");
+      var btnFechar = document.getElementById("ajh-hist-fechar");
+      var selectAno = document.getElementById("ajh-hist-select-ano");
+      var btnAnoAnterior = document.getElementById("ajh-hist-ano-anterior");
+      var btnAnoSeguinte = document.getElementById("ajh-hist-ano-seguinte");
+
+      btnAbrir.addEventListener("click", function () {
+        var anos = popularSelectAnos();
+        var anoAtual = String(new Date().getFullYear());
+        selectAno.value = anos.indexOf(anoAtual) >= 0 ? anoAtual : anos[0];
+        renderAno(selectAno.value);
+        overlay.classList.add("ajh-hist-aberto");
+        overlay.setAttribute("aria-hidden", "false");
+        document.body.style.overflow = "hidden";
+      });
+
+      function fechar() {
+        overlay.classList.remove("ajh-hist-aberto");
+        overlay.setAttribute("aria-hidden", "true");
+        document.body.style.overflow = "";
+      }
+      btnFechar.addEventListener("click", fechar);
+      overlay.addEventListener("click", function (e) { if (e.target === overlay) fechar(); });
+      document.addEventListener("keydown", function (e) { if (e.key === "Escape" && overlay.classList.contains("ajh-hist-aberto")) fechar(); });
+
+      selectAno.addEventListener("change", function () { renderAno(selectAno.value); });
+      btnAnoAnterior.addEventListener("click", function () {
+        var opcoes = Array.prototype.map.call(selectAno.options, function (o) { return o.value; });
+        var idx = opcoes.indexOf(selectAno.value);
+        var novoAno = String(Number(selectAno.value) - 1);
+        if (opcoes.indexOf(novoAno) === -1) {
+          opcoes.push(novoAno);
+          opcoes.sort().reverse();
+          selectAno.innerHTML = opcoes.map(function (a) { return '<option value="' + a + '">' + a + "</option>"; }).join("");
+        }
+        selectAno.value = novoAno;
+        renderAno(novoAno);
+      });
+      btnAnoSeguinte.addEventListener("click", function () {
+        var opcoes = Array.prototype.map.call(selectAno.options, function (o) { return o.value; });
+        var novoAno = String(Number(selectAno.value) + 1);
+        if (opcoes.indexOf(novoAno) === -1) {
+          opcoes.unshift(novoAno);
+          opcoes.sort().reverse();
+          selectAno.innerHTML = opcoes.map(function (a) { return '<option value="' + a + '">' + a + "</option>"; }).join("");
+        }
+        selectAno.value = novoAno;
+        renderAno(novoAno);
+      });
+    }
+
+    if (document.readyState === "loading") {
+      document.addEventListener("DOMContentLoaded", iniciar);
+    } else {
+      iniciar();
+    }
+  })();
+  </script>
   </body>
 </html>
