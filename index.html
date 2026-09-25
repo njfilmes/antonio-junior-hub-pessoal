@@ -447,6 +447,23 @@ React keys must be passed directly to JSX without using spread:
     .ajh-hist-legenda { display: flex; gap: 16px; font-size: 12px; color: #6b7a86; margin-top: 8px; }
     .ajh-hist-legenda span { display: inline-flex; align-items: center; gap: 5px; }
     .ajh-hist-legenda i { width: 10px; height: 10px; border-radius: 3px; display: inline-block; }
+    .ajh-hist-coluna-clicavel rect:first-child { transition: fill .12s; }
+    .ajh-hist-coluna-clicavel:hover rect:first-child { fill: rgba(16,42,60,.06); }
+    .chart-medium, .chart-small { cursor: pointer; }
+    .ajh-hist-clique-flutuante {
+      position: fixed; z-index: 10000; background: #102a3c; color: #fff;
+      font: 700 12px "DM Sans", sans-serif; padding: 6px 10px; border-radius: 8px;
+      pointer-events: none; opacity: 0; transition: opacity .15s; transform: translate(-50%, -130%);
+    }
+    .ajh-hist-clique-flutuante.ajh-hist-visivel { opacity: 1; }
+    #ajh-hist-card-rotina .panel-title h3 { font-size: 16px; font-weight: 800; color: #102a3c; margin: 0; }
+    .ajh-hist-link-ver-tudo {
+      background: none; border: none; color: #4d9390; font: 700 13px "DM Sans", sans-serif; cursor: pointer; padding: 0;
+    }
+    .ajh-hist-link-ver-tudo:hover { text-decoration: underline; }
+    .ajh-hist-mini-resumo { display: flex; gap: 24px; margin-bottom: 14px; flex-wrap: wrap; }
+    .ajh-hist-mini-resumo span { display: block; font-size: 11px; color: #6b7a86; margin-bottom: 2px; }
+    .ajh-hist-mini-resumo strong { font-size: 14px; font-weight: 800; color: #102a3c; }
     @media (max-width: 520px) {
       #ajh-hist-btn span { display: none; }
       #ajh-hist-btn { padding: 12px; }
@@ -511,7 +528,7 @@ React keys must be passed directly to JSX without using spread:
       return el;
     }
 
-    function desenharGraficoDuplo(container, meses, chaveA, chaveB, corA, corB) {
+    function desenharGraficoDuplo(container, meses, chaveA, chaveB, corA, corB, aoClicarMes) {
       container.innerHTML = "";
       var largura = 780, altura = 170, margem = 24, larguraMes = (largura - margem * 2) / 12;
       var maxValor = 1;
@@ -522,16 +539,23 @@ React keys must be passed directly to JSX without using spread:
         var barraLargura = larguraMes * 0.32;
         var altA = maxValor ? (m[chaveA] / maxValor) * (altura - 20) : 0;
         var altB = maxValor ? (m[chaveB] / maxValor) * (altura - 20) : 0;
-        svg.appendChild(svgEl("rect", { x: x + larguraMes * 0.08, y: altura - altA, width: barraLargura, height: Math.max(altA, m[chaveA] > 0 ? 2 : 0), rx: 3, fill: corA }));
-        svg.appendChild(svgEl("rect", { x: x + larguraMes * 0.5, y: altura - altB, width: barraLargura, height: Math.max(altB, m[chaveB] > 0 ? 2 : 0), rx: 3, fill: corB }));
+        var grupo = svgEl("g", { class: "ajh-hist-coluna-clicavel" });
+        grupo.appendChild(svgEl("rect", { x: x, y: 0, width: larguraMes, height: altura, fill: "transparent" }));
+        grupo.appendChild(svgEl("rect", { x: x + larguraMes * 0.08, y: altura - altA, width: barraLargura, height: Math.max(altA, m[chaveA] > 0 ? 2 : 0), rx: 3, fill: corA }));
+        grupo.appendChild(svgEl("rect", { x: x + larguraMes * 0.5, y: altura - altB, width: barraLargura, height: Math.max(altB, m[chaveB] > 0 ? 2 : 0), rx: 3, fill: corB }));
         var rotulo = svgEl("text", { x: x + larguraMes / 2, y: altura + 18, "text-anchor": "middle", "font-size": "11", fill: "#6b7a86", "font-family": "DM Sans, sans-serif" });
         rotulo.textContent = m.nome;
-        svg.appendChild(rotulo);
+        grupo.appendChild(rotulo);
+        if (aoClicarMes) {
+          grupo.style.cursor = "pointer";
+          grupo.addEventListener("click", function () { aoClicarMes(m); });
+        }
+        svg.appendChild(grupo);
       });
       container.appendChild(svg);
     }
 
-    function desenharGraficoSimples(container, meses, chave, cor) {
+    function desenharGraficoSimples(container, meses, chave, cor, aoClicarMes) {
       container.innerHTML = "";
       var largura = 780, altura = 150, margem = 24, larguraMes = (largura - margem * 2) / 12;
       var maxValor = 1;
@@ -541,15 +565,22 @@ React keys must be passed directly to JSX without using spread:
         var x = margem + i * larguraMes;
         var barraLargura = larguraMes * 0.6;
         var alt = maxValor ? (m[chave] / maxValor) * (altura - 20) : 0;
-        svg.appendChild(svgEl("rect", { x: x + larguraMes * 0.2, y: altura - alt, width: barraLargura, height: Math.max(alt, m[chave] > 0 ? 2 : 0), rx: 3, fill: cor }));
+        var grupo = svgEl("g", { class: "ajh-hist-coluna-clicavel" });
+        grupo.appendChild(svgEl("rect", { x: x, y: 0, width: larguraMes, height: altura, fill: "transparent" }));
+        grupo.appendChild(svgEl("rect", { x: x + larguraMes * 0.2, y: altura - alt, width: barraLargura, height: Math.max(alt, m[chave] > 0 ? 2 : 0), rx: 3, fill: cor }));
         if (m[chave] > 0) {
           var num = svgEl("text", { x: x + larguraMes / 2, y: altura - alt - 4, "text-anchor": "middle", "font-size": "10", fill: "#102a3c", "font-family": "DM Sans, sans-serif", "font-weight": "700" });
           num.textContent = m[chave];
-          svg.appendChild(num);
+          grupo.appendChild(num);
         }
         var rotulo = svgEl("text", { x: x + larguraMes / 2, y: altura + 18, "text-anchor": "middle", "font-size": "11", fill: "#6b7a86", "font-family": "DM Sans, sans-serif" });
         rotulo.textContent = m.nome;
-        svg.appendChild(rotulo);
+        grupo.appendChild(rotulo);
+        if (aoClicarMes) {
+          grupo.style.cursor = "pointer";
+          grupo.addEventListener("click", function () { aoClicarMes(m); });
+        }
+        svg.appendChild(grupo);
       });
       container.appendChild(svg);
     }
@@ -627,18 +658,22 @@ React keys must be passed directly to JSX without using spread:
     function renderAno(ano) {
       var meses = calcularMeses(ano);
       renderResumoAno(document.getElementById("ajh-hist-resumo-ano"), meses);
-      desenharGraficoDuplo(document.getElementById("ajh-hist-grafico-financas"), meses, "entradas", "despesas", COR_ENTRADA, COR_DESPESA);
-      desenharGraficoSimples(document.getElementById("ajh-hist-grafico-missoes"), meses, "missoes", COR_MISSAO);
+
+      function aoClicarBarraMes(m) {
+        var botoes = document.querySelectorAll("#ajh-hist-meses-grade .ajh-hist-mes-botao");
+        if (botoes[m.mes - 1]) botoes[m.mes - 1].click();
+      }
+
+      desenharGraficoDuplo(document.getElementById("ajh-hist-grafico-financas"), meses, "entradas", "despesas", COR_ENTRADA, COR_DESPESA, aoClicarBarraMes);
+      desenharGraficoSimples(document.getElementById("ajh-hist-grafico-missoes"), meses, "missoes", COR_MISSAO, aoClicarBarraMes);
       renderGradeMeses(document.getElementById("ajh-hist-meses-grade"), meses, renderDetalheMes);
       document.getElementById("ajh-hist-detalhe-mes").hidden = true;
 
       var mesAtual = new Date().getMonth() + 1;
       var anoAtual = String(new Date().getFullYear());
-      if (ano === anoAtual) {
-        var idx = mesAtual - 1;
-        var botoes = document.querySelectorAll("#ajh-hist-meses-grade .ajh-hist-mes-botao");
-        if (botoes[idx]) botoes[idx].click();
-      }
+      var idx = (ano === anoAtual ? mesAtual : 12) - 1;
+      var botoesIniciais = document.querySelectorAll("#ajh-hist-meses-grade .ajh-hist-mes-botao");
+      if (botoesIniciais[idx]) botoesIniciais[idx].click();
     }
 
     function popularSelectAnos() {
@@ -656,49 +691,201 @@ React keys must be passed directly to JSX without using spread:
       var btnAnoAnterior = document.getElementById("ajh-hist-ano-anterior");
       var btnAnoSeguinte = document.getElementById("ajh-hist-ano-seguinte");
 
-      btnAbrir.addEventListener("click", function () {
-        var anos = popularSelectAnos();
-        var anoAtual = String(new Date().getFullYear());
-        selectAno.value = anos.indexOf(anoAtual) >= 0 ? anoAtual : anos[0];
-        renderAno(selectAno.value);
+      function garantirAnoNoSelect(ano) {
+        var opcoes = Array.prototype.map.call(selectAno.options, function (o) { return o.value; });
+        if (opcoes.indexOf(ano) === -1) {
+          opcoes.push(ano);
+          opcoes.sort().reverse();
+          selectAno.innerHTML = opcoes.map(function (a) { return '<option value="' + a + '">' + a + "</option>"; }).join("");
+        }
+      }
+
+      function abrir() {
         overlay.classList.add("ajh-hist-aberto");
         overlay.setAttribute("aria-hidden", "false");
         document.body.style.overflow = "hidden";
-      });
+      }
 
       function fechar() {
         overlay.classList.remove("ajh-hist-aberto");
         overlay.setAttribute("aria-hidden", "true");
         document.body.style.overflow = "";
       }
+
+      // Abre o histórico direto num ano+mes especifico - usado pelos graficos
+      // clicaveis (o de Financas do proprio app, o mini do painel, e os daqui
+      // de dentro do Historico). mes e opcional (1-12); sem ele, abre no mes
+      // atual (ou dezembro, se o ano nao for o atual).
+      window.__ajhAbrirHistorico = function (ano, mes) {
+        popularSelectAnos();
+        ano = String(ano);
+        garantirAnoNoSelect(ano);
+        selectAno.value = ano;
+        renderAno(ano);
+        if (mes) {
+          var botoes = document.querySelectorAll("#ajh-hist-meses-grade .ajh-hist-mes-botao");
+          if (botoes[mes - 1]) botoes[mes - 1].click();
+        }
+        abrir();
+      };
+
+      btnAbrir.addEventListener("click", function () {
+        window.__ajhAbrirHistorico(new Date().getFullYear());
+      });
+
       btnFechar.addEventListener("click", fechar);
       overlay.addEventListener("click", function (e) { if (e.target === overlay) fechar(); });
       document.addEventListener("keydown", function (e) { if (e.key === "Escape" && overlay.classList.contains("ajh-hist-aberto")) fechar(); });
 
       selectAno.addEventListener("change", function () { renderAno(selectAno.value); });
       btnAnoAnterior.addEventListener("click", function () {
-        var opcoes = Array.prototype.map.call(selectAno.options, function (o) { return o.value; });
-        var idx = opcoes.indexOf(selectAno.value);
         var novoAno = String(Number(selectAno.value) - 1);
-        if (opcoes.indexOf(novoAno) === -1) {
-          opcoes.push(novoAno);
-          opcoes.sort().reverse();
-          selectAno.innerHTML = opcoes.map(function (a) { return '<option value="' + a + '">' + a + "</option>"; }).join("");
-        }
+        garantirAnoNoSelect(novoAno);
         selectAno.value = novoAno;
         renderAno(novoAno);
       });
       btnAnoSeguinte.addEventListener("click", function () {
-        var opcoes = Array.prototype.map.call(selectAno.options, function (o) { return o.value; });
         var novoAno = String(Number(selectAno.value) + 1);
-        if (opcoes.indexOf(novoAno) === -1) {
-          opcoes.unshift(novoAno);
-          opcoes.sort().reverse();
-          selectAno.innerHTML = opcoes.map(function (a) { return '<option value="' + a + '">' + a + "</option>"; }).join("");
-        }
+        garantirAnoNoSelect(novoAno);
         selectAno.value = novoAno;
         renderAno(novoAno);
       });
+
+      configurarGraficosReactClicaveis();
+      configurarCardMissoesNaRotina();
+    }
+
+    // Os graficos "Fluxo de seis meses" (Financas) e o mini-grafico do painel
+    // (Visao geral) sao do proprio app React, e mostram sempre os ultimos 6
+    // meses rolando a partir de hoje. Sem mexer nesse codigo (que e minificado
+    // e arriscado de editar), a gente "escuta" cliques por fora: acha a coluna
+    // mais perto de onde a pessoa clicou usando os rotulos do eixo X (que sao
+    // estaveis), calcula que mes/ano aquilo representa, e abre o Historico
+    // direto nesse mes.
+    function mesRolandoParaIndice(indice) {
+      var d = new Date();
+      d.setDate(1);
+      d.setMonth(d.getMonth() - (5 - indice));
+      return { ano: d.getFullYear(), mes: d.getMonth() + 1, nome: NOMES_MES[d.getMonth()] };
+    }
+
+    function acharIndiceMesPorClique(svg, clientX) {
+      // Os rotulos do eixo X (nomes dos meses, ex "set") sao elementos <text>
+      // dentro do SVG - filtra fora os rotulos numericos do eixo Y (valores
+      // em R$) pra sobrar so os 6 meses, e ordena da esquerda pra direita.
+      var todos = svg.querySelectorAll("text");
+      var rotulosMes = [];
+      Array.prototype.forEach.call(todos, function (t) {
+        var texto = (t.textContent || "").trim();
+        if (texto && !/^-?[\d.,]+$/.test(texto)) rotulosMes.push(t);
+      });
+      if (!rotulosMes.length) return null;
+      rotulosMes.sort(function (a, b) { return a.getBoundingClientRect().left - b.getBoundingClientRect().left; });
+      var melhorIdx = 0, menorDist = Infinity;
+      rotulosMes.forEach(function (t, i) {
+        var r = t.getBoundingClientRect();
+        var cx = r.left + r.width / 2;
+        var d = Math.abs(cx - clientX);
+        if (d < menorDist) { menorDist = d; melhorIdx = i; }
+      });
+      return melhorIdx;
+    }
+
+    function configurarGraficosReactClicaveis() {
+      var dica = document.createElement("div");
+      dica.className = "ajh-hist-clique-flutuante";
+      dica.textContent = "Clique pra ver o mês";
+      document.body.appendChild(dica);
+
+      function alvoGrafico(el) {
+        return el.closest(".chart-medium, .chart-small");
+      }
+
+      document.addEventListener("mousemove", function (e) {
+        var alvo = alvoGrafico(e.target);
+        var svg = alvo ? alvo.querySelector("svg.recharts-surface") : null;
+        if (!svg) { dica.classList.remove("ajh-hist-visivel"); return; }
+        var idx = acharIndiceMesPorClique(svg, e.clientX);
+        if (idx === null) { dica.classList.remove("ajh-hist-visivel"); return; }
+        var alvoMes = mesRolandoParaIndice(idx);
+        dica.textContent = "Ver " + alvoMes.nome + " no Histórico";
+        dica.style.left = e.clientX + "px";
+        dica.style.top = e.clientY + "px";
+        dica.classList.add("ajh-hist-visivel");
+      });
+      document.addEventListener("mouseleave", function () { dica.classList.remove("ajh-hist-visivel"); }, true);
+
+      document.addEventListener("click", function (e) {
+        var alvo = alvoGrafico(e.target);
+        if (!alvo) return;
+        var svg = alvo.querySelector("svg.recharts-surface");
+        if (!svg) return;
+        var idx = acharIndiceMesPorClique(svg, e.clientX);
+        if (idx === null) return;
+        var alvoMes = mesRolandoParaIndice(idx);
+        dica.classList.remove("ajh-hist-visivel");
+        window.__ajhAbrirHistorico(alvoMes.ano, alvoMes.mes);
+      });
+    }
+
+    // Pega os mesmos ultimos 6 meses "rolando" que os graficos do app usam,
+    // com os dados de missoes de cada um (reaproveita calcularMeses, que ja
+    // devolve tudo pronto - so busca ano por ano conforme precisa, com cache
+    // simples pra nao recalcular duas vezes o mesmo ano).
+    function dadosMissoesRolando6() {
+      var porAno = {};
+      var lista = [];
+      for (var i = 0; i < 6; i++) {
+        var alvo = mesRolandoParaIndice(i);
+        if (!porAno[alvo.ano]) porAno[alvo.ano] = calcularMeses(alvo.ano);
+        lista.push(porAno[alvo.ano][alvo.mes - 1]);
+      }
+      return lista;
+    }
+
+    // "Rotina & missoes" (React) nao tem nenhum grafico/historico - injeta um
+    // card com o mesmo visual do app (reaproveitando as classes CSS .panel/
+    // .panel-title que ja existem) logo depois do calendario. Como o React
+    // desmonta/remonta esse pedaco da tela ao trocar de aba, um
+    // MutationObserver garante que o card volta toda vez que a pessoa entra
+    // nessa aba de novo - sem duplicar.
+    function configurarCardMissoesNaRotina() {
+      function tentarInjetar() {
+        var calendario = document.querySelector(".calendar-panel");
+        if (!calendario || document.getElementById("ajh-hist-card-rotina")) return;
+
+        var meses = dadosMissoesRolando6();
+        var mesAtualDados = meses[meses.length - 1];
+        var totalMissoes = meses.reduce(function (s, m) { return s + m.missoes; }, 0);
+        var totalXp = meses.reduce(function (s, m) { return s + m.xp; }, 0);
+
+        var card = document.createElement("section");
+        card.className = "panel";
+        card.id = "ajh-hist-card-rotina";
+        card.style.marginBottom = "16px";
+        card.innerHTML =
+          '<div class="panel-title"><h3>Progresso de missões</h3>' +
+          '<button type="button" id="ajh-hist-btn-ver-tudo-rotina" class="ajh-hist-link-ver-tudo">Ver histórico completo →</button></div>' +
+          '<div class="ajh-hist-mini-resumo">' +
+          '<div><span>Este mês</span><strong>' + mesAtualDados.missoes + " missões · " + mesAtualDados.xp + ' XP</strong></div>' +
+          '<div><span>Últimos 6 meses</span><strong>' + totalMissoes + " missões · " + totalXp + ' XP</strong></div>' +
+          "</div>" +
+          '<div id="ajh-hist-mini-grafico-rotina"></div>';
+
+        calendario.parentNode.insertBefore(card, calendario.nextSibling);
+
+        desenharGraficoSimples(document.getElementById("ajh-hist-mini-grafico-rotina"), meses, "missoes", COR_MISSAO, function (m) {
+          window.__ajhAbrirHistorico(Number(m.prefixo.slice(0, 4)), m.mes);
+        });
+
+        document.getElementById("ajh-hist-btn-ver-tudo-rotina").addEventListener("click", function () {
+          window.__ajhAbrirHistorico(new Date().getFullYear());
+        });
+      }
+
+      tentarInjetar();
+      var observador = new MutationObserver(function () { tentarInjetar(); });
+      observador.observe(document.body, { childList: true, subtree: true });
     }
 
     if (document.readyState === "loading") {
