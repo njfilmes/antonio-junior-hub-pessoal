@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Caça-Fakes (ajudante de remoção)
 // @namespace    njfilmes
-// @version      1.2
+// @version      1.3
 // @description  Preenche a busca de Seguidores do Instagram com o próximo perfil suspeito e destaca o botão Remover. Nunca clica sozinho.
 // @match        https://www.instagram.com/*
 // @grant        GM_getValue
@@ -18,7 +18,7 @@
 // 3. O ajudante escreve o próximo nome na busca e contorna o botão "Remover" em vermelho.
 // 4. Você clica em Remover e confirma. O ajudante conta e, depois de uns segundos, escreve o próximo.
 // Ele não clica em nada: todo "Remover" é clique seu. Para no limite do dia.
-// Travas: pausa de 4 a 8 segundos entre remoções e rodadas de 15, com 2 horas de descanso entre elas.
+// Travas: pausa de 4 a 8 segundos entre remoções e 4 turnos de 20 por dia (manhã, tarde, noite, fim da noite).
 
 (function () {
   'use strict';
@@ -29,7 +29,13 @@
   const today = () => { const d = new Date(); return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0'); };
   const REMOVE_RE = /^(remover|remove)$/i;
   const PAUSE_MIN = 4000, PAUSE_MAX = 8000;   // pausa entre uma remoção e outra
-  const ROUND = 15, BREAK_MS = 2 * 60 * 60 * 1000; // no máximo 15 remoções a cada 2 horas
+  const PER_TURN = 20;                          // no máximo 20 remoções por turno
+  const TURNS = [                               // horários locais [início, fim)
+    { label: 'Manhã', of: 'da manhã', a: 6, b: 12 },
+    { label: 'Tarde', of: 'da tarde', a: 12, b: 17 },
+    { label: 'Noite', of: 'da noite', a: 17, b: 21 },
+    { label: 'Fim da noite', of: 'do fim da noite', a: 21, b: 24 },
+  ];
 
   let list = get(K.list, []);          // nomes pendentes, em ordem
   let idx = get(K.idx, 0);             // posição do próximo
@@ -37,22 +43,32 @@
   let nextAt = get(K.next, 0);         // antes disso, não preenche o próximo
   let autoFill = false;
   let gone = get(K.gone, []);          // já não seguem mais (Instagram não acha na busca)
-  let limit = get(K.limit, 40);
+  let limit = get(K.limit, 80);
   let current = null;                  // nome que está na busca agora
   let highlighted = null;
   let waitTimer = null;
 
   const doneToday = () => done.filter(d => d[1] === today()).length;
   const doneSet = () => new Set(done.map(d => d[0]));
-  // Quando a rodada libera: com 15 remoções nas últimas 2 horas, espera a mais antiga completar 2 horas.
+  // Turnos: 20 por turno. Fora dos turnos (meia-noite às 6h) fica travado.
+  const turnAt = (date) => { const h = date.getHours(); return TURNS.find(t => h >= t.a && h < t.b) || null; };
+  function turnCount(t) {
+    const s0 = new Date(); s0.setHours(t.a, 0, 0, 0);
+    const s1 = new Date(); s1.setHours(t.b, 0, 0, 0);
+    return done.filter(d => d[2] && d[2] >= s0.getTime() && d[2] < s1.getTime()).length;
+  }
+  function nextTurnStart() {
+    const now = new Date();
+    for (const t of TURNS) { const st = new Date(now); st.setHours(t.a, 0, 0, 0); if (st > now) return { t, at: st.getTime() }; }
+    const st = new Date(now); st.setDate(st.getDate() + 1); st.setHours(TURNS[0].a, 0, 0, 0);
+    return { t: TURNS[0], at: st.getTime() };
+  }
   function roundRelease() {
-    const now = Date.now();
-    const ts = done.map(d => d[2]).filter(t => t && now - t < BREAK_MS).sort((a, b) => a - b);
-    return ts.length < ROUND ? 0 : ts[ts.length - ROUND] + BREAK_MS;
+    const t = turnAt(new Date());
+    return t && turnCount(t) < PER_TURN ? 0 : nextTurnStart().at;
   }
   const waitUntil = () => Math.max(nextAt, roundRelease());
   const hhmm = (t) => { const d = new Date(t); return String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0'); };
-  const inRound = () => { const now = Date.now(); return done.filter(d => d[2] && now - d[2] < BREAK_MS).length; };
 
   /* ---------- interface ---------- */
   const box = document.createElement('div');
@@ -98,13 +114,17 @@
     } else if (n >= limit) {
       h += `<div class="cf-stop"><b>Limite de hoje atingido.</b> Pare e continue amanhã, para o Instagram não bloquear suas ações.</div>`;
     } else if (roundRelease() > Date.now()) {
-      h += `<div class="cf-wait"><b>Rodada de ${ROUND} concluída.</b> Descanse um pouco. A próxima rodada libera às <b>${hhmm(roundRelease())}</b>.</div>`;
+      const t = turnAt(new Date()), nx = nextTurnStart();
+      h += t
+        ? `<div class="cf-wait"><b>Turno ${t.of} completo</b> (${PER_TURN} de ${PER_TURN}). O turno ${nx.t.of} começa às <b>${hhmm(nx.at)}</b>.</div>`
+        : `<div class="cf-wait"><b>Fora do horário.</b> O turno ${nx.t.of} começa às <b>${hhmm(nx.at)}</b>.</div>`;
     } else {
       const wait = waitUntil() - Date.now();
       h += `<div class="cf-muted">Próximo: <span id="cf-count">${wait > 0 ? 'em ' + Math.ceil(wait / 1000) + 's' : ''}</span></div><div class="cf-next">@${list[idx]}</div>`;
       h += `<div class="cf-muted" id="cf-hint">${hint()}</div>`;
       h += `<div class="cf-row"><button class="cf-pri" id="cf-fill"${wait > 0 ? ' disabled' : ''}>Preencher busca</button><button id="cf-skip">Pular</button></div>`;
-      h += `<div class="cf-muted">Rodada: ${inRound()} de ${ROUND} · pausa de 4 a 8 s · ${gone.length} já tinham saído</div>`;
+      const tn = turnAt(new Date());
+      h += `<div class="cf-muted">Turno ${tn ? tn.of : ''}: <b>${tn ? turnCount(tn) : 0}</b> de ${PER_TURN} · pausa de 4 a 8 s · ${gone.length} já tinham saído</div>`;
     }
     h += `<div class="cf-row"><button id="cf-copy">Copiar removidos (${done.length})</button><button id="cf-new">Nova lista</button></div>`;
     body.innerHTML = h;
