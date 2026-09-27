@@ -1,13 +1,15 @@
 // ==UserScript==
 // @name         Caça-Fakes (ajudante de remoção)
 // @namespace    njfilmes
-// @version      1.5
+// @version      1.6
 // @description  Preenche a busca de Seguidores do Instagram com o próximo perfil suspeito e destaca o botão Remover. Nunca clica sozinho.
 // @match        https://www.instagram.com/*
+// @match        https://claude.ai/*
 // @grant        GM_getValue
 // @grant        GM_setValue
 // @grant        GM_setClipboard
 // @run-at       document-idle
+// @noframes
 // @updateURL    https://raw.githubusercontent.com/njfilmes/antonio-junior-hub-pessoal/claude/cloud-connection-test-wqbcb9/tools/caca-fakes.user.js
 // @downloadURL  https://raw.githubusercontent.com/njfilmes/antonio-junior-hub-pessoal/claude/cloud-connection-test-wqbcb9/tools/caca-fakes.user.js
 // ==/UserScript==
@@ -19,6 +21,7 @@
 // 4. Você clica em Remover e confirma. O ajudante conta e, depois de uns segundos, escreve o próximo.
 // Ele não clica em nada: todo "Remover" é clique seu. Para no limite do dia.
 // Travas: pausa de 4 a 8 segundos entre remoções, blocos de 20 com 2 horas de descanso e 80 por dia.
+// No claude.ai, só na página do painel Caça-Fakes: entrega ao painel a lista de removidos, para ele mostrar o andamento.
 
 (function () {
   'use strict';
@@ -31,6 +34,19 @@
   const PAUSE_MIN = 4000, PAUSE_MAX = 8000;   // pausa entre uma remoção e outra
   const BLOCK = 20;                             // remoções por bloco
   const GAP_MS = 2 * 60 * 60 * 1000;            // descanso depois de cada bloco
+
+  // Painel Caça-Fakes (claude.ai): manda os removidos para o painel e não faz mais nada.
+  if (location.hostname === 'claude.ai') {
+    if (!location.href.includes('RFqhm1SqevTghBxuyrmbet')) return;
+    const send = () => {
+      const msg = { type: 'cacafakes-sync', v: 1, done: get(K.done, []).map(d => [d[0], d[1]]), gone: get(K.gone, []) };
+      const walk = (w, depth) => { try { for (let i = 0; i < w.frames.length; i++) { w.frames[i].postMessage(msg, '*'); if (depth < 4) walk(w.frames[i], depth + 1); } } catch (e) {} };
+      walk(window, 0);
+    };
+    [2000, 5000, 10000].forEach(t => setTimeout(send, t));
+    setInterval(send, 60000);
+    return;
+  }
 
   let list = get(K.list, []);          // nomes pendentes, em ordem
   let idx = get(K.idx, 0);             // posição do próximo
