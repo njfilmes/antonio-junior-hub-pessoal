@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Caça-Fakes (ajudante de remoção)
 // @namespace    njfilmes
-// @version      1.1
+// @version      1.2
 // @description  Preenche a busca de Seguidores do Instagram com o próximo perfil suspeito e destaca o botão Remover. Nunca clica sozinho.
 // @match        https://www.instagram.com/*
 // @grant        GM_getValue
@@ -23,7 +23,7 @@
 (function () {
   'use strict';
 
-  const K = { list: 'cf_list', idx: 'cf_idx', done: 'cf_done', limit: 'cf_limit', open: 'cf_open', next: 'cf_next' };
+  const K = { list: 'cf_list', idx: 'cf_idx', done: 'cf_done', limit: 'cf_limit', open: 'cf_open', next: 'cf_next', gone: 'cf_gone' };
   const get = (k, d) => { try { const v = GM_getValue(k); return v === undefined ? d : v; } catch (e) { return d; } };
   const set = (k, v) => { try { GM_setValue(k, v); } catch (e) {} };
   const today = () => { const d = new Date(); return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0'); };
@@ -36,6 +36,7 @@
   let done = get(K.done, []);          // [[usuario, data, horário], ...]
   let nextAt = get(K.next, 0);         // antes disso, não preenche o próximo
   let autoFill = false;
+  let gone = get(K.gone, []);          // já não seguem mais (Instagram não acha na busca)
   let limit = get(K.limit, 40);
   let current = null;                  // nome que está na busca agora
   let highlighted = null;
@@ -103,7 +104,7 @@
       h += `<div class="cf-muted">Próximo: <span id="cf-count">${wait > 0 ? 'em ' + Math.ceil(wait / 1000) + 's' : ''}</span></div><div class="cf-next">@${list[idx]}</div>`;
       h += `<div class="cf-muted" id="cf-hint">${hint()}</div>`;
       h += `<div class="cf-row"><button class="cf-pri" id="cf-fill"${wait > 0 ? ' disabled' : ''}>Preencher busca</button><button id="cf-skip">Pular</button></div>`;
-      h += `<div class="cf-muted">Rodada: ${inRound()} de ${ROUND} · pausa de 4 a 8 s entre remoções</div>`;
+      h += `<div class="cf-muted">Rodada: ${inRound()} de ${ROUND} · pausa de 4 a 8 s · ${gone.length} já tinham saído</div>`;
     }
     h += `<div class="cf-row"><button id="cf-copy">Copiar removidos (${done.length})</button><button id="cf-new">Nova lista</button></div>`;
     body.innerHTML = h;
@@ -123,7 +124,8 @@
     if (t.id === 'cf-load') {
       const names = (box.querySelector('#cf-paste').value || '').split(/[\s,;]+/).map(s => s.trim().replace(/^@/, '').toLowerCase()).filter(s => /^[a-z0-9._]{1,30}$/.test(s));
       const ds = doneSet();
-      list = Array.from(new Set(names)).filter(u => !ds.has(u)); idx = 0;
+      const gs = new Set(gone);
+      list = Array.from(new Set(names)).filter(u => !ds.has(u) && !gs.has(u)); idx = 0;
       set(K.list, list); set(K.idx, idx); current = null; render();
       return;
     }
@@ -194,10 +196,22 @@
         const first = !highlighted;
         highlighted = b; b.classList.add('cf-target');
         if (first) { b.scrollIntoView({ block: 'center' }); setHint('Clique no <b>Remover</b> contornado em vermelho e confirme.'); }
-      } else if (!highlighted && Date.now() - started > 6000) {
+      } else if (!highlighted && Date.now() - started > 1500 && noResults()) {
+        // O Instagram respondeu "Nenhum resultado": a conta já saiu. Pula sozinho, sem gastar limite.
+        clearInterval(waitTimer);
+        gone.push(user); set(K.gone, gone);
+        advance();
+        setHint('@' + user + ' já não te segue (conta apagada ou saiu). Pulei sozinho.');
+        autoFill = true; nextAt = Date.now() + 1200; set(K.next, nextAt);
+      } else if (!highlighted && Date.now() - started > 8000) {
         setHint('@' + user + ' não aparece nos seus seguidores (talvez já saiu). Toque em <b>Pular</b>.');
       }
     }, 300);
+  }
+
+  function noResults() {
+    const input = dialogInput(); const d = input && input.closest('div[role="dialog"]');
+    return !!d && /nenhum resultado|no results/i.test(d.textContent || '');
   }
 
   function advance() {
