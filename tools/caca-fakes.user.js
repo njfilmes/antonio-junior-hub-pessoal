@@ -1,13 +1,15 @@
 // ==UserScript==
 // @name         Caça-Fakes (ajudante de remoção)
 // @namespace    njfilmes
-// @version      1.0
+// @version      1.1
 // @description  Preenche a busca de Seguidores do Instagram com o próximo perfil suspeito e destaca o botão Remover. Nunca clica sozinho.
 // @match        https://www.instagram.com/*
 // @grant        GM_getValue
 // @grant        GM_setValue
 // @grant        GM_setClipboard
 // @run-at       document-idle
+// @updateURL    https://raw.githubusercontent.com/njfilmes/antonio-junior-hub-pessoal/claude/cloud-connection-test-wqbcb9/tools/caca-fakes.user.js
+// @downloadURL  https://raw.githubusercontent.com/njfilmes/antonio-junior-hub-pessoal/claude/cloud-connection-test-wqbcb9/tools/caca-fakes.user.js
 // ==/UserScript==
 
 // Como funciona:
@@ -16,19 +18,24 @@
 // 3. O ajudante escreve o próximo nome na busca e contorna o botão "Remover" em vermelho.
 // 4. Você clica em Remover e confirma. O ajudante conta e, depois de uns segundos, escreve o próximo.
 // Ele não clica em nada: todo "Remover" é clique seu. Para no limite do dia.
+// Travas: pausa de 4 a 8 segundos entre remoções e rodadas de 15, com 2 horas de descanso entre elas.
 
 (function () {
   'use strict';
 
-  const K = { list: 'cf_list', idx: 'cf_idx', done: 'cf_done', limit: 'cf_limit', open: 'cf_open' };
+  const K = { list: 'cf_list', idx: 'cf_idx', done: 'cf_done', limit: 'cf_limit', open: 'cf_open', next: 'cf_next' };
   const get = (k, d) => { try { const v = GM_getValue(k); return v === undefined ? d : v; } catch (e) { return d; } };
   const set = (k, v) => { try { GM_setValue(k, v); } catch (e) {} };
   const today = () => { const d = new Date(); return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0'); };
   const REMOVE_RE = /^(remover|remove)$/i;
+  const PAUSE_MIN = 4000, PAUSE_MAX = 8000;   // pausa entre uma remoção e outra
+  const ROUND = 15, BREAK_MS = 2 * 60 * 60 * 1000; // no máximo 15 remoções a cada 2 horas
 
   let list = get(K.list, []);          // nomes pendentes, em ordem
   let idx = get(K.idx, 0);             // posição do próximo
-  let done = get(K.done, []);          // [[usuario, data], ...]
+  let done = get(K.done, []);          // [[usuario, data, horário], ...]
+  let nextAt = get(K.next, 0);         // antes disso, não preenche o próximo
+  let autoFill = false;
   let limit = get(K.limit, 40);
   let current = null;                  // nome que está na busca agora
   let highlighted = null;
@@ -36,6 +43,15 @@
 
   const doneToday = () => done.filter(d => d[1] === today()).length;
   const doneSet = () => new Set(done.map(d => d[0]));
+  // Quando a rodada libera: com 15 remoções nas últimas 2 horas, espera a mais antiga completar 2 horas.
+  function roundRelease() {
+    const now = Date.now();
+    const ts = done.map(d => d[2]).filter(t => t && now - t < BREAK_MS).sort((a, b) => a - b);
+    return ts.length < ROUND ? 0 : ts[ts.length - ROUND] + BREAK_MS;
+  }
+  const waitUntil = () => Math.max(nextAt, roundRelease());
+  const hhmm = (t) => { const d = new Date(t); return String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0'); };
+  const inRound = () => { const now = Date.now(); return done.filter(d => d[2] && now - d[2] < BREAK_MS).length; };
 
   /* ---------- interface ---------- */
   const box = document.createElement('div');
@@ -52,6 +68,8 @@
       #cf-box .cf-row{display:flex;gap:6px}
       #cf-box button{flex:1;font:600 12px system-ui,sans-serif;border-radius:8px;border:1px solid #2A3833;background:#1B2723;color:#E4EDE9;padding:8px;cursor:pointer}
       #cf-box button.cf-pri{background:#52C4B0;border-color:#52C4B0;color:#04201B}
+      #cf-box button:disabled{opacity:.45;cursor:not-allowed}
+      #cf-box .cf-wait{background:#1B2723;border:1px solid #52C4B0;border-radius:8px;padding:8px}
       #cf-box textarea{width:100%;height:70px;border-radius:8px;border:1px solid #2A3833;background:#0D1412;color:#E4EDE9;font:12px ui-monospace,monospace;padding:6px}
       #cf-box .cf-meter{height:6px;border-radius:9px;background:#2A3833;overflow:hidden}
       #cf-box .cf-meter span{display:block;height:100%;background:#5FCD8E}
@@ -78,10 +96,14 @@
       h += `<div class="cf-row"><button class="cf-pri" id="cf-load">Carregar lista</button></div>`;
     } else if (n >= limit) {
       h += `<div class="cf-stop"><b>Limite de hoje atingido.</b> Pare e continue amanhã, para o Instagram não bloquear suas ações.</div>`;
+    } else if (roundRelease() > Date.now()) {
+      h += `<div class="cf-wait"><b>Rodada de ${ROUND} concluída.</b> Descanse um pouco. A próxima rodada libera às <b>${hhmm(roundRelease())}</b>.</div>`;
     } else {
-      h += `<div class="cf-muted">Próximo:</div><div class="cf-next">@${list[idx]}</div>`;
+      const wait = waitUntil() - Date.now();
+      h += `<div class="cf-muted">Próximo: <span id="cf-count">${wait > 0 ? 'em ' + Math.ceil(wait / 1000) + 's' : ''}</span></div><div class="cf-next">@${list[idx]}</div>`;
       h += `<div class="cf-muted" id="cf-hint">${hint()}</div>`;
-      h += `<div class="cf-row"><button class="cf-pri" id="cf-fill">Preencher busca</button><button id="cf-skip">Pular</button></div>`;
+      h += `<div class="cf-row"><button class="cf-pri" id="cf-fill"${wait > 0 ? ' disabled' : ''}>Preencher busca</button><button id="cf-skip">Pular</button></div>`;
+      h += `<div class="cf-muted">Rodada: ${inRound()} de ${ROUND} · pausa de 4 a 8 s entre remoções</div>`;
     }
     h += `<div class="cf-row"><button id="cf-copy">Copiar removidos (${done.length})</button><button id="cf-new">Nova lista</button></div>`;
     body.innerHTML = h;
@@ -135,7 +157,7 @@
   function clearHighlight() { clearInterval(waitTimer); if (highlighted) highlighted.classList.remove('cf-target'); highlighted = null; }
 
   function fill() {
-    if (doneToday() >= limit) { render(); return; }
+    if (doneToday() >= limit || Date.now() < waitUntil()) { render(); return; }
     const input = dialogInput();
     if (!input) { setHint('Abra seu perfil › <b>seguidores</b> primeiro.'); return; }
     clearHighlight();
@@ -190,13 +212,25 @@
     if (!REMOVE_RE.test((b.textContent || '').trim())) return;
     const dlg = b.closest('div[role="dialog"]');
     if (!dlg || dlg.querySelector('input[type="text"], input[placeholder]')) return; // clique na lista, não na confirmação
-    done.push([current, today()]); set(K.done, done);
-    const n = doneToday();
+    done.push([current, today(), Date.now()]); set(K.done, done);
+    nextAt = Date.now() + PAUSE_MIN + Math.random() * (PAUSE_MAX - PAUSE_MIN); set(K.next, nextAt);
+    autoFill = true;
     advance();
-    if (n < limit && idx < list.length) {
-      setTimeout(() => { if (dialogInput()) fill(); }, 1500 + Math.random() * 1500);
-    }
   }, true);
+
+  // Relógio: mostra a contagem regressiva e preenche o próximo quando a pausa acaba.
+  let wasWaiting = false;
+  setInterval(() => {
+    const wait = waitUntil() - Date.now();
+    const el = box.querySelector('#cf-count');
+    if (wait > 0) {
+      wasWaiting = true;
+      if (el) el.textContent = 'em ' + Math.ceil(wait / 1000) + 's';
+      return;
+    }
+    if (wasWaiting) { wasWaiting = false; render(); }
+    if (autoFill && !current && idx < list.length && doneToday() < limit && dialogInput()) { autoFill = false; fill(); }
+  }, 500);
 
   // mantém a dica atualizada quando a janelinha de seguidores abre ou fecha
   let lastHas = null;
