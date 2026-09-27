@@ -1,0 +1,522 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+</head>
+<body>
+<title>Plano de Tráfego NJ Filmes</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  color-scheme: dark;
+  --bg:#0c0c0e; --bg-2:#121215; --card:#17171a; --fg:#f5f4f0; --muted:#a8a7a2; --dim:#6f6e6a;
+  --accent:#c9a227; --accent-hi:#f6c445; --accent-soft:rgba(201,162,39,.14);
+  --line:rgba(255,255,255,.09); --line-2:rgba(255,255,255,.18);
+  --wa:#3fbf6a; --warn:#e7a33a; --bad:#ef6b5b;
+  --display:"Poppins","Arial Narrow",system-ui,sans-serif;
+  --body:"Inter",-apple-system,"Segoe UI",system-ui,sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,Menlo,monospace;
+}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font-family:var(--body);font-size:15.5px;line-height:1.6;padding:0 16px}
+.wrap{max-width:860px;margin:0 auto;padding-block:28px 96px}
+h1,h2,h3{font-family:var(--display);line-height:1.15;margin:0;text-wrap:balance}
+h1{font-size:clamp(28px,6vw,44px);font-weight:800;letter-spacing:-.01em}
+h2{font-size:clamp(22px,4.4vw,28px);font-weight:700}
+h3{font-size:17px;font-weight:700}
+p{margin:0}
+a{color:var(--accent-hi)}
+.eyebrow{font:600 11.5px/1 var(--body);letter-spacing:.18em;text-transform:uppercase;color:var(--accent)}
+.muted{color:var(--muted)}
+code,.mono{font-family:var(--mono);font-size:.88em}
+code{background:var(--bg-2);border:1px solid var(--line);padding:1px 6px;border-radius:4px;word-break:break-word}
+strong{color:var(--fg)}
+
+/* topo */
+.top{display:flex;flex-direction:column;gap:14px;padding-bottom:22px;border-bottom:1px solid var(--line)}
+.top .lead{font-size:17px;color:var(--muted);max-width:62ch}
+.top .lead strong{color:var(--fg)}
+.meta{display:flex;flex-wrap:wrap;gap:8px 18px;font-size:13px;color:var(--dim)}
+
+/* navegação */
+.nav{position:sticky;top:env(safe-area-inset-top,0px);z-index:10;background:linear-gradient(var(--bg) 78%,rgba(12,12,14,0));padding-block:12px 16px;margin-top:6px}
+.nav ol{list-style:none;margin:0;padding:0;display:flex;flex-direction:row;flex-wrap:nowrap;gap:6px;overflow-x:auto;scrollbar-width:none}
+.nav ol::-webkit-scrollbar{display:none}
+.nav a{display:inline-flex;align-items:center;gap:6px;white-space:nowrap;text-decoration:none;color:var(--muted);font:600 12.5px/1 var(--body);border:1px solid var(--line-2);border-radius:99px;padding:8px 12px}
+.nav a:hover,.nav a:focus-visible{color:var(--fg);border-color:var(--accent)}
+.nav a span{font-family:var(--mono);color:var(--accent);font-size:11px}
+
+section{padding-block:34px;border-bottom:1px solid var(--line);scroll-margin-top:64px;display:flex;flex-direction:column;gap:16px}
+section > p,section > ul,section > ol{max-width:68ch}
+.sec-head{display:flex;flex-direction:column;gap:8px}
+ul,ol{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:6px}
+li::marker{color:var(--accent)}
+
+/* fluxo */
+.flow{display:grid;grid-template-columns:1fr auto 1fr auto 1fr;gap:10px;align-items:center}
+.node{border:1px solid var(--line-2);border-radius:8px;padding:12px 14px;background:var(--card)}
+.node b{display:block;font-family:var(--display);font-size:14px}
+.node small{color:var(--muted);font-size:12.5px}
+.node.goal{border-color:var(--wa);background:rgba(63,191,106,.08)}
+.arrow{color:var(--dim);font-size:18px}
+.paths{display:flex;flex-direction:column;gap:10px}
+@media (max-width:640px){.flow{grid-template-columns:1fr}.arrow{transform:rotate(90deg);justify-self:center}}
+
+/* cards de vídeo */
+.videos{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+@media (max-width:720px){.videos{grid-template-columns:1fr}}
+.vcard{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:18px;display:flex;flex-direction:column;gap:12px}
+.vcard header{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
+.vcard .num{font-family:var(--mono);color:var(--accent);font-size:12px}
+.tag{font:600 11px/1 var(--body);letter-spacing:.04em;border-radius:99px;padding:5px 8px;white-space:nowrap}
+.tag.wa{background:rgba(63,191,106,.14);color:var(--wa)}
+.tag.site{background:var(--accent-soft);color:var(--accent-hi)}
+.tag.both{background:rgba(255,255,255,.08);color:var(--fg)}
+.vcard .why{font-size:14px;color:var(--muted)}
+.tc{display:grid;grid-template-columns:auto 1fr;gap:6px 12px;font-size:14px;margin:0;padding:12px;border:1px dashed var(--line-2);border-radius:8px;background:var(--bg-2)}
+.tc dt{font-family:var(--mono);font-size:12px;color:var(--accent-hi);padding-top:2px;white-space:nowrap}
+.tc dd{margin:0}
+.vcard .tip{font-size:13px;color:var(--muted)}
+.vcard .tip b{color:var(--fg)}
+.start{border:1px solid var(--accent);background:var(--accent-soft);border-radius:10px;padding:16px 18px;display:flex;flex-direction:column;gap:8px}
+
+/* passos */
+.steps{counter-reset:s;list-style:none;padding:0;display:flex;flex-direction:column;gap:10px}
+.steps > li{counter-increment:s;display:grid;grid-template-columns:32px 1fr;gap:12px;align-items:start}
+.steps > li::before{content:counter(s);font:600 13px/32px var(--mono);text-align:center;width:32px;height:32px;border-radius:50%;border:1px solid var(--line-2);color:var(--accent-hi)}
+.steps > li > div{padding-top:4px;display:flex;flex-direction:column;gap:6px}
+.steps ul{padding-left:18px}
+.where{font-size:12.5px;color:var(--dim);font-family:var(--mono)}
+.group-title{font:600 12px/1 var(--body);letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-top:6px}
+
+/* tabelas */
+.tbl{overflow-x:auto;border:1px solid var(--line);border-radius:10px}
+table{border-collapse:collapse;width:100%;font-size:14px;min-width:520px}
+th,td{text-align:left;padding:10px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font:600 12px/1.3 var(--body);letter-spacing:.06em;text-transform:uppercase;color:var(--muted);background:var(--bg-2)}
+tr:last-child td{border-bottom:0}
+td.num{font-variant-numeric:tabular-nums;font-family:var(--mono);font-size:13px}
+.good{color:var(--wa)} .warnc{color:var(--warn)}
+
+/* textos pra copiar */
+.copies{display:flex;flex-direction:column;gap:10px}
+.copy{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px 16px;display:grid;grid-template-columns:1fr auto;gap:12px;align-items:start}
+.copy pre{margin:0;white-space:pre-wrap;font:inherit;font-size:14.5px}
+.btn{font:600 12.5px/1 var(--body);border:1px solid var(--line-2);background:var(--bg-2);color:var(--fg);border-radius:8px;padding:9px 12px;cursor:pointer;white-space:nowrap}
+.btn:hover{border-color:var(--accent)}
+.btn:focus-visible,.nav a:focus-visible,.check input:focus-visible{outline:2px solid var(--accent-hi);outline-offset:2px}
+.btn.ok{border-color:var(--wa);color:var(--wa)}
+blockquote{margin:0;border-left:3px solid var(--wa);padding:10px 14px;background:rgba(63,191,106,.06);border-radius:0 8px 8px 0}
+
+.note{border-left:3px solid var(--warn);padding:10px 14px;background:rgba(231,163,58,.07);border-radius:0 8px 8px 0;font-size:14.5px}
+
+/* checklist */
+.checks{display:flex;flex-direction:column;gap:6px}
+.check{display:flex;gap:12px;align-items:flex-start;padding:10px 12px;border:1px solid var(--line);border-radius:8px;background:var(--card);cursor:pointer}
+.check input{width:18px;height:18px;margin-top:3px;accent-color:var(--accent);flex:none}
+.check.done span{color:var(--dim);text-decoration:line-through}
+.progress{display:flex;align-items:center;gap:12px;font-size:13px;color:var(--muted)}
+.bar{flex:1;height:6px;border-radius:9px;background:var(--bg-2);border:1px solid var(--line);overflow:hidden}
+.bar i{display:block;height:100%;width:0;background:var(--accent);transition:width .3s}
+footer{padding-top:28px;font-size:13px;color:var(--dim)}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
+html{scroll-behavior:smooth}
+</style>
+
+<div class="wrap">
+  <header class="top">
+    <span class="eyebrow">NJ Filmes · Salvador, BA</span>
+    <h1>Plano de Tráfego Pago</h1>
+    <p class="lead">Duas campanhas na Meta com os mesmos vídeos: uma leva <strong>direto pro WhatsApp</strong>, a outra leva pra <strong>njfilmes.com.br/orcamento</strong>, onde a pessoa vê seu trabalho antes de pedir o orçamento. Tudo termina numa conversa com você.</p>
+    <div class="meta"><span>Atualizado em 27/09/2026</span><span>Pixel NJFILMES · 1633292798505183</span><span>WhatsApp +55 71 8681-7816</span></div>
+  </header>
+
+  <nav class="nav" aria-label="Seções">
+    <ol>
+      <li><a href="#resumo"><span>01</span>Resumo</a></li>
+      <li><a href="#videos"><span>02</span>Tipos de vídeo</a></li>
+      <li><a href="#formato"><span>03</span>Formato</a></li>
+      <li><a href="#adicionar"><span>04</span>Adicionar no Meta</a></li>
+      <li><a href="#whatsapp"><span>05</span>Campanha WhatsApp</a></li>
+      <li><a href="#site"><span>06</span>Campanha Site</a></li>
+      <li><a href="#textos"><span>07</span>Textos</a></li>
+      <li><a href="#verba"><span>08</span>Orçamento</a></li>
+      <li><a href="#14dias"><span>09</span>14 dias</a></li>
+      <li><a href="#venda"><span>10</span>Venda</a></li>
+      <li><a href="#google"><span>11</span>Google Ads</a></li>
+      <li><a href="#checklist"><span>12</span>Checklist</a></li>
+    </ol>
+  </nav>
+
+  <!-- 01 -->
+  <section id="resumo">
+    <div class="sec-head"><span class="eyebrow">01 · Resumo</span><h2>Os dois caminhos terminam no seu WhatsApp</h2></div>
+    <div class="flow" role="img" aria-label="Anúncio leva à Campanha 1 (WhatsApp) ou à Campanha 2 (página de orçamento e formulário); as duas terminam no seu WhatsApp">
+      <div class="node"><b>Anúncio</b><small>Instagram e Facebook</small></div>
+      <div class="arrow" aria-hidden="true">→</div>
+      <div class="paths">
+        <div class="node"><b>Campanha 1</b><small>botão "Enviar mensagem"</small></div>
+        <div class="node"><b>Campanha 2</b><small>/orcamento → formulário (Lead no Pixel + e-mail)</small></div>
+      </div>
+      <div class="arrow" aria-hidden="true">→</div>
+      <div class="node goal"><b>Seu WhatsApp</b><small>orçamento e venda</small></div>
+    </div>
+    <p><strong>Ordem:</strong> gravar ou separar os vídeos, publicar a Campanha 1, criar a Campanha 2, acompanhar 14 dias sem mexer, e só então ajustar. O Google Ads vem depois.</p>
+  </section>
+
+  <!-- 02 -->
+  <section id="videos">
+    <div class="sec-head"><span class="eyebrow">02 · Tipos de vídeo</span><h2>8 vídeos que trazem cliente</h2>
+      <p class="muted">Cada um tem um roteiro por tempo de vídeo. A etiqueta mostra em qual campanha ele rende mais.</p></div>
+
+    <div class="start">
+      <h3>Pra começar, grave ou separe estes 3</h3>
+      <p><strong>1. Trailer de casamento</strong>, <strong>2. Bastidores</strong> e <strong>4. Depoimento de cliente</strong>. Suba os três no mesmo anúncio: a Meta testa sozinha e mostra mais o que funciona. A cada 2 ou 3 semanas, troque o pior por um da lista.</p>
+    </div>
+
+    <div class="videos">
+      <article class="vcard">
+        <header><div><span class="num">01</span><h3>Trailer de casamento</h3></div><span class="tag both">WhatsApp + Site</span></header>
+        <p class="why">Mostra na hora o resultado que a noiva quer ter. É o vídeo que mais vende casamento.</p>
+        <dl class="tc">
+          <dt>00:00–00:03</dt><dd>A cena mais forte: entrada da noiva, troca de alianças ou o beijo.</dd>
+          <dt>00:03–00:20</dt><dd>Momentos rápidos: preparação, emoção dos pais, drone, festa.</dd>
+          <dt>00:20–00:25</dt><dd>Texto: "Seu casamento com cara de cinema · Peça seu orçamento".</dd>
+        </dl>
+        <p class="tip"><b>Dica:</b> peça autorização do casal pra usar as imagens no anúncio.</p>
+      </article>
+
+      <article class="vcard">
+        <header><div><span class="num">02</span><h3>Bastidores</h3></div><span class="tag wa">WhatsApp</span></header>
+        <p class="why">Mostra você trabalhando: gera confiança e aproxima. Quem vê seu rosto chama mais no WhatsApp.</p>
+        <dl class="tc">
+          <dt>00:00–00:03</dt><dd>Você com a câmera ou o drone decolando, com o texto "Por trás de um casamento".</dd>
+          <dt>00:03–00:18</dt><dd>Montagem do equipamento, você dirigindo o casal, a cena que ficou linda.</dd>
+          <dt>00:18–00:22</dt><dd>Corte pro resultado final + "Quer o seu assim? Me chama".</dd>
+        </dl>
+        <p class="tip"><b>Dica:</b> peça pra alguém filmar você com o celular no próximo evento.</p>
+      </article>
+
+      <article class="vcard">
+        <header><div><span class="num">03</span><h3>Antes e depois da edição</h3></div><span class="tag site">Site</span></header>
+        <p class="why">Prova que o seu trabalho vai além de apertar o botão. Chama atenção no feed.</p>
+        <dl class="tc">
+          <dt>00:00–00:03</dt><dd>Tela dividida: imagem crua de um lado, finalizada do outro.</dd>
+          <dt>00:03–00:15</dt><dd>3 ou 4 cenas "antes → depois" com cor, som e ritmo.</dd>
+          <dt>00:15–00:18</dt><dd>"Veja mais trabalhos e peça seu orçamento".</dd>
+        </dl>
+        <p class="tip"><b>Dica:</b> grave a tela do programa de edição, é rápido de fazer.</p>
+      </article>
+
+      <article class="vcard">
+        <header><div><span class="num">04</span><h3>Depoimento de cliente</h3></div><span class="tag both">WhatsApp + Site</span></header>
+        <p class="why">A fala de um cliente convence mais que qualquer texto seu.</p>
+        <dl class="tc">
+          <dt>00:00–00:03</dt><dd>A frase mais forte do cliente, com legenda. Ex.: "Ficou perfeito!"</dd>
+          <dt>00:03–00:20</dt><dd>O cliente contando a experiência, intercalado com cenas do vídeo dele.</dd>
+          <dt>00:20–00:24</dt><dd>5 estrelas do Google na tela + "Peça seu orçamento".</dd>
+        </dl>
+        <p class="tip"><b>Dica:</b> você já tem depoimentos em vídeo no site. A Natalia Montes também elogiou por escrito no Google.</p>
+      </article>
+
+      <article class="vcard">
+        <header><div><span class="num">05</span><h3>Drone revelando o local</h3></div><span class="tag both">WhatsApp + Site</span></header>
+        <p class="why">Imagem aérea para a rolagem do feed e diferencia você de quem não tem drone.</p>
+        <dl class="tc">
+          <dt>00:00–00:03</dt><dd>Drone subindo e revelando o local do evento ou a orla de Salvador.</dd>
+          <dt>00:03–00:12</dt><dd>2 ou 3 tomadas aéreas + uma cena de chão emocionante.</dd>
+          <dt>00:12–00:15</dt><dd>"Filmagem com drone em Salvador · Orçamento no WhatsApp".</dd>
+        </dl>
+        <p class="tip"><b>Dica:</b> funciona bem pra casamento, 15 anos e evento de empresa.</p>
+      </article>
+
+      <article class="vcard">
+        <header><div><span class="num">06</span><h3>Você se apresentando</h3></div><span class="tag wa">WhatsApp</span></header>
+        <p class="why">Olhando pra câmera, em 20 segundos. Cria confiança antes da primeira mensagem.</p>
+        <dl class="tc">
+          <dt>00:00–00:03</dt><dd>"Vai casar ou fazer um evento em Salvador? Olha isso."</dd>
+          <dt>00:03–00:18</dt><dd>Quem você é, o que faz (vídeo, foto, drone) e 2 cenas do seu trabalho.</dd>
+          <dt>00:18–00:22</dt><dd>"Toca em Enviar mensagem que eu te mando o orçamento".</dd>
+        </dl>
+        <p class="tip"><b>Dica:</b> grave de dia, perto de uma janela, com o celular na vertical.</p>
+      </article>
+
+      <article class="vcard">
+        <header><div><span class="num">07</span><h3>Destaques de 15 anos</h3></div><span class="tag both">WhatsApp + Site</span></header>
+        <p class="why">Fala direto com a mãe da debutante, que é quem contrata.</p>
+        <dl class="tc">
+          <dt>00:00–00:03</dt><dd>A valsa ou a entrada da debutante.</dd>
+          <dt>00:03–00:18</dt><dd>Família emocionada, amigas, festa, pista.</dd>
+          <dt>00:18–00:22</dt><dd>"15 anos só uma vez · Garanta a data".</dd>
+        </dl>
+        <p class="tip"><b>Dica:</b> faça um anúncio separado com esse vídeo, com o texto falando de 15 anos.</p>
+      </article>
+
+      <article class="vcard">
+        <header><div><span class="num">08</span><h3>Vídeo pra empresa</h3></div><span class="tag site">Site</span></header>
+        <p class="why">Mostra marcas que você já atendeu e traz clientes de ticket maior.</p>
+        <dl class="tc">
+          <dt>00:00–00:03</dt><dd>A cena mais bonita de um trabalho de marca ou evento corporativo.</dd>
+          <dt>00:03–00:15</dt><dd>Cortes de 3 ou 4 trabalhos, com o nome dos clientes na tela.</dd>
+          <dt>00:15–00:18</dt><dd>"Vídeo profissional pra sua empresa · Fale com a NJ Filmes".</dd>
+        </dl>
+        <p class="tip"><b>Dica:</b> só mostre marcas que autorizaram o uso das imagens.</p>
+      </article>
+    </div>
+  </section>
+
+  <!-- 03 -->
+  <section id="formato">
+    <div class="sec-head"><span class="eyebrow">03 · Formato</span><h2>Suba o arquivo original do vídeo</h2></div>
+    <p>Use o arquivo que está no seu celular ou computador, não o post do Instagram nem o vídeo do site. O original tem a melhor qualidade e deixa você escolher o corte certo pra cada lugar do anúncio.</p>
+    <div class="tbl"><table>
+      <thead><tr><th>Opção</th><th>Quando usar</th><th>Problema</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Arquivo original</strong></td><td class="good">Sempre que tiver o arquivo</td><td>Nenhum</td></tr>
+        <tr><td>Post do Instagram</td><td>Só se o post já tem muitas curtidas e comentários</td><td class="warnc">Fica preso ao formato e à legenda do post</td></tr>
+        <tr><td>Vídeo do site</td><td>Não use</td><td class="warnc">O site guarda uma versão comprimida</td></tr>
+      </tbody>
+    </table></div>
+    <ul>
+      <li><strong>Vertical 9:16</strong> (1080 × 1920), formato de Reels.</li>
+      <li><strong>15 a 30 segundos.</strong></li>
+      <li><strong>Os 3 primeiros segundos decidem tudo:</strong> comece pela cena mais forte. Nada de logo no começo.</li>
+      <li><strong>Texto na tela</strong>, porque a maioria assiste sem som.</li>
+      <li><strong>Logo e "Peça seu orçamento" só no final</strong>, nos últimos 2 segundos.</li>
+    </ul>
+  </section>
+
+  <!-- 04 -->
+  <section id="adicionar">
+    <div class="sec-head"><span class="eyebrow">04 · Adicionar no Meta</span><h2>Como colocar os vídeos no anúncio</h2>
+      <p class="muted">No Gerenciador de Anúncios (adsmanager.facebook.com), no nível do <strong>anúncio</strong>.</p></div>
+
+    <p class="group-title">Subir os vídeos</p>
+    <ol class="steps">
+      <li><div><strong>Criativo do anúncio → Configurar criativo → Imagem ou vídeo.</strong><span class="where">Formato: "Imagem ou vídeo único"</span></div></li>
+      <li><div><strong>Adicionar mídia → Enviar</strong> e escolha os 2 ou 3 arquivos do seu computador ou celular.</div></li>
+      <li><div><strong>Confira os cortes.</strong> A Meta mostra o vídeo em cada lugar:
+        <ul><li><strong>Stories e Reels:</strong> 9:16, tela cheia.</li><li><strong>Feed:</strong> 4:5 ou 1:1. Se cortar algo importante, ajuste em "Recortar".</li></ul></div></li>
+      <li><div><strong>Miniatura:</strong> escolha um quadro bonito, com rosto ou emoção. É a imagem que aparece antes do play.</div></li>
+      <li><div><strong>Legendas:</strong> ative as <strong>legendas automáticas</strong> se você fala no vídeo.</div></li>
+    </ol>
+
+    <p class="group-title">Textos e botão</p>
+    <ol class="steps">
+      <li><div><strong>Texto principal → Adicionar opção de texto</strong> e cole as 3 opções da seção Textos.</div></li>
+      <li><div><strong>Título → Adicionar opção</strong> e cole os 3 títulos.</div></li>
+      <li><div><strong>Chamada pra ação:</strong> "Enviar mensagem" (Campanha 1) ou "Solicitar orçamento" (Campanha 2).</div></li>
+      <li><div><strong>Aprimoramentos:</strong> deixe os automáticos ligados, mas desligue "Música" se o seu vídeo já tem trilha.</div></li>
+    </ol>
+
+    <p class="group-title">Mais de um vídeo e trocas</p>
+    <ol class="steps">
+      <li><div><strong>Vários anúncios no mesmo conjunto:</strong> no menu da esquerda, clique nos <strong>···</strong> do anúncio → <strong>Duplicar</strong>, e troque só o vídeo. Assim cada vídeo tem seus números.</div></li>
+      <li><div><strong>Não edite um anúncio que já está rodando</strong> pra trocar o vídeo. Crie um novo (Duplicar) e desligue o pior. Editar faz a Meta recomeçar o aprendizado.</div></li>
+      <li><div><strong>A cada 2 ou 3 semanas:</strong> desligue o vídeo com o maior custo por resultado e suba um novo da lista de tipos de vídeo.</div></li>
+    </ol>
+  </section>
+
+  <!-- 05 -->
+  <section id="whatsapp">
+    <div class="sec-head"><span class="eyebrow">05 · Campanha 1</span><h2>WhatsApp</h2>
+      <p class="muted">Já existe como rascunho: "NJFILMES - Novos Clientes". Falta o criativo e ajustar a conversa.</p></div>
+    <p class="group-title">No conjunto de anúncios · "NJFILMES - Novos Clientes - Salvador"</p>
+    <ol class="steps">
+      <li><div><strong>Local da conversão:</strong> Apps de mensagem → <strong>WhatsApp</strong> (+55 71 8681-7816).</div></li>
+      <li><div><strong>Orçamento diário:</strong> 70% da verba (seção Orçamento).</div></li>
+      <li><div><strong>Localização:</strong> Salvador + <strong>raio de 40 km</strong> (Lauro de Freitas, Camaçari e região).</div></li>
+      <li><div><strong>Idade:</strong> 22 a 55 anos.</div></li>
+      <li><div><strong>Público:</strong> Advantage+ (automático). Se quiser, acrescente os interesses Casamento, Noivado e Eventos.</div></li>
+      <li><div><strong>Posicionamentos:</strong> Advantage+ (automático).</div></li>
+    </ol>
+    <p class="group-title">No anúncio · "Leads WhatsApp - Salvador - v1"</p>
+    <ol class="steps">
+      <li><div><strong>Criativo:</strong> suba os vídeos e cole os textos (seções 04 e 07).</div></li>
+      <li><div><strong>Conversas → Editar:</strong> troque "Nome" e "Email" por <strong>Nome</strong>, <strong>Tipo de evento</strong> (Casamento, 15 anos, Evento, Empresa, Outro) e <strong>Data do evento</strong>.</div></li>
+      <li><div><strong>Mensagem de boas-vindas:</strong> "Oi! Que bom te ver por aqui. Me conta rapidinho do seu evento que eu já te mando o orçamento."</div></li>
+      <li><div><strong>Rastreamento:</strong> NJFILMES Pixel marcado (já está).</div></li>
+      <li><div><strong>Publicar.</strong></div></li>
+    </ol>
+  </section>
+
+  <!-- 06 -->
+  <section id="site">
+    <div class="sec-head"><span class="eyebrow">06 · Campanha 2</span><h2>Site · página de orçamento</h2>
+      <p class="muted">Leva a pessoa pra njfilmes.com.br/orcamento: vídeo no topo, formulário logo abaixo, clientes, projetos e avaliações. A página /contato continua igual.</p></div>
+    <p class="group-title">Na campanha</p>
+    <ol class="steps">
+      <li><div><strong>+ Criar → objetivo Leads</strong> (Cadastros).</div></li>
+      <li><div>Nome: <code>NJ - Site - Leads</code></div></li>
+    </ol>
+    <p class="group-title">No conjunto de anúncios</p>
+    <ol class="steps">
+      <li><div><strong>Local da conversão: Site</strong> (não "Formulários instantâneos").</div></li>
+      <li><div><strong>Pixel:</strong> NJFILMES Pixel → <strong>Evento de conversão: Lead</strong>.</div></li>
+      <li><div><strong>Orçamento diário:</strong> 30% da verba.</div></li>
+      <li><div><strong>Localização, idade, público e posicionamentos:</strong> iguais aos da Campanha 1.</div></li>
+    </ol>
+    <p class="group-title">No anúncio</p>
+    <ol class="steps">
+      <li><div><strong>Mídia:</strong> os mesmos vídeos da Campanha 1.</div></li>
+      <li><div><strong>URL do site:</strong> <code>https://njfilmes.com.br/orcamento</code></div></li>
+      <li><div><strong>Parâmetros de URL</strong> (em Rastreamento): <code>utm_source=meta&amp;utm_medium=paid&amp;utm_campaign=site-leads</code></div></li>
+      <li><div><strong>Botão:</strong> Solicitar orçamento (ou Saiba mais).</div></li>
+      <li><div><strong>Rastreamento:</strong> NJFILMES Pixel marcado, e <strong>Publicar</strong>.</div></li>
+    </ol>
+    <p class="note">Nas primeiras 1 a 2 semanas, o custo por lead do site tende a ser maior que o do WhatsApp. É a Meta aprendendo com o Pixel, que acabou de ser ativado.</p>
+  </section>
+
+  <!-- 07 -->
+  <section id="textos">
+    <div class="sec-head"><span class="eyebrow">07 · Textos</span><h2>Textos prontos pra copiar</h2>
+      <p class="muted">Cole as 3 opções no mesmo anúncio. A Meta combina e mostra mais a que funciona.</p></div>
+    <p class="group-title">Texto principal</p>
+    <div class="copies">
+      <div class="copy"><pre id="t1">🎬 Seu evento merece ser lembrado do jeito certo.
+Filmagem e fotografia profissional em Salvador: casamentos, 15 anos, eventos e empresas. Com drone e entrega caprichada.
+👉 Peça seu orçamento agora.</pre><button class="btn" type="button" data-copy="t1">Copiar</button></div>
+      <div class="copy"><pre id="t2">O dia passa rápido. As imagens ficam pra sempre. ✨
+Vídeo e foto do seu casamento ou evento com olhar de cinema, por quem já filmou para Band, Skol e Sesc.
+Datas limitadas: garanta a sua.</pre><button class="btn" type="button" data-copy="t2">Copiar</button></div>
+      <div class="copy"><pre id="t3">Procurando filmmaker em Salvador?
+Noberto Junior · NJ Filmes. Vídeo, foto e drone no mesmo pacote. Avaliação 5 estrelas no Google.
+Me chama e receba o orçamento em minutos.</pre><button class="btn" type="button" data-copy="t3">Copiar</button></div>
+    </div>
+    <p class="group-title">Títulos</p>
+    <div class="copies">
+      <div class="copy"><pre id="h1">Orçamento de filmagem em Salvador</pre><button class="btn" type="button" data-copy="h1">Copiar</button></div>
+      <div class="copy"><pre id="h2">Seu evento com cara de cinema</pre><button class="btn" type="button" data-copy="h2">Copiar</button></div>
+      <div class="copy"><pre id="h3">Vídeo + foto + drone</pre><button class="btn" type="button" data-copy="h3">Copiar</button></div>
+    </div>
+    <p class="group-title">Descrição</p>
+    <div class="copies"><div class="copy"><pre id="d1">Casamentos, 15 anos, eventos e empresas.</pre><button class="btn" type="button" data-copy="d1">Copiar</button></div></div>
+    <p class="note">Evite "o melhor de Salvador", "preço imperdível" e promessas que você não consegue provar. A Meta pode barrar o anúncio.</p>
+  </section>
+
+  <!-- 08 -->
+  <section id="verba">
+    <div class="sec-head"><span class="eyebrow">08 · Orçamento</span><h2>70% no WhatsApp, 30% no site</h2></div>
+    <div class="tbl"><table>
+      <thead><tr><th>Por mês</th><th>Por dia (total)</th><th>Campanha 1 · WhatsApp</th><th>Campanha 2 · Site</th></tr></thead>
+      <tbody>
+        <tr><td class="num">R$ 600</td><td class="num">R$ 20</td><td class="num">R$ 14/dia</td><td class="num">R$ 6/dia</td></tr>
+        <tr><td class="num">R$ 900</td><td class="num">R$ 30</td><td class="num">R$ 21/dia</td><td class="num">R$ 9/dia</td></tr>
+        <tr><td class="num">R$ 1.500</td><td class="num">R$ 50</td><td class="num">R$ 35/dia</td><td class="num">R$ 15/dia</td></tr>
+      </tbody>
+    </table></div>
+    <ul>
+      <li><strong>Menos de R$ 6/dia no site</strong> traz poucos leads e a Meta aprende devagar. Com orçamento curto, comece só com a Campanha 1.</li>
+      <li><strong>Depois de 14 dias</strong>, passe mais dinheiro pra campanha que trouxe <strong>mais clientes fechados</strong>, não a do clique mais barato.</li>
+      <li><strong>Aumente no máximo 20% por vez</strong>, a cada 3 ou 4 dias.</li>
+    </ul>
+  </section>
+
+  <!-- 09 -->
+  <section id="14dias">
+    <div class="sec-head"><span class="eyebrow">09 · Primeiros 14 dias</span><h2>Não mexa por 7 dias, depois olhe estes números</h2></div>
+    <p>Cada mudança (público, texto, orçamento grande) reinicia o aprendizado da Meta. No Gerenciador, use o período "Últimos 7 dias":</p>
+    <div class="tbl"><table>
+      <thead><tr><th>Número</th><th>O que é</th><th>Sinal bom</th><th>Sinal de alerta</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Custo por resultado</strong></td><td>Quanto custou cada conversa ou lead</td><td class="good">Estável ou caindo</td><td class="warnc">Subindo 3 dias seguidos</td></tr>
+        <tr><td><strong>CTR</strong></td><td>De cada 100 que viram, quantos clicaram</td><td class="good">1% ou mais</td><td class="warnc">Abaixo de 0,7%: troque o vídeo</td></tr>
+        <tr><td><strong>Frequência</strong></td><td>Quantas vezes a mesma pessoa viu</td><td class="good">Até 3</td><td class="warnc">Acima de 4: suba vídeo novo</td></tr>
+        <tr><td><strong>Clientes fechados</strong></td><td>Quantos viraram contrato</td><td class="good">O que importa de verdade</td><td class="warnc">Muitas conversas e nenhuma venda: reveja o atendimento</td></tr>
+      </tbody>
+    </table></div>
+    <p class="muted">São médias de mercado, não regra. O seu número certo aparece depois de umas 2 semanas.</p>
+    <p><strong>Anote cada cliente fechado</strong> e de onde veio (WhatsApp direto, site ou indicação). Depois de 14 dias, mande os prints desses números pro Claude que ele te diz o que ajustar.</p>
+  </section>
+
+  <!-- 10 -->
+  <section id="venda">
+    <div class="sec-head"><span class="eyebrow">10 · Venda</span><h2>Do WhatsApp ao contrato</h2>
+      <p class="muted">Responda em até 15 minutos sempre que puder. Quem pede orçamento chama 2 ou 3 profissionais, e o primeiro que responde bem sai na frente.</p></div>
+    <p class="group-title">1 · Primeira resposta (salve como resposta rápida no WhatsApp Business)</p>
+    <div class="copies"><div class="copy"><pre id="w1">Oi, [nome]! Aqui é o Noberto, da NJ Filmes 🎬 Obrigado por chamar! Me conta rapidinho: qual a data, o local e o tipo do evento? Assim eu já te mando o orçamento certinho.</pre><button class="btn" type="button" data-copy="w1">Copiar</button></div></div>
+    <p class="group-title">2 · Antes do preço, mostre o trabalho</p>
+    <div class="copies"><div class="copy"><pre id="w2">Enquanto preparo sua proposta, dá uma olhada nesse trabalho parecido com o seu: [link do projeto no site]</pre><button class="btn" type="button" data-copy="w2">Copiar</button></div></div>
+    <p class="group-title">3 · Proposta</p>
+    <p>Envie 2 ou 3 pacotes: básico, completo, completo + drone. Quem recebe opções escolhe entre elas, em vez de decidir se contrata ou não.</p>
+    <p class="group-title">4 · Se não responder</p>
+    <div class="copies">
+      <div class="copy"><pre id="w3">Oi, [nome]! Conseguiu ver a proposta? Se quiser, ajusto algum pacote pra caber melhor.</pre><button class="btn" type="button" data-copy="w3">Depois de 1 dia</button></div>
+      <div class="copy"><pre id="w4">Oi, [nome]! Tenho poucas datas livres em [mês]. Quer que eu reserve a sua?</pre><button class="btn" type="button" data-copy="w4">Depois de 3 dias</button></div>
+    </div>
+    <p class="group-title">5 · Fechou</p>
+    <p>Depois da entrega, peça uma avaliação no Google. Cada avaliação nova vira prova pro próximo cliente, inclusive na página /orcamento.</p>
+  </section>
+
+  <!-- 11 -->
+  <section id="google">
+    <div class="sec-head"><span class="eyebrow">11 · Depois</span><h2>Google Ads</h2>
+      <p class="muted">Traz quem já está procurando filmagem em Salvador. Comece depois que as campanhas da Meta estiverem rodando.</p></div>
+    <ol class="steps">
+      <li><div><strong>Criar a conta</strong> em ads.google.com no <strong>Modo Especialista</strong> (recuse a "campanha inteligente"). Moeda Real, fuso Brasília.</div></li>
+      <li><div><strong>Criar a conversão</strong> do formulário e mandar o código <code>AW-…</code> pro Claude instalar no site.</div></li>
+      <li><div><strong>Campanha de Pesquisa</strong> com <code>filmagem de casamento salvador</code>, <code>videomaker salvador</code>, <code>filmagem de 15 anos salvador</code>, <code>filmagem com drone salvador</code>.</div></li>
+      <li><div><strong>Palavras negativas:</strong> <code>curso</code>, <code>grátis</code>, <code>emprego</code>, <code>vaga</code>, <code>como fazer</code>.</div></li>
+      <li><div><strong>Destino:</strong> <code>njfilmes.com.br/orcamento</code>. <strong>Orçamento:</strong> R$ 20 a 30 por dia.</div></li>
+    </ol>
+  </section>
+
+  <!-- 12 -->
+  <section id="checklist">
+    <div class="sec-head"><span class="eyebrow">12 · Checklist</span><h2>O que falta fazer</h2>
+      <p class="muted">Suas marcações ficam salvas neste aparelho.</p></div>
+    <div class="progress"><span id="prog-text">0 de 0</span><div class="bar"><i id="prog-bar"></i></div></div>
+    <div class="checks" id="checks">
+      <label class="check"><input type="checkbox" id="c1"><span>Separar ou gravar 3 vídeos: trailer de casamento, bastidores e depoimento</span></label>
+      <label class="check"><input type="checkbox" id="c2"><span>Deixar os vídeos verticais, de 15 a 30 segundos, com texto na tela</span></label>
+      <label class="check"><input type="checkbox" id="c3"><span>Campanha 1: subir os vídeos e colar os textos</span></label>
+      <label class="check"><input type="checkbox" id="c4"><span>Campanha 1: trocar as perguntas da conversa (nome, tipo de evento, data)</span></label>
+      <label class="check"><input type="checkbox" id="c5"><span>Campanha 1: conferir orçamento, localização e idade, e publicar</span></label>
+      <label class="check"><input type="checkbox" id="c6"><span>Campanha 2: criar com objetivo Leads, local Site, evento Lead</span></label>
+      <label class="check"><input type="checkbox" id="c7"><span>Campanha 2: link njfilmes.com.br/orcamento + parâmetros de URL, e publicar</span></label>
+      <label class="check"><input type="checkbox" id="c8"><span>Salvar as respostas rápidas no WhatsApp Business</span></label>
+      <label class="check"><input type="checkbox" id="c9"><span>Criar a planilha de clientes (nome, data, de onde veio, fechou?)</span></label>
+      <label class="check"><input type="checkbox" id="c10"><span>Não mexer nas campanhas por 7 dias</span></label>
+      <label class="check"><input type="checkbox" id="c11"><span>Depois de 14 dias, mandar os prints dos números pro Claude</span></label>
+      <label class="check"><input type="checkbox" id="c12"><span>A cada 2 ou 3 semanas, trocar o pior vídeo por um novo</span></label>
+      <label class="check"><input type="checkbox" id="c13"><span>Criar a conta do Google Ads</span></label>
+    </div>
+  </section>
+
+  <footer>Plano feito com o Claude para a NJ Filmes · Página de orçamento: njfilmes.com.br/orcamento</footer>
+</div>
+
+<script>
+(function(){
+  // copiar textos
+  document.addEventListener('click', function(e){
+    var b = e.target.closest('[data-copy]'); if(!b) return;
+    var el = document.getElementById(b.getAttribute('data-copy')); if(!el) return;
+    var label = b.textContent, txt = el.textContent;
+    function ok(){ b.textContent = 'Copiado ✓'; b.classList.add('ok'); setTimeout(function(){ b.textContent = label; b.classList.remove('ok'); }, 1800); }
+    function fallback(){ var r = document.createRange(); r.selectNodeContents(el); var s = getSelection(); s.removeAllRanges(); s.addRange(r); b.textContent = 'Selecionado: copie'; setTimeout(function(){ b.textContent = label; }, 2200); }
+    try { navigator.clipboard.writeText(txt).then(ok, fallback); } catch(err){ fallback(); }
+  });
+  // checklist salvo neste aparelho
+  var KEY = 'plano-trafego-njfilmes-v1', saved = {};
+  try { saved = JSON.parse(localStorage.getItem(KEY) || '{}') || {}; } catch(e){ saved = {}; }
+  var boxes = Array.prototype.slice.call(document.querySelectorAll('#checks input'));
+  function paint(){
+    var n = 0;
+    boxes.forEach(function(x){ x.closest('.check').classList.toggle('done', x.checked); if(x.checked) n++; });
+    document.getElementById('prog-text').textContent = n + ' de ' + boxes.length + ' feitos';
+    document.getElementById('prog-bar').style.width = (boxes.length ? n / boxes.length * 100 : 0) + '%';
+  }
+  boxes.forEach(function(x){
+    x.checked = !!saved[x.id];
+    x.addEventListener('change', function(){ saved[x.id] = x.checked; try { localStorage.setItem(KEY, JSON.stringify(saved)); } catch(e){} paint(); });
+  });
+  paint();
+})();
+</script>
+
+</body>
+</html>
