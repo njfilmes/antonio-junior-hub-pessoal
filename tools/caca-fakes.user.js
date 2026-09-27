@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Caça-Fakes (ajudante de remoção)
 // @namespace    njfilmes
-// @version      1.4
+// @version      1.5
 // @description  Preenche a busca de Seguidores do Instagram com o próximo perfil suspeito e destaca o botão Remover. Nunca clica sozinho.
 // @match        https://www.instagram.com/*
 // @grant        GM_getValue
@@ -46,15 +46,16 @@
   const doneToday = () => done.filter(d => d[1] === today()).length;
   const doneSet = () => new Set(done.map(d => d[0]));
   // Blocos: a cada 20 remoções no dia, trava por 2 horas a partir da 20ª.
+  // Remoções antigas sem horário contam também (como as primeiras do dia).
   function blockState() {
-    const ts = done.filter(d => d[1] === today() && d[2]).map(d => d[2]).sort((x, y) => x - y);
+    const ts = done.filter(d => d[1] === today()).map(d => d[2] || 0).sort((x, y) => x - y);
     let inBlock = 0, lastFull = 0;
     for (const t of ts) { inBlock++; if (inBlock === BLOCK) { lastFull = t; inBlock = 0; } }
     return { inBlock, release: lastFull ? lastFull + GAP_MS : 0 };
   }
   function roundRelease() {
     const st = blockState();
-    return st.inBlock === 0 && st.release > Date.now() ? st.release : 0;
+    return st.release > Date.now() ? st.release : 0;
   }
   const waitUntil = () => Math.max(nextAt, roundRelease());
   const hhmm = (t) => { const d = new Date(t); return String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0'); };
