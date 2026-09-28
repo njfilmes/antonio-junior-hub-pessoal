@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>NJFILMES Plano Final</title>
+<title>NJFILMES Plano e Rotina</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
@@ -167,18 +167,217 @@ details.faq .a{padding-bottom:14px;color:var(--muted);font-size:14px;display:fle
 footer{padding-top:28px;font:500 12.5px/1.6 var(--mono);color:var(--dim);display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px}
 @media (prefers-reduced-motion:reduce){*{transition:none!important}html{scroll-behavior:auto}}
 @media (min-width:700px){.nav .row,.tabs{flex-wrap:wrap;overflow:visible}.nav{position:static}}
+
+.monthbar{display:flex;align-items:center;gap:12px}
+.monthbar strong{font-family:var(--display);font-size:20px;min-width:170px;text-align:center;color:var(--hi)}
+.lbl{display:block;font-weight:600;font-size:14px;margin-bottom:8px}
+textarea,.fields input{width:100%;background:var(--bg-2);color:var(--fg);border:1px solid var(--line-2);border-radius:8px;padding:10px 12px;font:inherit;font-size:15px}
+textarea:focus,.fields input:focus{outline:2px solid var(--accent);outline-offset:1px}
+.fields{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}
+.fields label{display:flex;flex-direction:column;gap:6px;font-size:13px;color:var(--muted);font-weight:600}
+.form{display:flex;flex-direction:column;gap:6px}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}
+.stat{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:13px 15px}
+.stat b{display:block;font:700 22px/1.2 var(--mono);color:var(--hi)}
+.stat span{font-size:12.5px;color:var(--muted)}
+.alerts{display:flex;flex-direction:column;gap:8px}
+.tabs{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none}
+.tabs::-webkit-scrollbar{display:none}
+.tab{white-space:nowrap;font:600 13px/1 var(--body);border:1px solid var(--line-2);background:transparent;color:var(--muted);border-radius:99px;padding:9px 13px;cursor:pointer}
+.tab[aria-selected="true"]{border-color:var(--accent);color:var(--hi);background:var(--accent-soft)}
+.tasks .day{font:600 10.5px/1 var(--mono);color:var(--accent);letter-spacing:.06em;text-transform:uppercase;display:block;margin-bottom:3px}
+.tasks .sub{display:block;color:var(--muted);font-size:13px;margin-top:2px}
+.habits{display:flex;flex-direction:column;gap:14px}
+.habit{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px 15px}
+.habit .hh{display:flex;justify-content:space-between;gap:10px;font-weight:600;font-size:14.5px;margin-bottom:10px}
+.habit .hh span{font:600 12px/1.4 var(--mono);color:var(--muted);white-space:nowrap}
+.days{display:grid;grid-template-columns:repeat(auto-fill,minmax(34px,1fr));gap:5px}
+.days button{height:34px;border-radius:7px;border:1px solid var(--line-2);background:var(--bg-2);color:var(--dim);font:600 12px/1 var(--mono);cursor:pointer}
+.days button.on{background:var(--accent);border-color:var(--accent);color:#1a1405}
+.days button.today{outline:1px solid var(--hi);outline-offset:1px}
+.sorteio{display:flex;flex-direction:column;gap:10px}
+.btn.big{font-size:14px;padding:12px 16px;align-self:flex-start;border-color:var(--accent);color:var(--hi)}
+.picked{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:6px}
+.picked li{color:var(--fg)}
+.picked li small{color:var(--muted)}
+.actions{display:flex;flex-wrap:wrap;gap:8px}
+@media print{.nav,.actions,.monthbar button,.sorteio,#ideias,#historico .alert{display:none!important}body{background:#fff;color:#000}.wrap{padding:0}}
+@media (min-width:700px){.nav .row,.tabs{flex-wrap:wrap;overflow:visible}}
+
+.switch{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:4px}
+.switch button{font:700 15px/1.2 var(--display);padding:14px 12px;border-radius:10px;border:1px solid var(--line-2);background:var(--card);color:var(--muted);cursor:pointer;display:flex;flex-direction:column;align-items:flex-start;gap:4px;text-align:left}
+.switch button small{font:500 12px/1.3 var(--body);color:var(--dim)}
+.switch button[aria-selected="true"]{border-color:var(--accent);background:var(--accent-soft);color:var(--hi)}
+.switch button:focus-visible{outline:2px solid var(--hi);outline-offset:2px}
+.view-head{display:flex;flex-direction:column;gap:14px;padding-top:22px}
+[hidden]{display:none!important}
 </style>
 </head>
 <body>
 <div class="wrap">
-
   <header class="top">
-    <span class="eyebrow">NJFILMES · Salvador, BA · versão final · 28/09/2026</span>
-    <h1>Plano Completo: Anúncios, Vendas, Preços e Crescimento</h1>
-    <p class="lead">Só o que falta fazer, sem repetição. O que já foi resolvido (WhatsApp verificado, vídeo anexado, mensagem de boas-vindas, Pixel, formulário com e-mail, página de orçamento, SEO da Home, Search Console e Perfil do Google) ficou de fora.</p>
-    <div class="meta"><span>Pixel NJFILMES · 1633292798505183</span><span>WhatsApp +55 71 8681-7816</span><span>Página de anúncio · njfilmes.com.br/orcamento</span></div>
+    <span class="eyebrow">NJFILMES · Salvador, BA · plano e rotina · 28/09/2026</span>
+    <h1>Plano e Rotina NJFILMES</h1>
+    <p class="lead">Tudo num arquivo só. <strong>Rotina do mês</strong>: o que fazer todo mês, com caixinhas, números e ideias de vídeo. <strong>Plano completo</strong>: como fazer cada coisa (anúncios, preços, vendas, Instagram, site e dúvidas).</p>
+    <div class="switch" role="tablist" aria-label="Escolha a parte">
+      <button type="button" role="tab" id="tabRotina" aria-controls="viewRotina" aria-selected="true">Rotina do mês<small>Use todo mês</small></button>
+      <button type="button" role="tab" id="tabPlano" aria-controls="viewPlano" aria-selected="false">Plano completo<small>Consulte quando precisar</small></button>
+    </div>
   </header>
 
+  <div id="viewRotina" role="tabpanel" aria-labelledby="tabRotina">
+    <div class="view-head">
+    <p class="lead">Abra no dia 1 de cada mês e siga de cima pra baixo. Cada mês tem suas marcações e seus números salvos separados. No fim, o painel calcula tudo e diz onde melhorar.</p>
+    <div class="monthbar">
+      <button class="btn" type="button" id="prevM" aria-label="Mês anterior">‹</button>
+      <strong id="mLabel">Mês</strong>
+      <button class="btn" type="button" id="nextM" aria-label="Próximo mês">›</button>
+    </div>
+    <div class="progress"><span id="rprog">0 de 0 feitas</span><div class="bar"><i id="rprogbar"></i></div></div>
+  </div>
+  <nav class="nav" aria-label="Seções">
+    <div class="row">
+      <a href="#foco"><span>01</span>Foco do mês</a>
+      <a href="#inicio"><span>02</span>Dia 1</a>
+      <a href="#habitos"><span>03</span>Todo dia</a>
+      <a href="#semanas"><span>04</span>Toda semana</a>
+      <a href="#meio"><span>05</span>Dia 15</a>
+      <a href="#fim"><span>06</span>Fechamento</a>
+      <a href="#numeros"><span>07</span>Números</a>
+      <a href="#extra"><span>08</span>Trimestral e anual</a>
+      <a class="part" href="#ideias"><span>09</span>Ideias de vídeo</a>
+      <a href="#historico"><span>10</span>Histórico</a>
+    </div>
+  </nav>
+
+
+  <section id="foco">
+    <div class="sec-head"><span class="eyebrow">01 · Foco do mês</span><h2 id="fTitle">Foco</h2></div>
+    <div class="alert new"><div class="h" id="fHead"></div><p id="fText"></p></div>
+    <div class="grid2">
+      <div class="box"><div class="t">Ação principal do mês</div><p id="fAcao"></p></div>
+      <div class="box"><div class="t">Conteúdo que combina</div><p id="fConteudo"></p></div>
+    </div>
+    <div class="card"><label class="lbl" for="metaTxt">Suas metas do mês (leads, contratos, faturamento)</label>
+      <textarea id="metaTxt" rows="3" data-field="metaTxt" placeholder="Ex.: 35 leads · 4 contratos · R$ 16.000"></textarea></div>
+  </section>
+
+  <section id="inicio">
+    <div class="sec-head"><span class="eyebrow">02 · Dias 1 a 3</span><h2>Planejar o mês</h2>
+      <p class="lede">Cerca de 2 horas. É o que evita perder tempo o resto do mês.</p></div>
+    <ul class="tasks" data-list="inicio"></ul>
+  </section>
+
+  <section id="habitos">
+    <div class="sec-head"><span class="eyebrow">03 · Todo dia</span><h2>Hábitos diários</h2>
+      <p class="lede">Toque no dia quando fizer. A sequência mostra sua constância.</p></div>
+    <div id="habitGrid" class="habits"></div>
+  </section>
+
+  <section id="semanas">
+    <div class="sec-head"><span class="eyebrow">04 · Toda semana</span><h2>A semana, dia a dia</h2>
+      <p class="lede">A mesma lista repete em cada semana. Adapte aos seus eventos, mas mantenha a terça como dia de conteúdo.</p></div>
+    <div class="tabs" id="weekTabs" role="tablist"></div>
+    <ul class="tasks" id="weekList"></ul>
+  </section>
+
+  <section id="meio">
+    <div class="sec-head"><span class="eyebrow">05 · Por volta do dia 15</span><h2>Revisão do meio do mês</h2></div>
+    <ul class="tasks" data-list="meio"></ul>
+  </section>
+
+  <section id="fim">
+    <div class="sec-head"><span class="eyebrow">06 · Últimos 3 dias</span><h2>Fechamento do mês</h2></div>
+    <ul class="tasks" data-list="fim"></ul>
+  </section>
+
+  <section id="numeros">
+    <div class="sec-head"><span class="eyebrow">07 · Painel</span><h2>Números do mês</h2>
+      <p class="lede">Preencha no fechamento. As contas e os alertas aparecem sozinhos.</p></div>
+    <div class="form">
+      <p class="group">Leads (pedidos de orçamento) por origem</p>
+      <div class="fields">
+        <label>Anúncio WhatsApp<input type="number" min="0" inputmode="numeric" data-num="lWa"></label>
+        <label>Anúncio site<input type="number" min="0" inputmode="numeric" data-num="lSite"></label>
+        <label>Instagram orgânico<input type="number" min="0" inputmode="numeric" data-num="lIg"></label>
+        <label>Google<input type="number" min="0" inputmode="numeric" data-num="lGoogle"></label>
+        <label>Indicação e parceiros<input type="number" min="0" inputmode="numeric" data-num="lInd"></label>
+      </div>
+      <p class="group">Vendas e dinheiro</p>
+      <div class="fields">
+        <label>Contratos fechados (total)<input type="number" min="0" inputmode="numeric" data-num="contratos"></label>
+        <label>Contratos vindos de anúncio<input type="number" min="0" inputmode="numeric" data-num="contratosAds"></label>
+        <label>Faturamento fechado (R$)<input type="number" min="0" inputmode="decimal" data-num="fat"></label>
+        <label>Faturamento vindo de anúncio (R$)<input type="number" min="0" inputmode="decimal" data-num="fatAds"></label>
+        <label>Gasto com anúncios (R$)<input type="number" min="0" inputmode="decimal" data-num="gasto"></label>
+      </div>
+      <p class="group">Instagram e Google</p>
+      <div class="fields">
+        <label>Reels postados<input type="number" min="0" inputmode="numeric" data-num="reels"></label>
+        <label>Seguidores no fim do mês<input type="number" min="0" inputmode="numeric" data-num="seg"></label>
+        <label>Alcance de não seguidores (%)<input type="number" min="0" max="100" inputmode="numeric" data-num="naoSeg"></label>
+        <label>Avaliações novas no Google<input type="number" min="0" inputmode="numeric" data-num="aval"></label>
+        <label>Cliques do Google no site (Search Console)<input type="number" min="0" inputmode="numeric" data-num="gsc"></label>
+      </div>
+    </div>
+    <div class="stats" id="kpis"></div>
+    <div id="alerts" class="alerts"></div>
+    <div class="card"><label class="lbl" for="aprendi">O que funcionou e o que mudar no próximo mês</label>
+      <textarea id="aprendi" rows="3" data-field="aprendi" placeholder="Ex.: Reels de drone deram mais alcance; perdi 3 clientes por preço de casamento"></textarea></div>
+  </section>
+
+  <section id="extra">
+    <div class="sec-head"><span class="eyebrow">08 · De vez em quando</span><h2>Tarefas trimestrais e anuais</h2>
+      <p class="lede">Aparecem só nos meses certos: trimestrais em janeiro, abril, julho e outubro; anuais em janeiro.</p></div>
+    <div id="triWrap"><p class="group">Trimestral</p><ul class="tasks" data-list="tri"></ul></div>
+    <div id="anoWrap"><p class="group">Anual</p><ul class="tasks" data-list="ano"></ul></div>
+    <p class="plain" id="extraNone">Nada trimestral ou anual neste mês. Próximo: <span id="extraNext"></span>.</p>
+  </section>
+
+  <section id="ideias">
+    <div class="sec-head"><span class="eyebrow">09 · Banco de ideias</span><h2>Ideias de vídeo pra postar</h2>
+      <p class="lede">Marque o que já postou: a marcação vale pra todos os meses. Use "Sortear" quando não souber o que gravar.</p></div>
+    <div class="progress"><span id="ideaProg">0 usadas</span><div class="bar"><i id="ideaBar"></i></div></div>
+    <div class="sorteio">
+      <button class="btn big" type="button" id="sortear">🎲 Sortear 3 ideias</button>
+      <ol id="sorteadas" class="picked"></ol>
+    </div>
+    <div class="tabs" id="ideaTabs" role="tablist"></div>
+    <p class="plain" id="ideaIntro"></p>
+    <ul class="tasks" id="ideaList"></ul>
+    <p class="group">Regras que valem pra qualquer ideia</p>
+    <ul class="tips">
+      <li><strong>Gancho nos 2 primeiros segundos,</strong> com texto na tela.</li>
+      <li><strong>Vertical 9:16,</strong> de 7 a 30 segundos, logo só no final.</li>
+      <li><strong>Autorização por escrito</strong> de clientes e de quem aparece na rua.</li>
+      <li><strong>Drone:</strong> cadastro no SISANT e pedido no SARPAS. Não voe sobre multidão nem perto do aeroporto (Stella Maris, Itapuã, Lauro de Freitas), e respeite as restrições no Centro Histórico.</li>
+      <li><strong>Música licenciada</strong> ou áudio do próprio Instagram.</li>
+      <li><strong>Marque o cliente, o local e os fornecedores.</strong> Use Collab sempre que der.</li>
+    </ul>
+  </section>
+
+  <section id="historico">
+    <div class="sec-head"><span class="eyebrow">10 · Histórico</span><h2>Mês a mês</h2></div>
+    <div class="tbl"><table>
+      <thead><tr><th>Mês</th><th>Tarefas</th><th>Leads</th><th>Contratos</th><th>Faturamento</th><th>Retorno</th><th>Seguidores</th></tr></thead>
+      <tbody id="histBody"></tbody>
+    </table></div>
+    <div class="alert warn"><div class="h">Faça backup todo mês</div><p>As marcações ficam salvas só neste navegador. Se limpar os dados do Chrome ou trocar de aparelho, perde tudo. Baixe o backup no fechamento de cada mês.</p></div>
+    <div class="actions">
+      <button class="btn" type="button" id="exp">Baixar backup</button>
+      <label class="btn" for="imp">Restaurar backup<input type="file" id="imp" accept="application/json" hidden></label>
+      <button class="btn" type="button" id="prt">Imprimir o mês</button>
+    </div>
+  </section>
+
+
+  </div>
+
+  <div id="viewPlano" role="tabpanel" aria-labelledby="tabPlano" hidden>
+    <div class="view-head">
+      <p class="plain">O que já foi resolvido (WhatsApp verificado, vídeo anexado, mensagem de boas-vindas, Pixel, formulário com e-mail, página de orçamento, SEO da Home, Search Console e Perfil do Google) ficou de fora.</p>
+      <div class="meta"><span>Pixel NJFILMES · 1633292798505183</span><span>WhatsApp +55 71 8681-7816</span><span>Página de anúncio · njfilmes.com.br/orcamento</span></div>
+    </div>
   <nav class="nav" aria-label="Seções">
     <div class="row">
       <a class="part" href="#p1">Parte 1 · Anúncios</a>
@@ -211,14 +410,14 @@ footer{padding-top:28px;font:500 12.5px/1.6 var(--mono);color:var(--dim);display
       <a href="#s22"><span>25</span>Medir</a>
       <a href="#s23"><span>26</span>Mais clientes</a>
       <a href="#s24"><span>27</span>Calendário</a>
-      <a href="#sx4"><span>28</span>Rotina</a>
-      <a href="#sx5"><span>29</span>Metas</a>
-      <a href="#s25"><span>30</span>Ideias</a>
-      <a class="part" href="#s26"><span>31</span>Não fazer (geral)</a>
-      <a class="part" href="#s27"><span>32</span>Dúvidas</a>
-      <a class="part" href="#s28"><span>33</span>Checklist</a>
+      <a href="#sx5"><span>28</span>Metas</a>
+      <a href="#s25"><span>29</span>Ganchos</a>
+      <a class="part" href="#s26"><span>30</span>Não fazer (geral)</a>
+      <a class="part" href="#s27"><span>31</span>Dúvidas</a>
+      <a class="part" href="#s28"><span>32</span>Checklist</a>
     </div>
   </nav>
+
 
   <!-- ============ PARTE 1 ============ -->
   <div class="part-head" id="p1"><span class="eyebrow">Parte 1</span><h2>Anúncios na Meta</h2></div>
@@ -266,7 +465,7 @@ footer{padding-top:28px;font:500 12.5px/1.6 var(--mono);color:var(--dim);display
       <li><div><div class="t">Conferir a forma de pagamento</div><div class="d">Cartão válido e com limite, ou saldo pré-pago por Pix/boleto (seção 12).</div></div></li>
       <li><div><div class="t">Rever orçamento e data de início</div><div class="d">R$ 25/dia é um bom começo (seção 09).</div></div></li>
       <li><div><div class="t">Clicar em "Publicar"</div><div class="d">Publica campanha, conjunto e anúncios juntos.</div></div></li>
-      <li><div><div class="t">Aguardar a análise da Meta</div><div class="d">Costuma liberar em algumas horas, às vezes até 24h. Se reprovar, veja a seção 32.</div></div></li>
+      <li><div><div class="t">Aguardar a análise da Meta</div><div class="d">Costuma liberar em algumas horas, às vezes até 24h. Se reprovar, veja a seção 31.</div></div></li>
     </ol>
   </section>
 
@@ -1102,25 +1301,9 @@ Já filmei para Band, Skol, Sesc e Record
     </table></div>
   </section>
 
-  <section id="sx4">
-    <div class="sec-head"><span class="eyebrow">28 · Rotina</span><h2>Sua semana ideal</h2>
-      <p class="lede">Adapte aos eventos. O importante é cada tarefa ter um dia fixo.</p></div>
-    <div class="tbl"><table>
-      <thead><tr><th>Dia</th><th>Foco</th><th>Tarefas</th></tr></thead>
-      <tbody>
-        <tr><td><strong>Segunda</strong></td><td>Entregas</td><td>Edição dos trabalhos de clientes · resposta às propostas do fim de semana</td></tr>
-        <tr class="hl"><td><strong>Terça</strong></td><td>Dia de conteúdo</td><td>Editar 3–4 Reels, legendas e capas · agendar a semana no Planejador</td></tr>
-        <tr><td><strong>Quarta</strong></td><td>Vendas</td><td>Prospectar 5 empresas · follow-up de propostas · 1 parceiro novo</td></tr>
-        <tr><td><strong>Quinta</strong></td><td>Reuniões</td><td>Visitas técnicas, reuniões com noivos e empresas · edição</td></tr>
-        <tr><td><strong>Sex–Dom</strong></td><td>Eventos</td><td>Gravar trabalhos + lista de conteúdo · Stories ao vivo do evento</td></tr>
-        <tr><td><strong>Domingo à noite</strong></td><td>Números (30 min)</td><td>Anúncios, leads da semana, Insights, painel na planilha</td></tr>
-      </tbody>
-    </table></div>
-    <div class="callout"><strong>Todo dia:</strong> WhatsApp em até 15 minutos (ou 3 janelas fixas: 9h, 13h e 19h, com mensagem de ausência no resto), 15 minutos de engajamento no Instagram, 3–5 Stories.</div>
-  </section>
 
   <section id="sx5">
-    <div class="sec-head"><span class="eyebrow">29 · Metas</span><h2>O caminho pro topo em Salvador</h2>
+    <div class="sec-head"><span class="eyebrow">28 · Metas</span><h2>O caminho pro topo em Salvador</h2>
       <p class="lede">Sugestão de metas. Ajuste depois do 1º mês, com os números reais.</p></div>
     <div class="tbl"><table>
       <thead><tr><th>Indicador</th><th>Em 90 dias</th><th>Em 12 meses</th></tr></thead>
@@ -1148,28 +1331,9 @@ Já filmei para Band, Skol, Sesc e Record
   </section>
 
   <section id="s25">
-    <div class="sec-head"><span class="eyebrow">30 · Banco de ideias</span><h2>60 ideias de conteúdo pra nunca ficar sem post</h2>
-      <p class="lede">Escolha 3–4 por semana. Grave várias no mesmo evento: 1 cobertura rende conteúdo pra 2 semanas.</p></div>
-    <div class="grid2">
-      <div class="box"><div class="t">Casamento (12)</div><ul>
-        <li>Entrada da noiva em câmera lenta</li><li>Reação do noivo ao ver a noiva</li><li>Votos com legenda</li><li>Discurso do pai</li><li>Primeira dança</li><li>Making of da noiva</li><li>Drone revelando a cerimônia na praia</li><li>Detalhes: alianças, vestido, convite</li><li>"Um casamento em 15 segundos"</li><li>Noivos assistindo o filme pela 1ª vez</li><li>Casamento na chuva que ficou lindo</li><li>Trend de áudio com cenas de casamento</li>
-      </ul></div>
-      <div class="box"><div class="t">15 anos e família (8)</div><ul>
-        <li>Valsa com o pai</li><li>Entrada da debutante</li><li>Surpresa da família</li><li>Making of com as amigas</li><li>Troca do vestido</li><li>Depoimento da mãe</li><li>"De bebê aos 15" com fotos antigas</li><li>Ensaio de 15 anos em ponto de Salvador</li>
-      </ul></div>
-      <div class="box"><div class="t">Bastidores e você (12)</div><ul>
-        <li>Um dia de filmmaker em 30s</li><li>O que tem na minha mochila</li><li>Configuração da câmera pra pôr do sol</li><li>Drone decolando na orla</li><li>Timelapse editando</li><li>Erros que já cometi</li><li>Como comecei na NJ Filmes</li><li>POV: filmando um casamento</li><li>Equipamento x celular: a diferença</li><li>Respondendo caixinha de perguntas</li><li>Meu setup de edição</li><li>Correndo atrás da melhor luz</li>
-      </ul></div>
-      <div class="box"><div class="t">Educativo (12)</div><ul>
-        <li>Quanto custa filmar um casamento em Salvador</li><li>Teaser, filme ou os dois?</li><li>5 erros ao contratar filmmaker</li><li>Melhor horário pra casar na praia</li><li>Lugares pra ensaio em Salvador</li><li>Checklist de fornecedores da noiva</li><li>Por que ter drone no evento</li><li>O que perguntar antes de contratar</li><li>Como ficar natural na frente da câmera</li><li>Vídeo x foto: por que ter os dois</li><li>Quanto tempo leva pra editar um filme</li><li>Como um vídeo vende mais pra empresa</li>
-      </ul></div>
-      <div class="box"><div class="t">Empresas e marcas (8)</div><ul>
-        <li>Bastidor de gravação pra marca</li><li>Antes/depois do Instagram de um cliente</li><li>Case Skol / Band / Sesc em 20s</li><li>Reels de restaurante: prato em câmera lenta</li><li>Vídeo de imóvel com drone</li><li>Aftermovie de evento corporativo</li><li>"3 vídeos que toda empresa precisa ter"</li><li>Depoimento do dono da empresa</li>
-      </ul></div>
-      <div class="box"><div class="t">Salvador e prova social (8)</div><ul>
-        <li>Salvador vista de drone (Farol, Rio Vermelho, Pelourinho)</li><li>Pôr do sol na Ponta de Humaitá</li><li>Print de avaliação 5 estrelas</li><li>Mensagem de cliente emocionado</li><li>Números: "X casamentos em 2026"</li><li>Fornecedores parceiros</li><li>Datas livres do mês</li><li>Retrospectiva do ano</li>
-      </ul></div>
-    </div>
+    <div class="sec-head"><span class="eyebrow">29 · Ganchos e legendas</span><h2>Ganchos e legendas prontas</h2>
+      <p class="lede">Grave várias ideias no mesmo evento: 1 cobertura rende conteúdo pra 2 semanas.</p></div>
+    <div class="alert new"><div class="h">As 100 ideias de vídeo ficam na aba Rotina do mês</div><p>Com cliente, drone, na rua e em casa, com botão de sortear e marcação do que já postou. Aqui ficam os ganchos e as legendas prontas.</p></div>
     <p class="group">Ganchos prontos (texto na tela nos 2 primeiros segundos)</p>
     <div class="copies">
       <div class="copy"><pre id="g1">Ela não sabia que o pai ia fazer isso 😭
@@ -1195,7 +1359,7 @@ Sua empresa precisa de vídeo que vende? Me chama no WhatsApp (link na bio).</pr
   </section>
 
   <section id="s26">
-    <div class="sec-head"><span class="eyebrow">31 · Cuidados</span><h2>O que NÃO fazer, em todas as áreas</h2>
+    <div class="sec-head"><span class="eyebrow">30 · Cuidados</span><h2>O que NÃO fazer, em todas as áreas</h2>
       <p class="lede">Os anúncios já têm a lista deles na seção 11. Aqui está o resto.</p></div>
     <p class="group">Atendimento e venda</p>
     <ul class="dont">
@@ -1250,7 +1414,7 @@ Sua empresa precisa de vídeo que vende? Me chama no WhatsApp (link na bio).</pr
 
   <!-- ============ DÚVIDAS ============ -->
   <section id="s27">
-    <div class="sec-head"><span class="eyebrow">32 · Dúvidas</span><h2>Perguntas frequentes</h2>
+    <div class="sec-head"><span class="eyebrow">31 · Dúvidas</span><h2>Perguntas frequentes</h2>
       <p class="lede">Toque numa pergunta pra ver a resposta.</p></div>
     <p class="group">Anúncios</p>
     <div class="faqs">
@@ -1309,7 +1473,7 @@ Sua empresa precisa de vídeo que vende? Me chama no WhatsApp (link na bio).</pr
 
   <!-- ============ CHECKLIST ============ -->
   <section id="s28">
-    <div class="sec-head"><span class="eyebrow">33 · Checklist</span><h2>Tudo o que falta, em ordem</h2>
+    <div class="sec-head"><span class="eyebrow">32 · Checklist</span><h2>Tudo o que falta, em ordem</h2>
       <p class="lede">Marque conforme for fazendo. Fica salvo neste navegador.</p></div>
     <div class="progress"><span id="prog">0 de 0 feitas</span><div class="bar"><i id="progbar"></i></div></div>
 
@@ -1379,16 +1543,39 @@ Sua empresa precisa de vídeo que vende? Me chama no WhatsApp (link na bio).</pr
     </ul>
 
     <p class="group">Rotina de todo mês</p>
-    <div class="callout"><strong>Todo mês:</strong> 1 trabalho novo no portfólio, Instagram 3–4× por semana, pedir avaliação depois de cada entrega, mensagem de 30 dias pros clientes, trocar o vídeo mais cansado dos anúncios, preencher o painel do mês (leads, fechamento, ticket, CAC, ROAS) e olhar o Search Console pra ver o que as pessoas buscam.</div>
+    <div class="callout"><strong>O que se repete todo mês está na aba Rotina do mês,</strong> com as caixinhas por semana. Resumo: 1 trabalho novo no portfólio, Instagram 3–4× por semana, pedir avaliação depois de cada entrega, mensagem de 30 dias pros clientes, trocar o vídeo mais cansado dos anúncios, preencher o painel do mês (leads, fechamento, ticket, CAC, ROAS) e olhar o Search Console pra ver o que as pessoas buscam.</div>
   </section>
 
 
+
+  </div>
+
   <footer>
     <span>NJFILMES · Salvador, BA · Vídeo, foto e drone</span>
-    <span>Plano final · 28/09/2026</span>
+    <span>Plano e Rotina · 28/09/2026</span>
   </footer>
 </div>
-
+<script>
+(function(){
+  var KEY='njfilmes-aba';
+  function show(which,scroll){
+    var r=which!=='plano';
+    document.getElementById('viewRotina').hidden=!r;
+    document.getElementById('viewPlano').hidden=r;
+    document.getElementById('tabRotina').setAttribute('aria-selected',r);
+    document.getElementById('tabPlano').setAttribute('aria-selected',!r);
+    try{localStorage.setItem(KEY,r?'rotina':'plano')}catch(e){}
+    if(scroll)window.scrollTo(0,document.querySelector('.switch').offsetTop-12);
+  }
+  document.getElementById('tabRotina').addEventListener('click',function(){show('rotina',true)});
+  document.getElementById('tabPlano').addEventListener('click',function(){show('plano',true)});
+  var h=location.hash.slice(1),start='rotina';
+  if(h&&document.getElementById(h)&&document.getElementById('viewPlano').contains(document.getElementById(h)))start='plano';
+  else if(!h){try{start=localStorage.getItem(KEY)||'rotina'}catch(e){}}
+  show(start,false);
+  if(h&&document.getElementById(h))document.getElementById(h).scrollIntoView();
+})();
+</script>
 <script>
 (function(){
   document.addEventListener('click', function(e){
@@ -1401,7 +1588,7 @@ Sua empresa precisa de vídeo que vende? Me chama no WhatsApp (link na bio).</pr
   });
   var KEY = 'njfilmes-plano-final-v1', saved = {};
   try { saved = JSON.parse(localStorage.getItem(KEY) || '{}') || {}; } catch(e){ saved = {}; }
-  var boxes = Array.prototype.slice.call(document.querySelectorAll('.tasks input[type="checkbox"]'));
+  var boxes = Array.prototype.slice.call(document.querySelectorAll('#viewPlano .tasks input[type="checkbox"]'));
   function paint(){
     var n = 0;
     boxes.forEach(function(b){ b.closest('label').classList.toggle('done', b.checked); if (b.checked) n++; });
@@ -1414,6 +1601,198 @@ Sua empresa precisa de vídeo que vende? Me chama no WhatsApp (link na bio).</pr
     b.addEventListener('change', function(){ saved[id] = b.checked; try { localStorage.setItem(KEY, JSON.stringify(saved)); } catch(e){} paint(); });
   });
   paint();
+})();
+</script>
+<script>
+(function(){
+var MESES=['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
+var FOCO=[
+ {h:'Verão, réveillon e muitos noivados novos',t:'Muita gente ficou noiva no fim de ano e começa a procurar fornecedor agora. Mês de reajustar preços.',a:'Aplicar o reajuste anual e reforçar a verba dos anúncios de casamento. Prospectar Carnaval (agências, camarotes, blocos).',c:'"Acabou de noivar? O que fazer primeiro", melhores momentos do réveillon, drone da orla no verão.'},
+ {h:'Carnaval',t:'Cidade cheia e agenda de eventos corporativos e de artistas. Casamentos seguem fechando pro fim do ano.',a:'Cobrir Carnaval (camarote, bloco, artista) e já prospectar São João com empresas, condomínios e prefeituras.',c:'Bastidor do Carnaval, drone da festa (respeitando restrições), cortes rápidos pra artistas.'},
+ {h:'Pré-São João e volta à rotina',t:'Empresas planejam o semestre. Bom mês pra fechar contratos mensais de conteúdo.',a:'Oferecer o plano mensal pra 10 empresas. Fechar coberturas de São João.',c:'"Como um vídeo aumenta suas vendas", case de marca (Skol, Band, Sesc), bastidor de gravação pra empresa.'},
+ {h:'Páscoa e preparação do mês das noivas',t:'Revisão trimestral. Prepare o conteúdo forte de casamento pra maio.',a:'Revisão trimestral (Trimestral e anual). Gravar ou separar 6 Reels de casamento pra maio. Campanha de pré-wedding.',c:'Ensaios pré-wedding em Salvador, "5 erros ao contratar filmmaker", depoimentos.'},
+ {h:'Mês das noivas e Dia das Mães',t:'Maio é quando mais se fala de casamento. Aproveite o interesse.',a:'Promoção de ensaio pré-wedding ou combo casamento + ensaio. Postagem diária de casamento.',c:'Série "Casamentos de Salvador", mães emocionadas nos casamentos, vídeo pro Dia das Mães.'},
+ {h:'São João',t:'Eventos juninos, empresas e prefeituras. Casamentos diminuem.',a:'Cobrir São João. Lançar a promoção de datas de baixa procura (jun–ago).',c:'Bastidor de São João, drone de festa junina, "datas livres" nos Stories.'},
+ {h:'Agenda mais calma',t:'Menos eventos: hora de investir no negócio. Revisão trimestral.',a:'Revisão trimestral. Atualizar portfólio no site, gravar conteúdo próprio (drone de Salvador, em casa), fechar contratos mensais.',c:'Conteúdo em casa e na rua (seção 09), tutoriais, "um dia de filmmaker".'},
+ {h:'Dia dos Pais e preparação da temporada',t:'Último mês calmo antes da alta. Deixe tudo pronto.',a:'Revisar site e pacotes. Criar os vídeos novos dos anúncios pra temporada. Fechar parceria com 2 cerimonialistas.',c:'Pais nos casamentos (valsa, discurso), bastidor de preparação de equipamento.'},
+ {h:'Formaturas e pré-temporada',t:'Começa a procura por casamentos de fim de ano e do ano seguinte.',a:'Anúncios de casamento com verba cheia. Prospectar formaturas e confraternizações de empresas.',c:'Trailers de casamento, drone no pôr do sol, depoimentos.'},
+ {h:'Pré-temporada de casamentos do próximo ano',t:'Revisão trimestral. Noivas do ano seguinte começam a fechar.',a:'Revisão trimestral. Lançar a promoção de pré-temporada (quem fechar até 31/12 ganha bônus). Planejar Black Friday.',c:'"Vai casar ano que vem? Garanta a data", casamentos completos, bastidores.'},
+ {h:'Black Friday e confraternizações',t:'Empresas contratam cobertura de fim de ano. Muitos casamentos no fim de semana.',a:'Condição de Black Friday só naquela semana (reserva com sinal menor ou bônus). Oferecer confraternizações.',c:'Contagem regressiva da condição, aftermovie corporativo, datas livres de dezembro.'},
+ {h:'Réveillon, festas e planejamento do ano',t:'Muitos pedidos de casamento no Natal e no réveillon.',a:'Reforçar anúncios no fim do mês. Fazer a retrospectiva e o planejamento do ano (tarefas anuais em janeiro).',c:'Retrospectiva do ano, "casamentos de 2026", agradecimento aos clientes, drone do réveillon.'}
+];
+var L={
+ inicio:[
+  ['Fechar o mês anterior','Se ainda não preencheu os números do mês passado, faça isso primeiro.'],
+  ['Ler o foco do mês e escrever as metas no quadro acima',''],
+  ['Escolher 1 ação ou promoção do mês','Use o foco do mês e a seção de Promoções da aba Plano completo.'],
+  ['Planejar 12 a 16 Reels','Sorteie ou escolha no banco de ideias (Ideias de vídeo, abaixo) e coloque na planilha: Ideia → Gravar → Editar → Pronto → Postado.'],
+  ['Conferir a agenda de eventos do mês','Confirmar horário e local com cada cliente, cobrar o restante até 7 dias antes, separar equipe.'],
+  ['Conferir pagamento e verba dos anúncios','Cartão ou saldo pra o mês inteiro. Verba conforme a fase atual.'],
+  ['Checar o status dos anúncios','Tudo ativo, nada reprovado, frequência abaixo de 4.'],
+  ['Postar nos Stories as datas livres do mês',''],
+  ['Separar o dinheiro do mês','Imposto, pró-labore, reserva e reinvestimento em contas ou caixinhas diferentes.']
+ ],
+ semana:[
+  ['seg','Responder propostas do fim de semana','Toda conversa nova respondida e proposta enviada.'],
+  ['seg','Follow-up das propostas abertas','Mensagens de 1 dia, 3 dias e 7 dias.'],
+  ['seg','Editar trabalhos de clientes','Conferir prazos de entrega da semana.'],
+  ['ter','Dia de conteúdo: editar 3–4 Reels','Com projeto modelo, legenda revisada e capa.'],
+  ['ter','Agendar os posts da semana','Meta Business Suite → Planejador.'],
+  ['qua','Prospectar 5 empresas','Restaurantes, clínicas, imobiliárias, hotéis, academias.'],
+  ['qua','Falar com 1 parceiro novo','Cerimonialista, buffet, decoradora, espaço de festa.'],
+  ['qui','Postar no Perfil da Empresa no Google','Trabalho recente, promoção ou datas livres.'],
+  ['qui','Reuniões e visitas técnicas',''],
+  ['sex','Preparar os eventos do fim de semana','Baterias, cartões formatados, equipamento reserva, SARPAS do drone.'],
+  ['fds','Gravar o evento + lista de conteúdo','Vertical, 5 bastidores seus, drone vertical, depoimento de 20s, detalhes.'],
+  ['fds','Backup duplo no mesmo dia',''],
+  ['dom','30 minutos de números','Anúncios (custo por conversa, frequência, CTR), leads na planilha, Insights.'],
+  ['dom','Limpar fakes com o Caça-Fakes','Até 80 por dia, 20 a cada 2 horas.']
+ ],
+ meio:[
+  ['Colocar 1 vídeo novo em teste nos anúncios','Duplique o anúncio e troque só o vídeo ou o gancho. Desligue o pior.'],
+  ['Conferir o custo por conversa e o retorno até agora','Muito acima do mês passado? Veja a tabela de diagnóstico da aba Plano completo.'],
+  ['Publicar 1 trabalho novo no site','Com título "serviço + local + Salvador" e legenda nas fotos.'],
+  ['Pedir avaliação no Google a quem recebeu o material','Mensagem "30 dias depois".'],
+  ['Conferir prazos de entrega da segunda metade do mês',''],
+  ['Revisar o andamento dos Reels planejados','Atrasou? Use a pasta de reserva.'],
+  ['Fazer 1 Collab ou anúncio de parceria','Com cliente ou fornecedor.']
+ ],
+ fim:[
+  ['Preencher os números do mês (Números)',''],
+  ['Ler os alertas do painel e anotar o que mudar',''],
+  ['Instagram Insights: anotar os 3 Reels campeões','Por alcance de não seguidores e compartilhamentos. Repita o formato no mês seguinte.'],
+  ['Search Console: ver as buscas que mais trouxeram gente','Ideia de texto pro blog ou de página.'],
+  ['Mandar a mensagem de 30 dias','Pros clientes que receberam o material no mês passado.'],
+  ['Emitir notas fiscais e pagar impostos do mês','MEI: o DAS vence no dia 20.'],
+  ['Conferir que todo material entregue tem backup na nuvem','Depois liberar HDs e cartões.'],
+  ['Atualizar a planilha de leads','Status de cada um e o motivo de quem não fechou.'],
+  ['Baixar o backup desta página (Histórico)','']
+ ],
+ tri:[
+  ['Revisar pacotes e preços','Fechou 5+ contratos no trimestre ou agenda 60% cheia? Suba o preço.'],
+  ['Revisar as metas de 90 dias',''],
+  ['Atualizar o media kit (PDF) e o contrato',''],
+  ['Testar a velocidade do site','pagespeed.web.dev no celular. Mande o resultado pro Claude se estiver vermelho.'],
+  ['Trocar capas dos destaques e posts fixados',''],
+  ['Manutenção do equipamento','Limpeza de sensor, firmware do drone e da câmera, baterias estufadas, cartões com erro.'],
+  ['Revisar os públicos de remarketing e criar público semelhante',''],
+  ['Revisar parcerias: quem indicou, quem não indicou','']
+ ],
+ ano:[
+  ['Aplicar o reajuste anual de preços','Avise clientes mensais com 30 dias.'],
+  ['Planejar o ano: metas, férias, equipamento novo, promoções',''],
+  ['Conferir o vencimento do domínio njfilmes.com.br','No registro.br. Ative a renovação automática.'],
+  ['Conferir cadastro do drone (SISANT) e seguro',''],
+  ['Revisar o enquadramento fiscal com o contador','Limite do MEI, Simples Nacional.'],
+  ['Fazer a retrospectiva do ano no Instagram',''],
+  ['Revisar o plano de hospedagem do site e das chaves','Trocar chaves de API antigas por segurança.']
+ ]
+};
+var HAB=[['WhatsApp respondido em até 15 minutos'],['3 a 5 Stories'],['15 minutos de engajamento no Instagram']];
+var DIAS={seg:'Segunda',ter:'Terça',qua:'Quarta',qui:'Quinta',sex:'Sexta',fds:'Fim de semana',dom:'Domingo'};
+var IDEIAS={
+ cliente:{n:'Com cliente',i:'Em casamentos, ensaios e empresas. Peça autorização antes de postar.',l:[
+  'Noivos assistindo o filme pela 1ª vez (reação)','"Em uma palavra, como foi o dia?" com os noivos','Você dirigindo o casal: "olha pra ela e ri"','Pose sem direção x com direção (antes/depois)','"Como vocês se conheceram?" com cenas do casamento','Pais lendo uma carta surpresa','Entrega da caixa ou pendrive filmada','Noiva se vendo no espelho pela primeira vez','Convidados mandando recado pros noivos','Perguntas rápidas pros noivos no carro','Ensaio pré-wedding em 3 pontos de Salvador em 30s','Pedido de casamento surpresa (serviço novo)','Chá revelação','Ensaio de gestante ou família','Mini documentário do casal em 60s','Recriar a foto antiga dos pais dos noivos','Trend de dupla com o casal','Debutante reagindo ao próprio vídeo','Valsa do pai com a debutante','Dono da empresa falando do resultado do vídeo','Chef preparando um prato em câmera lenta','"Um dia na empresa" de um cliente','Bastidor de clipe ou show de artista','Collab com cerimonialista ou decoradora mostrando o evento','Unboxing do cliente recebendo o material']},
+ drone:{n:'Drone',i:'SISANT + SARPAS sempre. Fora da área do aeroporto e longe de multidões.',l:[
+  'Revelação: subir de trás de uma palmeira mostrando o mar','Farol da Barra no pôr do sol','Top-down (câmera pra baixo) das ondas no Porto da Barra','Dronie: afastando de você acenando','Órbita em volta do casal na praia','Hyperlapse do Comércio e da Baía de Todos os Santos','Rio Vermelho e Largo de Santana de cima','Dique do Tororó','Seguir o carro dos noivos chegando','Transição: você segurando o drone e corta pro voo','Antes e depois da cor numa imagem de drone','Série "Onde ver o melhor pôr do sol de Salvador"','Aproximação da fachada de um imóvel de alto padrão','Top-down de mesa decorada ou festa ao ar livre','Nascer do sol na orla (Piatã, Patamares)','Tutorial: 3 movimentos de drone pra iniciantes','Checklist antes de voar (SARPAS, bateria, vento)','"Salvador em 15 segundos"','Mesmo lugar de dia e de noite','Viagem: Ilha dos Frades, Morro de São Paulo, Praia do Forte','Voo pela orla passando pelos bairros (Barra → Itapuã)','Enquete: "Qual lugar de Salvador eu filmo próximo?"','Drone x celular: mesma cena','Queda de bateria ou vento forte: o que fazer (bastidor)','Reflexo do pôr do sol no mar em câmera lenta']},
+ rua:{n:'Na rua',i:'Salvador é seu cenário. Peça autorização de quem aparecer de perto.',l:[
+  'Transformar uma rua comum em cena de cinema','Pelourinho: celular x câmera profissional','"Posso te filmar em câmera lenta?" com desconhecidos','Ensaio relâmpago de 5 minutos com alguém na rua','Cotidiano de Salvador: baiana, acarajé, mercado','Chuva em Salvador cinematográfica','Golden hour no Porto da Barra','Recriar a cena de um filme famoso em Salvador','Desafio: vídeo de cinema só com celular','Hyperlapse andando pelo Centro Histórico','Match cut: o mesmo movimento em 5 lugares','Paleta de cores de Salvador','Filmar turistas e mandar o vídeo pra eles (reação)','Bastidores de Carnaval ou São João','Festas populares: Lavagem do Bonfim, 2 de Fevereiro','Transições com a mão tapando a câmera','Um minuto no Mercado Modelo','Surf, skate ou capoeira com atletas locais (Collab)','Fotógrafo x filmmaker: mesma cena','Timelapse de nuvens no Farol','Elevador Lacerda de ângulos diferentes','Pôr do sol no Solar do Unhão / MAM','"3 lugares pra ensaio em Salvador que ninguém usa"','POV: indo pra um casamento','Rua à noite com luzes e movimento']},
+ casa:{n:'Em casa',i:'Pra semanas sem evento. Rende educativo e bastidor.',l:[
+  'Tour pelo setup de edição','O que tem na minha mochila','Limpeza do equipamento (ASMR)','Edição acelerada de um Reels','Antes e depois da correção de cor','Respondendo a caixinha de perguntas','"Quanto custa filmar um casamento em Salvador?"','Erros que cometi no começo','Dica rápida de edição (Premiere ou CapCut)','Meu primeiro vídeo x hoje','Organizando os backups: 3 cópias de cada trabalho','Checklist da véspera de um casamento','Filmar um objeto comum de forma cinematográfica (café, perfume)','Unboxing de equipamento novo','"Como escolher um filmmaker" (falando pra câmera)','Um dia de edição em 15 segundos','Sem som x com sound design','Sem música x com música','Mini aula: 3 enquadramentos que mudam tudo','A história de um cliente marcante','POV: a noiva perguntando "já tá pronto?"','Trend de humor da vida de filmmaker','Preparando a caixa de entrega de um cliente','Como planejo meus conteúdos da semana','Luz de janela: como gravar bonito em casa']}
+};
+var KEY='njfilmes-rotina-v1',ST;
+try{ST=JSON.parse(localStorage.getItem(KEY)||'null')}catch(e){}
+if(!ST||typeof ST!=='object')ST={};ST.months=ST.months||{};ST.ideas=ST.ideas||{};
+function save(){try{localStorage.setItem(KEY,JSON.stringify(ST))}catch(e){}}
+var now=new Date(),cur={y:now.getFullYear(),m:now.getMonth()};
+function mk(){return cur.y+'-'+String(cur.m+1).padStart(2,'0')}
+function M(){var k=mk();return ST.months[k]=ST.months[k]||{c:{},n:{},f:{}}}
+var $=function(id){return document.getElementById(id)};
+function esc(t){return String(t).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
+function li(id,t,d,day){return '<li><label><input type="checkbox" data-c="'+id+'"><span>'+(day?'<span class="day">'+day+'</span>':'')+esc(t)+(d?'<span class="sub">'+esc(d)+'</span>':'')+'</span></label></li>'}
+var week=0,ideaCat='cliente';
+function weeksIn(){var d=new Date(cur.y,cur.m+1,0).getDate();return Math.ceil(d/7)}
+function renderLists(){
+ document.querySelectorAll('[data-list]').forEach(function(ul){var k=ul.getAttribute('data-list');ul.innerHTML=L[k].map(function(x,i){return li(k+i,x[0],x[1])}).join('')});
+ var n=weeksIn(),h='';for(var w=0;w<n;w++)h+='<button class="tab" role="tab" type="button" data-w="'+w+'" aria-selected="'+(w===week)+'">Semana '+(w+1)+'</button>';
+ $('weekTabs').innerHTML=h;
+ $('weekList').innerHTML=L.semana.map(function(x,i){return li('w'+week+'-'+i,x[1],x[2],DIAS[x[0]])}).join('');
+ var q=cur.m%3===0,a=cur.m===0;$('triWrap').hidden=!q;$('anoWrap').hidden=!a;$('extraNone').hidden=q||a;
+ var nx=[0,3,6,9].find(function(v){return v>cur.m});$('extraNext').textContent=nx===undefined?'Janeiro (trimestral e anual)':MESES[nx]+' (trimestral)';
+}
+function renderHabits(){
+ var d=new Date(cur.y,cur.m+1,0).getDate(),m=M(),isCur=cur.y===now.getFullYear()&&cur.m===now.getMonth();
+ $('habitGrid').innerHTML=HAB.map(function(hb,i){var c=0,b='';for(var x=1;x<=d;x++){var on=!!m.c['h'+i+'-'+x];if(on)c++;b+='<button type="button" data-h="h'+i+'-'+x+'" class="'+(on?'on':'')+(isCur&&x===now.getDate()?' today':'')+'" aria-pressed="'+on+'" aria-label="Dia '+x+'">'+x+'</button>'}
+  return '<div class="habit"><div class="hh">'+esc(hb[0])+'<span>'+c+'/'+d+' dias</span></div><div class="days">'+b+'</div></div>'}).join('');
+}
+function syncChecks(){var m=M();document.querySelectorAll('input[data-c]').forEach(function(b){b.checked=!!m.c[b.getAttribute('data-c')];b.closest('label').classList.toggle('done',b.checked)});prog()}
+function allIds(){var ids=[];['inicio','meio','fim'].forEach(function(k){L[k].forEach(function(_,i){ids.push(k+i)})});
+ for(var w=0;w<weeksIn();w++)L.semana.forEach(function(_,i){ids.push('w'+w+'-'+i)});
+ if(cur.m%3===0)L.tri.forEach(function(_,i){ids.push('tri'+i)});if(cur.m===0)L.ano.forEach(function(_,i){ids.push('ano'+i)});return ids}
+function prog(){var ids=allIds(),m=M(),n=ids.filter(function(i){return m.c[i]}).length;$('rprog').textContent=n+' de '+ids.length+' feitas';$('rprogbar').style.width=(ids.length?n/ids.length*100:0)+'%';return[n,ids.length]}
+function renderFoco(){var f=FOCO[cur.m];$('mLabel').textContent=MESES[cur.m]+' '+cur.y;$('fTitle').textContent=MESES[cur.m];$('fHead').textContent=f.h;$('fText').textContent=f.t;$('fAcao').textContent=f.a;$('fConteudo').textContent=f.c}
+function fields(){var m=M();document.querySelectorAll('[data-field]').forEach(function(t){t.value=m.f[t.getAttribute('data-field')]||''});document.querySelectorAll('[data-num]').forEach(function(t){var v=m.n[t.getAttribute('data-num')];t.value=(v===undefined||v===null)?'':v})}
+function num(k,m){var v=parseFloat((m||M()).n[k]);return isNaN(v)?null:v}
+function brl(v){return 'R$ '+Math.round(v).toLocaleString('pt-BR')}
+function prevM(){var y=cur.y,m=cur.m-1;if(m<0){m=11;y--}return ST.months[y+'-'+String(m+1).padStart(2,'0')]}
+function kpis(){
+ var m=M(),g=function(k){return num(k,m)||0};
+ var leads=g('lWa')+g('lSite')+g('lIg')+g('lGoogle')+g('lInd'),c=g('contratos'),ca=g('contratosAds'),fat=g('fat'),fa=g('fatAds'),gs=g('gasto');
+ var tx=leads?c/leads*100:null,tk=c?fat/c:null,cac=ca?gs/ca:null,roas=gs?fa/gs:null,cpl=(g('lWa')+g('lSite'))?gs/(g('lWa')+g('lSite')):null;
+ var S=[['Leads no mês',leads||'–'],['Taxa de fechamento',tx===null?'–':tx.toFixed(0)+'%'],['Ticket médio',tk===null?'–':brl(tk)],['Custo por lead (anúncio)',cpl===null?'–':brl(cpl)],['Custo por cliente',cac===null?'–':brl(cac)],['Retorno dos anúncios',roas===null?'–':roas.toFixed(1)+'×']];
+ $('kpis').innerHTML=S.map(function(s){return '<div class="stat"><b>'+s[1]+'</b><span>'+s[0]+'</span></div>'}).join('');
+ var A=[],p=prevM();
+ if(!leads&&!c&&!gs){$('alerts').innerHTML='<div class="alert info"><div class="h">Preencha os números no fechamento</div><p>Os alertas aparecem aqui.</p></div>';return}
+ if(tx!==null&&leads>=10&&tx<10)A.push(['warn','Taxa de fechamento baixa ('+tx.toFixed(0)+'%)','O problema está no atendimento ou no preço, não no anúncio. Revise tempo de resposta, envio de trabalho parecido antes do preço e os motivos de perda. Aba Plano completo: Atendimento e Negociação.']);
+ if(tx!==null&&tx>=25)A.push(['ok','Taxa de fechamento alta ('+tx.toFixed(0)+'%)','Sinal de que dá pra subir o preço ou aumentar a verba dos anúncios.']);
+ if(roas!==null&&roas<3)A.push(['warn','Retorno dos anúncios abaixo de 3×','Confira a tabela de diagnóstico na aba Plano completo (Tráfego avançado). Troque o vídeo antes de mexer em público ou verba.']);
+ if(roas!==null&&roas>=5)A.push(['ok','Anúncios dando retorno ('+roas.toFixed(1)+'×)','Se a agenda tem vaga, suba a verba até 20% a cada 2–3 dias.']);
+ if(gs&&!(g('lWa')+g('lSite')))A.push(['warn','Gasto sem leads registrados','Confira se anotou os leads de anúncio ou se as campanhas estão rodando certo.']);
+ var r=num('reels',m);if(r!==null&&r<12)A.push(['warn','Só '+r+' Reels no mês','A meta é 12+. Use a pasta de reserva e o dia de conteúdo na terça.']);
+ var ns=num('naoSeg',m);if(ns!==null&&ns<30)A.push(['info','Alcance de não seguidores baixo ('+ns+'%)','Ganchos mais fortes, Reels de teste, áudios em alta e Collabs.']);
+ var av=num('aval',m);if(av!==null&&av<3)A.push(['info','Poucas avaliações novas no Google','Mande a mensagem de 30 dias pra todos os clientes entregues.']);
+ if(g('lInd')===0&&leads>0)A.push(['info','Nenhuma indicação no mês','Ative a promoção "Indique e ganhe" e fale com parceiros.']);
+ if(p&&p.n){var pl=['lWa','lSite','lIg','lGoogle','lInd'].reduce(function(s,k){return s+(parseFloat(p.n[k])||0)},0);if(pl&&leads<pl*0.8)A.push(['warn','Leads caíram mais de 20% em relação ao mês anterior','Veja se é sazonal (foco do mês), se o vídeo do anúncio cansou ou se o Instagram ficou parado.']);
+  var ps=parseFloat(p.n.seg),s=num('seg',m);if(ps&&s!==null)A.push(['info','Seguidores: '+(s-ps>=0?'+':'')+(s-ps)+' no mês','Lembre: seguidor real de Salvador vale mais que número.'])}
+ if(!A.length)A.push(['ok','Tudo dentro do esperado','Mantenha a rotina e teste 1 coisa nova no próximo mês.']);
+ $('alerts').innerHTML=A.map(function(a){return '<div class="alert '+a[0]+'"><div class="h">'+esc(a[1])+'</div><p>'+esc(a[2])+'</p></div>'}).join('');
+}
+function renderIdeas(){
+ $('ideaTabs').innerHTML=Object.keys(IDEIAS).map(function(k){var used=IDEIAS[k].l.filter(function(_,i){return ST.ideas[k+i]}).length;return '<button class="tab" role="tab" type="button" data-cat="'+k+'" aria-selected="'+(k===ideaCat)+'">'+IDEIAS[k].n+' · '+used+'/'+IDEIAS[k].l.length+'</button>'}).join('');
+ var c=IDEIAS[ideaCat];$('ideaIntro').textContent=c.i;
+ $('ideaList').innerHTML=c.l.map(function(t,i){var id=ideaCat+i,on=!!ST.ideas[id];return '<li><label class="'+(on?'done':'')+'"><input type="checkbox" data-idea="'+id+'"'+(on?' checked':'')+'><span>'+esc(t)+'</span></label></li>'}).join('');
+ var tot=0,used=0;Object.keys(IDEIAS).forEach(function(k){IDEIAS[k].l.forEach(function(_,i){tot++;if(ST.ideas[k+i])used++})});
+ $('ideaProg').textContent=used+' de '+tot+' ideias usadas';$('ideaBar').style.width=used/tot*100+'%';
+}
+function sortear(){var pool=[];Object.keys(IDEIAS).forEach(function(k){IDEIAS[k].l.forEach(function(t,i){if(!ST.ideas[k+i])pool.push([IDEIAS[k].n,t])})});
+ if(!pool.length){ST.ideas={};save();renderIdeas();return sortear()}
+ var out=[];while(out.length<3&&pool.length){out.push(pool.splice(Math.floor(Math.random()*pool.length),1)[0])}
+ $('sorteadas').innerHTML=out.map(function(o){return '<li>'+esc(o[1])+' <small>· '+o[0]+'</small></li>'}).join('')}
+function hist(){var ks=Object.keys(ST.months).sort().reverse(),h='';
+ ks.forEach(function(k){var m=ST.months[k];if(k!==mk()&&!Object.keys(m.c||{}).length&&!Object.keys(m.n||{}).length&&!Object.keys(m.f||{}).filter(function(x){return m.f[x]}).length)return;var _=0,n=m.n||{},g=function(x){return parseFloat(n[x])||0};var leads=g('lWa')+g('lSite')+g('lIg')+g('lGoogle')+g('lInd');var done=Object.keys(m.c||{}).filter(function(i){return m.c[i]&&i.charAt(0)!=='h'}).length;
+  var p=k.split('-');h+='<tr'+(k===mk()?' class="hl"':'')+'><td><strong>'+MESES[+p[1]-1]+' '+p[0]+'</strong></td><td class="num">'+done+'</td><td class="num">'+(leads||'–')+'</td><td class="num">'+(g('contratos')||'–')+'</td><td class="num">'+(g('fat')?brl(g('fat')):'–')+'</td><td class="num">'+(g('gasto')?(g('fatAds')/g('gasto')).toFixed(1)+'×':'–')+'</td><td class="num">'+(g('seg')?g('seg').toLocaleString('pt-BR'):'–')+'</td></tr>'});
+ $('histBody').innerHTML=h||'<tr><td colspan="7">Nenhum mês registrado ainda.</td></tr>'}
+function all(){renderFoco();renderLists();renderHabits();fields();syncChecks();kpis();hist()}
+document.addEventListener('change',function(e){var t=e.target;
+ if(t.matches('input[data-c]')){M().c[t.getAttribute('data-c')]=t.checked;if(!t.checked)delete M().c[t.getAttribute('data-c')];t.closest('label').classList.toggle('done',t.checked);save();prog();hist()}
+ if(t.matches('input[data-idea]')){if(t.checked)ST.ideas[t.getAttribute('data-idea')]=1;else delete ST.ideas[t.getAttribute('data-idea')];save();renderIdeas()}
+});
+document.addEventListener('input',function(e){var t=e.target;
+ if(t.matches('[data-field]')){M().f[t.getAttribute('data-field')]=t.value;save()}
+ if(t.matches('[data-num]')){var k=t.getAttribute('data-num');if(t.value==='')delete M().n[k];else M().n[k]=t.value;save();kpis();hist()}
+});
+document.addEventListener('click',function(e){var t=e.target.closest('button');if(!t)return;
+ if(t.hasAttribute('data-h')){var k=t.getAttribute('data-h'),m=M();if(m.c[k])delete m.c[k];else m.c[k]=1;save();renderHabits()}
+ else if(t.hasAttribute('data-w')){week=+t.getAttribute('data-w');renderLists();syncChecks()}
+ else if(t.hasAttribute('data-cat')){ideaCat=t.getAttribute('data-cat');renderIdeas()}
+ else if(t.id==='prevM'||t.id==='nextM'){cur.m+=t.id==='nextM'?1:-1;if(cur.m<0){cur.m=11;cur.y--}if(cur.m>11){cur.m=0;cur.y++}week=0;all()}
+ else if(t.id==='sortear')sortear();
+ else if(t.id==='exp'){var a=document.createElement('a');a.href=URL.createObjectURL(new Blob([JSON.stringify(ST,null,1)],{type:'application/json'}));a.download='njfilmes-rotina-backup-'+mk()+'.json';document.body.appendChild(a);a.click();a.remove()}
+ else if(t.id==='prt')window.print();
+});
+$('imp').addEventListener('change',function(){var f=this.files[0];if(!f)return;var r=new FileReader();r.onload=function(){try{var d=JSON.parse(r.result);if(!d||!d.months)throw 0;ST=d;ST.ideas=ST.ideas||{};save();all();renderIdeas();alert('Backup restaurado.')}catch(e){alert('Arquivo de backup inválido.')}};r.readAsText(f);this.value=''});
+if(now.getDate()<=7){var d=now.getDate();week=Math.min(Math.floor((d-1)/7),weeksIn()-1)}else week=Math.min(Math.floor((now.getDate()-1)/7),weeksIn()-1);
+all();renderIdeas();
 })();
 </script>
 </body>
