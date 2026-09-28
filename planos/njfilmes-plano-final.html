@@ -1,0 +1,1202 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>NJFILMES Plano Final</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  color-scheme:dark;
+  --bg:#0c0c0e; --bg-2:#121215; --card:#17171a;
+  --fg:#f5f4f0; --muted:#a8a7a2; --dim:#6f6e6a;
+  --accent:#c9a227; --hi:#f6c445; --accent-soft:rgba(201,162,39,.14);
+  --line:rgba(255,255,255,.09); --line-2:rgba(255,255,255,.18);
+  --ok:#3fbf6a; --ok-soft:rgba(63,191,106,.12); --bad:#ef6b5b; --bad-soft:rgba(239,107,91,.12); --warn:#e7a33a; --warn-soft:rgba(231,163,58,.1);
+  --display:"Poppins","Arial Narrow",system-ui,sans-serif;
+  --body:"Inter",-apple-system,"Segoe UI",system-ui,sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,Menlo,monospace;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--body);font-size:15.5px;line-height:1.6;padding:0 16px}
+.wrap{max-width:860px;margin:0 auto;padding-block:32px 96px}
+h1,h2,h3{font-family:var(--display);line-height:1.15;margin:0;text-wrap:balance}
+h1{font-size:clamp(30px,6.4vw,46px);font-weight:800;letter-spacing:-.01em}
+h2{font-size:clamp(21px,4.2vw,27px);font-weight:700}
+h3{font-size:16.5px;font-weight:700;margin-top:8px}
+p{margin:0}
+a{color:var(--hi)}
+strong{color:var(--fg)}
+.eyebrow{font:600 11.5px/1 var(--body);letter-spacing:.18em;text-transform:uppercase;color:var(--accent)}
+.mono{font-family:var(--mono);font-size:.9em;color:var(--hi)}
+code{font-family:var(--mono);font-size:.86em;background:var(--bg-2);border:1px solid var(--line);padding:1px 6px;border-radius:4px;word-break:break-word}
+
+.top{display:flex;flex-direction:column;gap:14px;padding-bottom:24px;border-bottom:1px solid var(--line)}
+.top .lead{font-size:17px;color:var(--muted);max-width:64ch}
+.meta{display:flex;flex-wrap:wrap;gap:6px 18px;font:500 12.5px/1.5 var(--mono);color:var(--dim)}
+
+.nav{position:sticky;top:env(safe-area-inset-top,0px);z-index:10;background:linear-gradient(var(--bg) 80%,rgba(12,12,14,0));padding-block:12px 16px;margin-top:6px}
+.nav .row{display:flex;flex-direction:row;flex-wrap:nowrap;gap:6px;overflow-x:auto;scrollbar-width:none}
+.nav .row::-webkit-scrollbar{display:none}
+.nav a{display:inline-flex;align-items:center;gap:6px;white-space:nowrap;text-decoration:none;color:var(--muted);font:600 12.5px/1 var(--body);border:1px solid var(--line-2);border-radius:99px;padding:8px 12px}
+.nav a span{font-family:var(--mono);color:var(--accent);font-size:11px}
+.nav a:hover,.nav a:focus-visible{color:var(--fg);border-color:var(--accent)}
+.nav a.part{border-color:var(--accent);color:var(--hi)}
+
+.part-head{margin-top:40px;padding:22px 0 4px;border-top:2px solid var(--accent);display:flex;flex-direction:column;gap:6px}
+.part-head h2{font-size:clamp(24px,5vw,32px)}
+section{padding-block:32px;border-bottom:1px solid var(--line);scroll-margin-top:64px;display:flex;flex-direction:column;gap:14px}
+.sec-head{display:flex;flex-direction:column;gap:8px}
+.lede{color:var(--muted);max-width:66ch}
+.plain{color:var(--muted);font-size:14.5px;max-width:68ch}
+.group{font:600 11.5px/1 var(--body);letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-top:8px}
+
+/* fluxo */
+.flow{display:grid;grid-template-columns:1fr auto 1fr auto 1fr;gap:10px;align-items:center}
+.node{border:1px solid var(--line-2);border-radius:8px;padding:12px 14px;background:var(--card)}
+.node b{display:block;font-family:var(--display);font-size:14px}
+.node small{color:var(--muted);font-size:12.5px}
+.node.goal{border-color:var(--ok);background:var(--ok-soft)}
+.arrow{color:var(--dim);font-size:18px}
+.paths{display:flex;flex-direction:column;gap:10px}
+@media (max-width:640px){.flow{grid-template-columns:1fr}.arrow{transform:rotate(90deg);justify-self:center}}
+
+.card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:18px 20px}
+.stack{border:1px solid var(--line);border-radius:10px;overflow:hidden;background:var(--card)}
+.stack .row{display:grid;grid-template-columns:130px 1fr;gap:16px;padding:14px 18px;border-top:1px solid var(--line)}
+.stack .row:first-child{border-top:0}
+.stack .k{font:600 11px/1.4 var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--dim);padding-top:3px}
+@media (max-width:540px){.stack .row{grid-template-columns:1fr;gap:4px}}
+.chip-label{font:600 11px/1 var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--dim);margin-top:14px}
+.chip-label:first-child{margin-top:0}
+.chips{display:flex;flex-wrap:wrap;gap:7px;margin-top:9px}
+.chip{font-size:13.5px;font-weight:600;padding:5px 11px;border-radius:99px;background:var(--accent-soft);color:var(--hi)}
+.chip.off{background:var(--bad-soft);color:var(--bad)}
+
+.alert{border-radius:10px;padding:15px 18px;border:1px solid transparent;display:flex;flex-direction:column;gap:6px}
+.alert .h{font-weight:700;font-size:15px}
+.alert p{font-size:14.5px;opacity:.94}
+.alert.ok{background:var(--ok-soft);border-color:rgba(63,191,106,.35)} .alert.ok .h{color:var(--ok)}
+.alert.warn{background:var(--warn-soft);border-color:rgba(231,163,58,.35)} .alert.warn .h{color:var(--warn)}
+.alert.info{background:var(--card);border-color:var(--line-2)} .alert.info .h{color:var(--hi)}
+.alert.new{background:var(--accent-soft);border-color:var(--accent)} .alert.new .h{color:var(--hi)}
+
+ol.steps{list-style:none;margin:0;padding:0;counter-reset:s;display:flex;flex-direction:column}
+ol.steps li{counter-increment:s;display:grid;grid-template-columns:30px 1fr;gap:12px;padding:12px 0;border-top:1px solid var(--line)}
+ol.steps li:first-child{border-top:0}
+ol.steps li::before{content:counter(s);font:600 12.5px/30px var(--mono);text-align:center;width:30px;height:30px;border-radius:50%;border:1px solid var(--line-2);color:var(--hi)}
+ol.steps .t{font-weight:600}
+ol.steps .d{color:var(--muted);font-size:14px;margin-top:2px}
+ol.steps .d ul{margin:6px 0 0;padding-left:18px}
+
+.tips,.dont{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:9px}
+.tips li,.dont li{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:12px 15px;font-size:14.5px}
+.tips li strong{color:var(--hi)}
+.dont li{position:relative;padding-left:40px}
+.dont li::before{content:"✕";position:absolute;left:15px;top:12px;color:var(--bad);font-weight:700;font-size:13px}
+.dont li strong{color:var(--bad)}
+
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.grid3{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
+@media (max-width:560px){.grid2{grid-template-columns:1fr}}
+.box{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:15px 17px;display:flex;flex-direction:column;gap:6px}
+.box .t{font-weight:700;font-size:14.5px;color:var(--hi)}
+.box p,.box ul{font-size:14px;color:var(--muted);margin:0}
+.box ul{padding-left:18px;display:flex;flex-direction:column;gap:4px}
+.box ul li b{color:var(--fg)}
+
+/* vídeos */
+.videos{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+@media (max-width:720px){.videos{grid-template-columns:1fr}}
+.vcard{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:17px;display:flex;flex-direction:column;gap:10px}
+.vcard header{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
+.vcard .num{font-family:var(--mono);color:var(--accent);font-size:12px}
+.tag{font:600 10.5px/1 var(--mono);letter-spacing:.04em;border-radius:99px;padding:5px 8px;white-space:nowrap}
+.tag.wa{background:var(--ok-soft);color:var(--ok)} .tag.site{background:var(--accent-soft);color:var(--hi)} .tag.both{background:rgba(255,255,255,.08);color:var(--fg)}
+.vcard .why{font-size:14px;color:var(--muted)}
+.tc{display:grid;grid-template-columns:auto 1fr;gap:5px 12px;font-size:14px;margin:0;padding:11px 12px;border:1px dashed var(--line-2);border-radius:8px;background:var(--bg-2)}
+.tc dt{font-family:var(--mono);font-size:11.5px;color:var(--hi);padding-top:2px;white-space:nowrap}
+.tc dd{margin:0}
+.vcard .tip{font-size:13px;color:var(--muted)}
+.vcard .tip b{color:var(--fg)}
+
+/* tabelas */
+.tbl{overflow-x:auto;border:1px solid var(--line);border-radius:10px}
+table{border-collapse:collapse;width:100%;font-size:14px;min-width:540px}
+th,td{text-align:left;padding:10px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font:600 11px/1.3 var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--dim);background:var(--bg-2)}
+tr:last-child td{border-bottom:0}
+td.num{font-family:var(--mono);font-size:13px;color:var(--hi);white-space:nowrap}
+tr.hl td{background:var(--accent-soft)}
+.good{color:var(--ok)} .warnc{color:var(--warn)}
+
+/* copiar */
+.copy{display:grid;grid-template-columns:1fr auto;gap:12px;align-items:start;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:13px 15px}
+.copy pre{margin:0;white-space:pre-wrap;font:inherit;font-size:14.5px}
+.copies{display:flex;flex-direction:column;gap:9px}
+.btn{font:600 12px/1 var(--mono);border:1px solid var(--line-2);background:var(--bg-2);color:var(--fg);border-radius:7px;padding:9px 11px;cursor:pointer;white-space:nowrap}
+.btn:hover{border-color:var(--accent)}
+.btn.ok{border-color:var(--ok);color:var(--ok)}
+
+/* dúvidas */
+details.faq{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:0 16px}
+details.faq summary{cursor:pointer;padding:13px 0;font-weight:700;color:var(--hi);font-size:14.5px;list-style:none;display:flex;justify-content:space-between;gap:12px}
+details.faq summary::after{content:"+";font-family:var(--mono);color:var(--dim)}
+details.faq[open] summary::after{content:"–"}
+details.faq .a{padding-bottom:14px;color:var(--muted);font-size:14px;display:flex;flex-direction:column;gap:6px}
+.faqs{display:flex;flex-direction:column;gap:8px}
+
+.callout{border-left:3px solid var(--accent);background:var(--card);border-radius:0 10px 10px 0;padding:13px 16px;font-size:14.5px;color:var(--muted)}
+.callout strong{color:var(--fg)}
+
+/* checklist */
+.progress{display:flex;align-items:center;gap:12px;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:12px 16px;font:600 13px/1 var(--mono);color:var(--muted)}
+.bar{flex:1;height:7px;border-radius:9px;background:var(--bg-2);overflow:hidden}
+.bar i{display:block;height:100%;width:0;background:var(--accent);transition:width .3s}
+.tasks{list-style:none;margin:0;padding:0;background:var(--card);border:1px solid var(--line);border-radius:10px}
+.tasks li{border-top:1px solid var(--line)}
+.tasks li:first-child{border-top:0}
+.tasks label{display:flex;gap:12px;align-items:flex-start;padding:12px 15px;cursor:pointer;font-size:14.5px}
+.tasks input{width:18px;height:18px;margin-top:3px;accent-color:var(--accent);flex:none}
+.tasks label.done span{color:var(--dim);text-decoration:line-through}
+
+.btn:focus-visible,.nav a:focus-visible,.tasks input:focus-visible,details.faq summary:focus-visible{outline:2px solid var(--hi);outline-offset:2px}
+footer{padding-top:28px;font:500 12.5px/1.6 var(--mono);color:var(--dim);display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}html{scroll-behavior:auto}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="top">
+    <span class="eyebrow">NJFILMES · Salvador, BA · versão final · 28/09/2026</span>
+    <h1>Plano Completo: Anúncios, Vendas, Preços e Crescimento</h1>
+    <p class="lead">Só o que falta fazer, sem repetição. O que já foi resolvido (WhatsApp verificado, vídeo anexado, mensagem de boas-vindas, Pixel, formulário com e-mail, página de orçamento, SEO da Home, Search Console e Perfil do Google) ficou de fora.</p>
+    <div class="meta"><span>Pixel NJFILMES · 1633292798505183</span><span>WhatsApp +55 71 8681-7816</span><span>Página de anúncio · njfilmes.com.br/orcamento</span></div>
+  </header>
+
+  <nav class="nav" aria-label="Seções">
+    <div class="row">
+      <a class="part" href="#p1">Parte 1 · Anúncios</a>
+      <a href="#s01"><span>01</span>Como funciona</a>
+      <a href="#s02"><span>02</span>Campanha WhatsApp</a>
+      <a href="#s03"><span>03</span>Campanha Site</a>
+      <a href="#s04"><span>04</span>Remarketing</a>
+      <a href="#s05"><span>05</span>Vídeos</a>
+      <a href="#s06"><span>06</span>Formato</a>
+      <a href="#s07"><span>07</span>Subir no Meta</a>
+      <a href="#s08"><span>08</span>Textos</a>
+      <a href="#s09"><span>09</span>Orçamento</a>
+      <a href="#s10"><span>10</span>14 dias</a>
+      <a href="#s11"><span>11</span>Não fazer</a>
+      <a href="#s12"><span>12</span>Ajustes da conta</a>
+      <a class="part" href="#p2">Parte 2 · Vender</a>
+      <a href="#s13"><span>13</span>Atendimento</a>
+      <a href="#s14"><span>14</span>Pacotes</a>
+      <a href="#s15"><span>15</span>Preço mínimo</a>
+      <a href="#s16"><span>16</span>Negociação</a>
+      <a href="#s17"><span>17</span>Promoções</a>
+      <a href="#s18"><span>18</span>Contrato</a>
+      <a class="part" href="#p3">Parte 3 · Crescer</a>
+      <a href="#s19"><span>19</span>Instagram</a>
+      <a href="#s20"><span>20</span>Site</a>
+      <a href="#s21"><span>21</span>Google</a>
+      <a href="#s22"><span>22</span>Medir</a>
+      <a href="#s23"><span>23</span>Mais clientes</a>
+      <a href="#s24"><span>24</span>Calendário</a>
+      <a href="#s25"><span>25</span>Ideias</a>
+      <a class="part" href="#s26">Não fazer</a>
+      <a class="part" href="#s27">Dúvidas</a>
+      <a class="part" href="#s28">Checklist</a>
+    </div>
+  </nav>
+
+  <!-- ============ PARTE 1 ============ -->
+  <div class="part-head" id="p1"><span class="eyebrow">Parte 1</span><h2>Anúncios na Meta</h2></div>
+
+  <section id="s01">
+    <div class="sec-head"><span class="eyebrow">01 · Como funciona</span><h2>Os dois caminhos terminam no seu WhatsApp</h2></div>
+    <div class="flow" role="img" aria-label="O anúncio leva à Campanha 1 (WhatsApp direto) ou à Campanha 2 (página de orçamento com formulário); as duas terminam no seu WhatsApp">
+      <div class="node"><b>Anúncio</b><small>Instagram e Facebook</small></div>
+      <div class="arrow" aria-hidden="true">→</div>
+      <div class="paths">
+        <div class="node"><b>Campanha 1 · principal</b><small>botão "Enviar mensagem"</small></div>
+        <div class="node"><b>Campanha 2 · teste</b><small>/orcamento → formulário (Lead + e-mail)</small></div>
+      </div>
+      <div class="arrow" aria-hidden="true">→</div>
+      <div class="node goal"><b>Seu WhatsApp</b><small>orçamento e venda</small></div>
+    </div>
+    <ol class="steps">
+      <li><div><div class="t">Publicar a Campanha 1 (WhatsApp)</div><div class="d">Já está quase pronta, seção 02.</div></div></li>
+      <li><div><div class="t">Criar a Campanha 2 (Site), menor</div><div class="d">Seção 03. Pode ser no mesmo dia ou uma semana depois.</div></div></li>
+      <li><div><div class="t">Deixar 14 dias sem mexer e comparar</div><div class="d">Por cliente fechado, não pelo clique mais barato (seção 10).</div></div></li>
+      <li><div><div class="t">Ligar o remarketing</div><div class="d">Quando o público de quem viu seus vídeos passar de 1.000 pessoas (seção 04).</div></div></li>
+      <li><div><div class="t">Em paralelo: Instagram, site e Google</div><div class="d">Seções 19 a 21.</div></div></li>
+    </ol>
+  </section>
+
+  <section id="s02">
+    <div class="sec-head"><span class="eyebrow">02 · Campanha 1</span><h2>WhatsApp: o que falta pra publicar</h2>
+      <p class="lede">"NJFILMES - Novos Clientes", em rascunho no Gerenciador de Anúncios.</p></div>
+    <div class="stack">
+      <div class="row"><div class="k">Campanha</div><div><strong>NJFILMES - Novos Clientes</strong><br><span class="mono">Leads (Advantage+) · R$ 25,00/dia · sem data de término</span></div></div>
+      <div class="row"><div class="k">Conjunto</div><div><strong>NJFILMES - Novos Clientes - Salvador</strong><br><span class="mono">WhatsApp · maximizar conversas · 18+ · 20 bairros · 500 mil–589 mil pessoas</span></div></div>
+      <div class="row"><div class="k">Anúncio</div><div><strong>NJFILMES - Leads WhatsApp - Salvador - v1</strong><br><span class="mono">Reels de bastidores do @njfilmes (post existente)</span></div></div>
+    </div>
+    <div class="card">
+      <div class="chip-label">Orla de Salvador</div>
+      <div class="chips"><span class="chip">Barra</span><span class="chip">Ondina</span><span class="chip">Rio Vermelho</span><span class="chip">Costa Azul</span><span class="chip">Boca do Rio</span><span class="chip">Patamares</span><span class="chip">Stella Maris</span><span class="chip">Praia do Flamengo</span><span class="chip">Piatã</span><span class="chip">Itapuã</span></div>
+      <div class="chip-label">Miolo nobre e centro expandido</div>
+      <div class="chips"><span class="chip">Graça</span><span class="chip">Horto Florestal</span><span class="chip">Itaigara</span><span class="chip">Caminho das Árvores</span><span class="chip">Pituba</span><span class="chip">Jardim Armação</span><span class="chip">Imbuí</span><span class="chip">Candeal</span><span class="chip">Canela</span><span class="chip">Federação</span></div>
+      <div class="chip-label">Fora por agora (opcional incluir)</div>
+      <div class="chips"><span class="chip off">Buraquinho</span><span class="chip off">Vilas do Atlântico</span></div>
+    </div>
+    <p class="plain">Pra incluir Lauro de Freitas com precisão: em Localização, use <strong>"Soltar pino"</strong> num ponto exato (praia ou avenida principal) e defina um raio pequeno, de 1 a 2 km.</p>
+    <ol class="steps">
+      <li><div><div class="t">Colocar um texto feito pro anúncio</div><div class="d">O anúncio atual usa a legenda do post, que não dá pra editar. No menu da esquerda, clique nos <strong>···</strong> do anúncio → <strong>Duplicar</strong>. No anúncio novo, troque pra <strong>"Configurar criativo"</strong>, suba o arquivo do vídeo e cole os textos da seção 08. Deixe os dois anúncios rodando: a Meta mostra mais o melhor.</div></div></li>
+      <li><div><div class="t">Conferir a forma de pagamento</div><div class="d">Cartão válido e com limite, ou saldo pré-pago por Pix/boleto (seção 12).</div></div></li>
+      <li><div><div class="t">Rever orçamento e data de início</div><div class="d">R$ 25/dia é um bom começo (seção 09).</div></div></li>
+      <li><div><div class="t">Clicar em "Publicar"</div><div class="d">Publica campanha, conjunto e anúncios juntos.</div></div></li>
+      <li><div><div class="t">Aguardar a análise da Meta</div><div class="d">Costuma liberar em algumas horas, às vezes até 24h. Se reprovar, veja a seção 27.</div></div></li>
+    </ol>
+  </section>
+
+  <section id="s03">
+    <div class="sec-head"><span class="eyebrow">03 · Campanha 2</span><h2>Site: página de orçamento</h2>
+      <p class="lede">Leva a pessoa pra njfilmes.com.br/orcamento: vídeo no topo, formulário, clientes, trabalhos e avaliações. Cada formulário enviado vira um Lead no Pixel, abre o WhatsApp e manda um e-mail pra contato@njfilmes.com.br.</p></div>
+    <p class="group">Na campanha</p>
+    <ol class="steps">
+      <li><div><div class="t">+ Criar → objetivo Leads (Cadastros)</div><div class="d">Nome: <code>NJ - Site - Leads</code></div></div></li>
+    </ol>
+    <p class="group">No conjunto de anúncios</p>
+    <ol class="steps">
+      <li><div><div class="t">Local da conversão: Site</div><div class="d">Não "Formulários instantâneos" (esses abrem dentro do Instagram e a pessoa nunca vê seu site).</div></div></li>
+      <li><div><div class="t">Pixel NJFILMES → evento de conversão: Lead</div></div></li>
+      <li><div><div class="t">Orçamento diário</div><div class="d">R$ 7,50 a R$ 10 no começo (seção 09).</div></div></li>
+      <li><div><div class="t">Os mesmos 20 bairros, idade 18+</div><div class="d">Posicionamentos: Advantage+ (automático).</div></div></li>
+    </ol>
+    <p class="group">No anúncio</p>
+    <ol class="steps">
+      <li><div><div class="t">Mídia: os mesmos vídeos da Campanha 1</div></div></li>
+      <li><div><div class="t">URL do site</div><div class="d"><code>https://njfilmes.com.br/orcamento</code></div></div></li>
+      <li><div><div class="t">Parâmetros de URL (em Rastreamento)</div><div class="d"><code>utm_source=meta&amp;utm_medium=paid&amp;utm_campaign=site-leads</code></div></div></li>
+      <li><div><div class="t">Botão: "Solicitar orçamento"</div><div class="d">Rastreamento: NJFILMES Pixel marcado. Publicar.</div></div></li>
+    </ol>
+    <div class="alert warn"><div class="h">Nas primeiras 1–2 semanas o lead do site sai mais caro</div><p>É a Meta aprendendo com o Pixel, que é novo. Compare as duas campanhas só depois de 14 dias.</p></div>
+  </section>
+
+  <section id="s04">
+    <div class="sec-head"><span class="eyebrow">04 · Novo</span><h2>Remarketing: falar de novo com quem já te viu</h2>
+      <p class="lede">Anúncio só pra quem assistiu seus vídeos, visitou o site ou interagiu com o Instagram e ainda não pediu orçamento. Costuma ser o dinheiro que mais vira cliente.</p></div>
+    <p class="group">1 · Criar os públicos (Gerenciador → Públicos → Criar público → Público personalizado)</p>
+    <div class="tbl"><table>
+      <thead><tr><th>Público</th><th>Fonte</th><th>Regra</th><th>Janela</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Viu seus vídeos</strong></td><td>Vídeo</td><td>Assistiram 50% ou mais</td><td class="num">30 dias</td></tr>
+        <tr><td><strong>Visitou o site</strong></td><td>Site (Pixel)</td><td>Todos os visitantes</td><td class="num">30 dias</td></tr>
+        <tr><td><strong>Interagiu no Instagram</strong></td><td>Conta do Instagram</td><td>Todos que interagiram</td><td class="num">60 dias</td></tr>
+        <tr><td><strong>Já pediu orçamento</strong> (pra excluir)</td><td>Site (Pixel)</td><td>Evento Lead</td><td class="num">30 dias</td></tr>
+      </tbody>
+    </table></div>
+    <p class="group">2 · A campanha</p>
+    <ol class="steps">
+      <li><div><div class="t">Quando começar</div><div class="d">Quando os públicos somarem pelo menos 1.000 pessoas (umas 2–3 semanas depois de publicar).</div></div></li>
+      <li><div><div class="t">Objetivo Leads → WhatsApp</div><div class="d">Nome: <code>NJ - Remarketing</code>. Orçamento: R$ 5/dia.</div></div></li>
+      <li><div><div class="t">Público</div><div class="d">Inclua os 3 primeiros públicos e <strong>exclua</strong> "Já pediu orçamento".</div></div></li>
+      <li><div><div class="t">Vídeo diferente do que a pessoa já viu</div><div class="d">Depoimento de cliente ou trailer de casamento, com texto de reforço (seção 08).</div></div></li>
+    </ol>
+    <p class="group">3 · Depois de uns 100 leads: público semelhante</p>
+    <p class="plain">Públicos → Criar público → <strong>Público semelhante</strong>, a partir de "Já pediu orçamento", 1%. Use num conjunto novo com os mesmos 20 bairros: a Meta procura pessoas parecidas com quem já pediu orçamento.</p>
+  </section>
+
+  <section id="s05">
+    <div class="sec-head"><span class="eyebrow">05 · Criativos</span><h2>8 vídeos que trazem cliente</h2>
+      <p class="lede">Cada um com roteiro por tempo. A etiqueta mostra em qual campanha rende mais.</p></div>
+    <div class="alert new"><div class="h">Pra começar, grave ou separe estes 3</div><p><strong>1. Trailer de casamento</strong>, <strong>2. Bastidores</strong> e <strong>4. Depoimento de cliente</strong>. Suba os três no mesmo conjunto (um anúncio por vídeo) e, a cada 2–3 semanas, troque o pior por outro da lista.</p></div>
+    <div class="videos">
+      <article class="vcard"><header><div><span class="num">01</span><h3>Trailer de casamento</h3></div><span class="tag both">WhatsApp + Site</span></header>
+        <p class="why">Mostra o resultado que a noiva quer ter. É o que mais vende casamento.</p>
+        <dl class="tc"><dt>00:00–00:03</dt><dd>Entrada da noiva, troca de alianças ou o beijo.</dd><dt>00:03–00:20</dt><dd>Preparação, emoção dos pais, drone, festa.</dd><dt>00:20–00:25</dt><dd>"Seu casamento com cara de cinema · Peça seu orçamento".</dd></dl>
+        <p class="tip"><b>Dica:</b> peça autorização do casal pra usar as imagens.</p></article>
+      <article class="vcard"><header><div><span class="num">02</span><h3>Bastidores</h3></div><span class="tag wa">WhatsApp</span></header>
+        <p class="why">Você trabalhando: gera confiança. Quem vê seu rosto chama mais.</p>
+        <dl class="tc"><dt>00:00–00:03</dt><dd>Você com a câmera ou o drone decolando: "Por trás de um casamento".</dd><dt>00:03–00:18</dt><dd>Equipamento, você dirigindo o casal, a cena que ficou linda.</dd><dt>00:18–00:22</dt><dd>Resultado final + "Quer o seu assim? Me chama".</dd></dl>
+        <p class="tip"><b>Dica:</b> peça pra alguém te filmar com o celular no próximo evento.</p></article>
+      <article class="vcard"><header><div><span class="num">03</span><h3>Antes e depois da edição</h3></div><span class="tag site">Site</span></header>
+        <p class="why">Prova que o trabalho vai além de apertar o botão.</p>
+        <dl class="tc"><dt>00:00–00:03</dt><dd>Tela dividida: bruto de um lado, finalizado do outro.</dd><dt>00:03–00:15</dt><dd>3 ou 4 cenas "antes → depois" com cor, som e ritmo.</dd><dt>00:15–00:18</dt><dd>"Veja mais trabalhos e peça seu orçamento".</dd></dl>
+        <p class="tip"><b>Dica:</b> grave a tela do programa de edição.</p></article>
+      <article class="vcard"><header><div><span class="num">04</span><h3>Depoimento de cliente</h3></div><span class="tag both">WhatsApp + Site</span></header>
+        <p class="why">A fala de um cliente convence mais que qualquer texto seu.</p>
+        <dl class="tc"><dt>00:00–00:03</dt><dd>A frase mais forte, com legenda: "Ficou perfeito!"</dd><dt>00:03–00:20</dt><dd>O cliente contando a experiência + cenas do vídeo dele.</dd><dt>00:20–00:24</dt><dd>5 estrelas do Google + "Peça seu orçamento".</dd></dl>
+        <p class="tip"><b>Dica:</b> use os depoimentos em vídeo que já estão no site.</p></article>
+      <article class="vcard"><header><div><span class="num">05</span><h3>Drone revelando o local</h3></div><span class="tag both">WhatsApp + Site</span></header>
+        <p class="why">Para a rolagem do feed e te diferencia de quem não tem drone.</p>
+        <dl class="tc"><dt>00:00–00:03</dt><dd>Drone subindo e revelando o local ou a orla.</dd><dt>00:03–00:12</dt><dd>2 ou 3 tomadas aéreas + uma cena de chão emocionante.</dd><dt>00:12–00:15</dt><dd>"Filmagem com drone em Salvador · Orçamento no WhatsApp".</dd></dl>
+        <p class="tip"><b>Dica:</b> serve pra casamento, 15 anos e empresa.</p></article>
+      <article class="vcard"><header><div><span class="num">06</span><h3>Você se apresentando</h3></div><span class="tag wa">WhatsApp</span></header>
+        <p class="why">Olhando pra câmera, em 20 segundos.</p>
+        <dl class="tc"><dt>00:00–00:03</dt><dd>"Vai casar ou fazer um evento em Salvador? Olha isso."</dd><dt>00:03–00:18</dt><dd>Quem você é, vídeo + foto + drone, 2 cenas do trabalho.</dd><dt>00:18–00:22</dt><dd>"Toca em Enviar mensagem que eu te mando o orçamento".</dd></dl>
+        <p class="tip"><b>Dica:</b> grave de dia, perto de uma janela, na vertical.</p></article>
+      <article class="vcard"><header><div><span class="num">07</span><h3>Destaques de 15 anos</h3></div><span class="tag both">WhatsApp + Site</span></header>
+        <p class="why">Fala com a mãe da debutante, que é quem contrata.</p>
+        <dl class="tc"><dt>00:00–00:03</dt><dd>A valsa ou a entrada da debutante.</dd><dt>00:03–00:18</dt><dd>Família emocionada, amigas, festa, pista.</dd><dt>00:18–00:22</dt><dd>"15 anos só uma vez · Garanta a data".</dd></dl>
+        <p class="tip"><b>Dica:</b> anúncio separado, com texto falando de 15 anos.</p></article>
+      <article class="vcard"><header><div><span class="num">08</span><h3>Vídeo pra empresa</h3></div><span class="tag site">Site</span></header>
+        <p class="why">Mostra marcas atendidas e traz clientes de ticket maior.</p>
+        <dl class="tc"><dt>00:00–00:03</dt><dd>A cena mais bonita de um trabalho de marca.</dd><dt>00:03–00:15</dt><dd>Cortes de 3 ou 4 trabalhos, com o nome dos clientes.</dd><dt>00:15–00:18</dt><dd>"Vídeo profissional pra sua empresa · Fale com a NJ Filmes".</dd></dl>
+        <p class="tip"><b>Dica:</b> só marcas que autorizaram o uso.</p></article>
+    </div>
+  </section>
+
+  <section id="s06">
+    <div class="sec-head"><span class="eyebrow">06 · Formato</span><h2>Suba o arquivo original do vídeo</h2></div>
+    <div class="tbl"><table>
+      <thead><tr><th>Opção</th><th>Quando usar</th><th>Problema</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Arquivo original</strong></td><td class="good">Sempre que tiver</td><td>Nenhum: melhor qualidade e texto livre</td></tr>
+        <tr><td>Post do Instagram</td><td>Só se o post já tem muitas curtidas</td><td class="warnc">Preso à legenda e ao formato do post</td></tr>
+        <tr><td>Vídeo do site</td><td>Não use</td><td class="warnc">Versão comprimida</td></tr>
+      </tbody>
+    </table></div>
+    <ul class="tips">
+      <li><strong>Vertical 9:16</strong> (1080 × 1920), formato Reels, com <strong>15 a 30 segundos</strong>.</li>
+      <li><strong>Os 3 primeiros segundos decidem tudo:</strong> comece pela cena mais forte, nada de logo no começo.</li>
+      <li><strong>Texto na tela:</strong> a maioria assiste sem som.</li>
+      <li><strong>Logo e "Peça seu orçamento" só nos últimos 2 segundos.</strong></li>
+      <li><strong>Nada de imagem de banco:</strong> o seu portfólio real é o argumento de venda.</li>
+    </ul>
+  </section>
+
+  <section id="s07">
+    <div class="sec-head"><span class="eyebrow">07 · Gerenciador de Anúncios</span><h2>Como colocar os vídeos no anúncio</h2>
+      <p class="lede">Em adsmanager.facebook.com, no nível do anúncio.</p></div>
+    <p class="group">Subir</p>
+    <ol class="steps">
+      <li><div><div class="t">Configurar criativo → Imagem ou vídeo único</div></div></li>
+      <li><div><div class="t">Adicionar mídia → Enviar</div><div class="d">Escolha o arquivo do computador ou celular.</div></div></li>
+      <li><div><div class="t">Conferir os cortes</div><div class="d"><ul><li><strong>Stories e Reels:</strong> 9:16, tela cheia.</li><li><strong>Feed:</strong> 4:5 ou 1:1. Se cortar algo importante, ajuste em "Recortar".</li></ul></div></div></li>
+      <li><div><div class="t">Miniatura</div><div class="d">Um quadro com rosto ou emoção: é o que aparece antes do play.</div></div></li>
+      <li><div><div class="t">Legendas automáticas</div><div class="d">Ative se você fala no vídeo.</div></div></li>
+    </ol>
+    <p class="group">Textos e botão</p>
+    <ol class="steps">
+      <li><div><div class="t">Texto principal → Adicionar opção de texto</div><div class="d">Cole as 3 opções da seção 08.</div></div></li>
+      <li><div><div class="t">Título → Adicionar opção</div><div class="d">Cole os 3 títulos.</div></div></li>
+      <li><div><div class="t">Chamada pra ação</div><div class="d">"Enviar mensagem" (WhatsApp) ou "Solicitar orçamento" (Site).</div></div></li>
+      <li><div><div class="t">Aprimoramentos</div><div class="d">Deixe os automáticos, mas desligue "Música" se o vídeo já tem trilha.</div></div></li>
+    </ol>
+    <p class="group">Vários vídeos e trocas</p>
+    <ol class="steps">
+      <li><div><div class="t">Um anúncio por vídeo, no mesmo conjunto</div><div class="d">··· do anúncio → Duplicar → troque só o vídeo. Assim cada vídeo tem seus números.</div></div></li>
+      <li><div><div class="t">Não edite anúncio que já está rodando</div><div class="d">Duplique, suba o vídeo novo e desligue o pior. Editar faz a Meta recomeçar o aprendizado.</div></div></li>
+      <li><div><div class="t">A cada 2–3 semanas</div><div class="d">Desligue o vídeo com maior custo por resultado e suba um novo da seção 05.</div></div></li>
+    </ol>
+  </section>
+
+  <section id="s08">
+    <div class="sec-head"><span class="eyebrow">08 · Textos</span><h2>Textos prontos pra copiar</h2>
+      <p class="lede">Cole as 3 opções no mesmo anúncio: a Meta combina e mostra mais a que funciona.</p></div>
+    <p class="group">Texto principal</p>
+    <div class="copies">
+      <div class="copy"><pre id="t1">🎬 Seu evento merece ser lembrado do jeito certo.
+Filmagem e fotografia profissional em Salvador: casamentos, 15 anos, eventos e empresas. Com drone e entrega caprichada.
+👉 Peça seu orçamento agora.</pre><button class="btn" type="button" data-copy="t1">Copiar</button></div>
+      <div class="copy"><pre id="t2">O dia passa rápido. As imagens ficam pra sempre. ✨
+Vídeo e foto do seu casamento ou evento com olhar de cinema, por quem já filmou para Band, Skol e Sesc.
+Datas limitadas: garanta a sua.</pre><button class="btn" type="button" data-copy="t2">Copiar</button></div>
+      <div class="copy"><pre id="t3">Procurando filmmaker em Salvador?
+Noberto Junior · NJ Filmes. Vídeo, foto e drone no mesmo pacote. Avaliação 5 estrelas no Google.
+Me chama e receba o orçamento em minutos.</pre><button class="btn" type="button" data-copy="t3">Copiar</button></div>
+    </div>
+    <p class="group">Títulos</p>
+    <div class="copies">
+      <div class="copy"><pre id="h1">Orçamento de filmagem em Salvador</pre><button class="btn" type="button" data-copy="h1">Copiar</button></div>
+      <div class="copy"><pre id="h2">Seu evento com cara de cinema</pre><button class="btn" type="button" data-copy="h2">Copiar</button></div>
+      <div class="copy"><pre id="h3">Vídeo + foto + drone</pre><button class="btn" type="button" data-copy="h3">Copiar</button></div>
+    </div>
+    <p class="group">Descrição</p>
+    <div class="copies"><div class="copy"><pre id="d1">Casamentos, 15 anos, eventos e empresas.</pre><button class="btn" type="button" data-copy="d1">Copiar</button></div></div>
+    <p class="group">Remarketing (quem já te viu)</p>
+    <div class="copies">
+      <div class="copy"><pre id="r1">Ainda pensando nas imagens do seu evento? 🎬
+Olha o que nossos clientes dizem sobre a NJ Filmes. Tenho poucas datas livres nos próximos meses.
+👉 Me chama e garanta a sua.</pre><button class="btn" type="button" data-copy="r1">Copiar</button></div>
+    </div>
+    <div class="alert warn"><div class="h">Evite</div><p>"O melhor de Salvador", "preço imperdível" e promessas que você não consegue provar. A Meta pode barrar o anúncio.</p></div>
+  </section>
+
+  <section id="s09">
+    <div class="sec-head"><span class="eyebrow">09 · Orçamento</span><h2>Quanto investir e por quanto tempo</h2>
+      <p class="lede">A Meta precisa de tempo pra aprender quem, dentro de meio milhão de pessoas, realmente chama. 7 dias costuma ser cedo demais pra julgar.</p></div>
+    <div class="tbl"><table>
+      <thead><tr><th>Cenário</th><th>WhatsApp</th><th>Site</th><th>Remarketing</th><th>Por mês</th></tr></thead>
+      <tbody>
+        <tr><td>Só WhatsApp</td><td class="num">R$ 25/dia</td><td class="num">·</td><td class="num">·</td><td class="num">R$ 750</td></tr>
+        <tr class="hl"><td><strong>Recomendado</strong></td><td class="num">R$ 25/dia</td><td class="num">R$ 10/dia</td><td class="num">R$ 5/dia*</td><td class="num">R$ 1.050–1.200</td></tr>
+        <tr><td>Mesmo total, dividido</td><td class="num">R$ 17,50/dia</td><td class="num">R$ 7,50/dia</td><td class="num">·</td><td class="num">R$ 750</td></tr>
+      </tbody>
+    </table></div>
+    <p class="plain">* O remarketing entra depois de 2–3 semanas. Teste ideal: <strong>14 dias</strong> (R$ 350 só com o WhatsApp). Menos de R$ 6/dia no site traz poucos leads.</p>
+    <ul class="tips">
+      <li><strong>Escale aos poucos:</strong> até 20% a cada 2–3 dias (R$ 25 → R$ 30 → R$ 36).</li>
+      <li><strong>Custo alto?</strong> Não aumente a verba: estreite pros 8 a 10 bairros que mais trouxeram conversa e teste mais 7 a 10 dias.</li>
+      <li><strong>Sem data de término:</strong> a campanha roda até você pausar. Marque no calendário o checkpoint de 14 dias.</li>
+    </ul>
+  </section>
+
+  <section id="s10">
+    <div class="sec-head"><span class="eyebrow">10 · Os primeiros 14 dias</span><h2>O que olhar e quando mexer</h2></div>
+    <ol class="steps">
+      <li><div><div class="t">Dias 1 a 3: não mexa em nada</div><div class="d">Fase de aprendizado. Mudar orçamento, público ou vídeo recomeça tudo.</div></div></li>
+      <li><div><div class="t">Dias 4 a 14: só acompanhe</div><div class="d">É normal os primeiros dias custarem mais caro.</div></div></li>
+      <li><div><div class="t">Dia 14: decida</div><div class="d">Compare as campanhas por cliente fechado.</div></div></li>
+    </ol>
+    <div class="tbl"><table>
+      <thead><tr><th>Número</th><th>O que é</th><th>Sinal bom</th><th>Alerta</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Custo por conversa</strong></td><td>Quanto custou cada conversa no WhatsApp</td><td class="good">R$ 3 a R$ 10</td><td class="warnc">Subindo 3 dias seguidos</td></tr>
+        <tr><td><strong>Custo por lead (site)</strong></td><td>Quanto custou cada formulário</td><td class="good">Estável ou caindo</td><td class="warnc">3× o custo da conversa</td></tr>
+        <tr><td><strong>CTR</strong></td><td>De cada 100 que viram, quantos clicaram</td><td class="good">1% ou mais</td><td class="warnc">Abaixo de 0,7%: troque o vídeo</td></tr>
+        <tr><td><strong>Frequência</strong></td><td>Quantas vezes a mesma pessoa viu</td><td class="good">Até 3</td><td class="warnc">Acima de 4: vídeo novo</td></tr>
+        <tr><td><strong>Clientes fechados</strong></td><td>Contratos</td><td class="good">O que importa</td><td class="warnc">Muita conversa e nenhuma venda: reveja o atendimento</td></tr>
+      </tbody>
+    </table></div>
+    <p class="plain">Referências de mercado, não regra. Anote cada cliente e de onde veio (WhatsApp, site, remarketing ou indicação). Depois de 14 dias, mande prints desses números pro Claude pra ajustar.</p>
+  </section>
+
+  <section id="s11">
+    <div class="sec-head"><span class="eyebrow">11 · Cuidados</span><h2>O que NÃO fazer</h2></div>
+    <ul class="dont">
+      <li><strong>Não use "Impulsionar publicação"</strong> do Instagram pra esse objetivo: a segmentação é bem mais limitada.</li>
+      <li><strong>Não mexa todo dia.</strong> Decida nos checkpoints (dia 3 e dia 14).</li>
+      <li><strong>Não deixe o mesmo vídeo mais de 3–4 semanas.</strong> O público cansa e o custo sobe.</li>
+      <li><strong>Não demore pra responder no WhatsApp.</strong></li>
+      <li><strong>Não pause e recrie a campanha do zero</strong> nos primeiros dias: zera o aprendizado.</li>
+      <li><strong>Não duplique a mesma campanha pro mesmo público.</strong> WhatsApp e site têm objetivos diferentes e podem rodar juntas.</li>
+      <li><strong>Não mande anúncio pro portfólio ou pra página inicial:</strong> use /orcamento, que tem o formulário e registra o Lead.</li>
+      <li><strong>Não ative o agente de IA do WhatsApp</strong> no horário comercial: o seu diferencial é o atendimento pessoal.</li>
+    </ul>
+  </section>
+
+  <section id="s12">
+    <div class="sec-head"><span class="eyebrow">12 · Ajustes da conta</span><h2>Configurações que faltam</h2></div>
+    <div class="grid2">
+      <div class="box"><div class="t">Verificar o domínio na Meta</div><ul>
+        <li>Configurações do negócio → <b>Segurança da marca → Domínios</b> → Adicionar → njfilmes.com.br</li>
+        <li>Escolha <b>"Registro TXT de DNS"</b> e copie o código</li>
+        <li>No registro.br: Configurar zona DNS → Nova entrada → TXT, nome em branco, cole o código → Salvar</li>
+        <li>Volte na Meta e clique em <b>Verificar</b> (pode levar algumas horas)</li>
+        <li>Ajuda o Pixel a medir melhor, principalmente iPhone</li>
+      </ul></div>
+      <div class="box"><div class="t">WhatsApp Business</div><ul>
+        <li><b>Mensagem de ausência</b> fora do horário: "Oi! Já já te respondo com seu orçamento 🎬"</li>
+        <li><b>Etiquetas:</b> Novo · Orçamento enviado · Negociando · Fechado · Perdido</li>
+        <li><b>Respostas rápidas</b> com as mensagens da seção 13 (atalhos tipo /oi, /proposta)</li>
+        <li><b>Catálogo</b> com os pacotes da seção 14</li>
+      </ul></div>
+      <div class="box"><div class="t">Pagamento dos anúncios</div><ul>
+        <li><b>Cartão:</b> cobrança automática conforme gasta</li>
+        <li><b>Pix ou boleto:</b> você coloca saldo antes e a campanha para quando acaba</li>
+        <li>Com Pix/boleto, deixe saldo pra pelo menos 14 dias</li>
+      </ul></div>
+      <div class="box"><div class="t">Acompanhar pelo celular</div><ul>
+        <li>App <b>Meta Business Suite</b>: resultados, gasto e mensagens</li>
+        <li>Ative as notificações de anúncio reprovado e de pagamento</li>
+        <li>Leads do site chegam no e-mail contato@njfilmes.com.br e no WhatsApp</li>
+      </ul></div>
+    </div>
+  </section>
+
+  <!-- ============ PARTE 2 ============ -->
+  <div class="part-head" id="p2"><span class="eyebrow">Parte 2</span><h2>Transformar conversa em contrato</h2></div>
+
+  <section id="s13">
+    <div class="sec-head"><span class="eyebrow">13 · Atendimento</span><h2>Do WhatsApp ao contrato</h2>
+      <p class="lede">Quem pede orçamento chama 2 ou 3 profissionais. O primeiro que responde bem sai na frente.</p></div>
+    <ol class="steps">
+      <li><div><div class="t">Responda em até 10–15 minutos</div><div class="d">Depois de 1–2 horas, boa parte já fechou com outro.</div></div></li>
+      <li><div><div class="t">Entenda o evento antes do preço</div><div class="d">Tipo, data, local, número de convidados e o que é mais importante pra pessoa (o formulário já pergunta tipo e data).</div></div></li>
+      <li><div><div class="t">Mande 2–3 trabalhos parecidos</div><div class="d">Casamento pra casamento, empresa pra empresa.</div></div></li>
+      <li><div><div class="t">Proposta com 3 pacotes e valor claro</div><div class="d">Até a 2ª ou 3ª mensagem (seção 14). De preferência em PDF bonito ou áudio explicando.</div></div></li>
+      <li><div><div class="t">Urgência real, sem inventar</div><div class="d">"Essa data ainda está livre, mas já tenho 2 conversas pro mesmo fim de semana."</div></div></li>
+      <li><div><div class="t">Feche com sinal</div><div class="d">Sem sinal, a data não está garantida (seção 18).</div></div></li>
+    </ol>
+    <p class="group">Mensagens prontas</p>
+    <div class="copies">
+      <div class="copy"><pre id="w1">Oi, [nome]! Aqui é o Noberto, da NJ Filmes 🎬 Obrigado por chamar! Me conta rapidinho: qual a data, o local e o tipo do evento? Assim eu já te mando o orçamento certinho.</pre><button class="btn" type="button" data-copy="w1">Primeira resposta</button></div>
+      <div class="copy"><pre id="w2">Enquanto preparo sua proposta, dá uma olhada nesse trabalho parecido com o seu: [link do projeto no site]</pre><button class="btn" type="button" data-copy="w2">Mostrar trabalho</button></div>
+      <div class="copy"><pre id="w3">Oi, [nome]! Conseguiu ver a proposta? Se quiser, ajusto algum pacote pra caber melhor.</pre><button class="btn" type="button" data-copy="w3">Depois de 1 dia</button></div>
+      <div class="copy"><pre id="w4">Oi, [nome]! Tenho poucas datas livres em [mês]. Quer que eu reserve a sua?</pre><button class="btn" type="button" data-copy="w4">Depois de 3 dias</button></div>
+      <div class="copy"><pre id="w6">Oi, [nome]! Vou encerrar sua proposta por aqui pra liberar a agenda. Se ainda fizer sentido, é só me chamar que vejo se a data continua livre 😊</pre><button class="btn" type="button" data-copy="w6">Última (7 dias)</button></div>
+      <div class="copy"><pre id="w5">Oi, [nome]! Já faz um mês da entrega, espero que esteja curtindo o material 😊 Se puder deixar uma avaliação no Google, me ajuda muito: [link]. E se souber de alguém que vai casar ou fazer evento, indica a NJ Filmes!</pre><button class="btn" type="button" data-copy="w5">30 dias depois</button></div>
+    </div>
+    <ul class="tips">
+      <li><strong>Áudio curto ou vídeo selfie</strong> pras respostas longas: aproxima mais que um textão.</li>
+      <li><strong>Ligação de 5 minutos</strong> pra casamento e empresa: fecha muito mais que só mensagem.</li>
+      <li><strong>Planilha de leads (seu CRM):</strong> nome, data do contato, evento, data do evento, valor proposto, status, de onde veio e motivo quando não fecha. Em 2–3 semanas vira um raio-x de onde você perde cliente.</li>
+    </ul>
+  </section>
+
+  <section id="s14">
+    <div class="sec-head"><span class="eyebrow">14 · Pacotes e preços</span><h2>Ideias de pacotes com valores de referência</h2>
+      <p class="lede">Faixas estimadas pra Salvador em 2026, pra um profissional com portfólio de marcas como o seu. Não são tabela oficial: confira com a seção 15 se cobrem seus custos e ajuste.</p></div>
+    <p class="group">Casamento</p>
+    <div class="tbl"><table>
+      <thead><tr><th>Item</th><th>Essencial</th><th>Completo · mais escolhido</th><th>Premium</th></tr></thead>
+      <tbody>
+        <tr><td>Cobertura</td><td>Cerimônia + 2h de festa (~5h)</td><td>Making of até a festa (~9h)</td><td>Dia todo, 2 cinegrafistas</td></tr>
+        <tr><td>Vídeo</td><td>Teaser 1–2 min</td><td>Teaser + filme 15–20 min</td><td>Teaser + filme + cerimônia na íntegra</td></tr>
+        <tr><td>Extras</td><td>·</td><td>Drone</td><td>Drone + Reels no dia seguinte + save the date</td></tr>
+        <tr><td>Fotos</td><td>Opcional</td><td>300+ editadas</td><td>500+ editadas + álbum</td></tr>
+        <tr><td>Entrega</td><td class="num">60 dias</td><td class="num">45 dias</td><td class="num">30 dias</td></tr>
+        <tr class="hl"><td><strong>Referência</strong></td><td class="num">R$ 2.500–3.500</td><td class="num">R$ 4.500–6.500</td><td class="num">R$ 7.500–12.000</td></tr>
+      </tbody>
+    </table></div>
+    <p class="group">Outros serviços</p>
+    <div class="tbl"><table>
+      <thead><tr><th>Serviço</th><th>O que inclui</th><th>Referência</th></tr></thead>
+      <tbody>
+        <tr><td><strong>15 anos</strong></td><td>Teaser + filme + drone (3 níveis como no casamento)</td><td class="num">R$ 1.800–6.000</td></tr>
+        <tr><td><strong>Mini wedding / civil</strong></td><td>Até 4h, teaser + fotos</td><td class="num">R$ 1.500–2.800</td></tr>
+        <tr><td><strong>Pré-wedding / ensaio</strong></td><td>2h num ponto de Salvador, vídeo curto + fotos</td><td class="num">R$ 600–1.500</td></tr>
+        <tr><td><strong>Evento corporativo</strong></td><td>Meia diária (4h) com aftermovie de 1–2 min</td><td class="num">R$ 1.500–2.500</td></tr>
+        <tr><td><strong>Evento corporativo</strong></td><td>Diária (8h), aftermovie + cortes pra redes</td><td class="num">R$ 2.500–4.500</td></tr>
+        <tr><td><strong>Vídeo institucional</strong></td><td>Roteiro, 1 diária, entrevistas, 2–3 min</td><td class="num">R$ 3.500–8.000</td></tr>
+        <tr><td><strong>Show / artista</strong></td><td>Cobertura + aftermovie + Reels</td><td class="num">R$ 1.500–4.000</td></tr>
+        <tr><td><strong>Drone avulso</strong></td><td>Voo + imagens tratadas</td><td class="num">R$ 600–1.200</td></tr>
+        <tr><td><strong>Imóvel</strong></td><td>Vídeo + fotos + drone de 1 imóvel</td><td class="num">R$ 700–1.800</td></tr>
+      </tbody>
+    </table></div>
+    <p class="group">Conteúdo mensal pra empresas (receita recorrente)</p>
+    <div class="tbl"><table>
+      <thead><tr><th>Plano</th><th>Por mês</th><th>Referência</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Start</strong></td><td>1 gravação (meio período) · 4 Reels editados</td><td class="num">R$ 1.500–2.200</td></tr>
+        <tr class="hl"><td><strong>Pro</strong></td><td>2 gravações · 8 Reels + 15 fotos</td><td class="num">R$ 2.800–4.000</td></tr>
+        <tr><td><strong>Max</strong></td><td>4 gravações · 12 Reels + fotos + drone + 1 vídeo institucional/trimestre</td><td class="num">R$ 4.500–7.000</td></tr>
+      </tbody>
+    </table></div>
+    <p class="plain">Contrato mínimo de 3 meses. 3 clientes no plano Pro já pagam suas contas fixas do mês.</p>
+    <p class="group">Adicionais (aumentam o ticket)</p>
+    <div class="grid3">
+      <div class="box"><div class="t">Drone</div><p>+ R$ 600–900</p></div>
+      <div class="box"><div class="t">Same day edit</div><p>Vídeo editado e exibido na própria festa · + R$ 1.500–2.500</p></div>
+      <div class="box"><div class="t">Reels em 24h</div><p>Teaser vertical no dia seguinte · + R$ 400–700</p></div>
+      <div class="box"><div class="t">2º cinegrafista</div><p>+ R$ 800–1.200</p></div>
+      <div class="box"><div class="t">Transmissão ao vivo</div><p>Pra quem não pôde ir · + R$ 800–1.500</p></div>
+      <div class="box"><div class="t">Entrega expressa</div><p>Metade do prazo · + 20%</p></div>
+      <div class="box"><div class="t">Hora extra</div><p>+ R$ 300–450 por hora</p></div>
+      <div class="box"><div class="t">Cerimônia na íntegra</div><p>+ R$ 400–800</p></div>
+      <div class="box"><div class="t">Caixa, pendrive, álbum</div><p>Presente pros pais · + R$ 250–1.500</p></div>
+    </div>
+    <ul class="tips">
+      <li><strong>Destaque o do meio</strong> como "mais escolhido": a maioria fica nele.</li>
+      <li><strong>Mostre o Premium primeiro:</strong> depois dele o Completo parece razoável (ancoragem).</li>
+      <li><strong>"A partir de R$ X" no site e no Instagram</strong> filtra curioso e traz lead mais qualificado. Preço completo só no WhatsApp.</li>
+      <li><strong>Suba o preço a cada 5–6 contratos fechados</strong> ou quando a agenda do semestre passar de 60% cheia.</li>
+      <li><strong>Reajuste anual</strong> em janeiro, avisando clientes mensais com 30 dias.</li>
+    </ul>
+  </section>
+
+  <section id="s15">
+    <div class="sec-head"><span class="eyebrow">15 · Técnico</span><h2>Como calcular seu preço mínimo</h2>
+      <p class="lede">Pra nunca fechar um trabalho que dá prejuízo. Use a conta abaixo com os seus números.</p></div>
+    <ol class="steps">
+      <li><div><div class="t">Custos fixos do mês</div><div class="d">Equipamento (valor total ÷ 36 meses de vida útil), Adobe/softwares, nuvem e HDs, internet, celular, carro, anúncios, contador.</div></div></li>
+      <li><div><div class="t">Quanto você quer tirar por mês (pró-labore)</div></div></li>
+      <li><div><div class="t">Divida pelos trabalhos que consegue fazer no mês</div><div class="d">Contando gravação + edição. Casamento completo costuma ser 1 dia de gravação + 3 a 5 dias de edição.</div></div></li>
+      <li><div><div class="t">Some os custos variáveis do trabalho</div><div class="d">Assistente, 2º cinegrafista, transporte, alimentação, HD do cliente.</div></div></li>
+      <li><div><div class="t">Some imposto e margem</div><div class="d">Imposto conforme seu enquadramento + 20–30% de margem pra reinvestir.</div></div></li>
+    </ol>
+    <div class="tbl"><table>
+      <thead><tr><th>Exemplo (troque pelos seus números)</th><th>Valor</th></tr></thead>
+      <tbody>
+        <tr><td>Custos fixos do mês</td><td class="num">R$ 2.500</td></tr>
+        <tr><td>Pró-labore desejado</td><td class="num">R$ 7.000</td></tr>
+        <tr><td>Total ÷ 5 trabalhos por mês</td><td class="num">R$ 1.900</td></tr>
+        <tr><td>+ Assistente e transporte</td><td class="num">R$ 400</td></tr>
+        <tr><td>+ Margem de 25%</td><td class="num">R$ 575</td></tr>
+        <tr class="hl"><td><strong>Preço mínimo por trabalho</strong></td><td class="num">≈ R$ 2.875 + imposto</td></tr>
+      </tbody>
+    </table></div>
+    <ul class="tips">
+      <li><strong>Valor da sua hora:</strong> pró-labore ÷ horas trabalhadas no mês (gravando + editando + atendendo). Use pra precificar hora extra e edição avulsa.</li>
+      <li><strong>Abaixo do preço mínimo, só com motivo:</strong> portfólio num nicho novo, cliente que traz muitos outros, data que ficaria vazia.</li>
+      <li><strong>Enquadramento (MEI, Simples):</strong> o MEI tem limite de faturamento anual e nem toda atividade de vídeo é permitida. Confirme com um contador; passar do limite gera imposto retroativo.</li>
+    </ul>
+  </section>
+
+  <section id="s16">
+    <div class="sec-head"><span class="eyebrow">16 · Negociação</span><h2>Como negociar sem perder valor</h2></div>
+    <ul class="tips">
+      <li><strong>Pergunte antes de passar preço:</strong> "O que é mais importante pra vocês nesse vídeo?" e "Já têm um valor em mente pra essa parte?"</li>
+      <li><strong>Nunca dê desconto sem tirar algo:</strong> tire horas, drone ou o filme longo. Desconto de graça ensina o cliente a pedir mais.</li>
+      <li><strong>Troque desconto por condição:</strong> parcelar, mudar a data de vencimento, bônus (Reels extra) em vez de baixar o preço.</li>
+      <li><strong>Desconto só com contrapartida:</strong> 5% no Pix à vista, fechamento em até 48h, dia de semana, autorização pra usar no portfólio e nos anúncios.</li>
+      <li><strong>Validade da proposta:</strong> 7 dias. Dá um motivo real pra decidir.</li>
+      <li><strong>Feche com pergunta de escolha:</strong> "Prefere garantir com o sinal no Pix ou no cartão?" em vez de "E aí, vai fechar?"</li>
+      <li><strong>Silêncio depois do preço:</strong> não justifique de primeira. Espere a pessoa responder.</li>
+      <li><strong>Fale de investimento e resultado,</strong> não de "custo": "É o único registro em movimento do seu dia".</li>
+      <li><strong>Empresa:</strong> fale em alcance, vendas e imagem da marca. Mostre o case da Skol, Band ou Sesc.</li>
+    </ul>
+    <p class="group">Respostas prontas</p>
+    <div class="copies">
+      <div class="copy"><pre id="n1">Entendo, [nome]! Pra não perder qualidade, consigo montar uma versão que caiba melhor: tiro o [drone / filme longo / horas] e fica R$ [valor]. Assim a gente mantém o padrão da entrega. Faz sentido?</pre><button class="btn" type="button" data-copy="n1">Pediu desconto</button></div>
+      <div class="copy"><pre id="n2">Consigo sim facilitar: fechando no Pix à vista até [data], fica R$ [valor com 5% off]. Ou no cartão em até [x]x. Qual fica melhor pra você?</pre><button class="btn" type="button" data-copy="n2">Condição de pagamento</button></div>
+      <div class="copy"><pre id="n3">Faz total sentido comparar! Só te peço pra olhar o que está incluído em cada proposta: horas de cobertura, drone, prazo de entrega, quantidade de fotos e se tem equipamento reserva. Se quiser, te mando um casamento completo pra você ver o padrão.</pre><button class="btn" type="button" data-copy="n3">"Vi mais barato"</button></div>
+      <div class="copy"><pre id="n4">Pra essa data eu consigo incluir de presente o [Reels em 24h / save the date], se a gente fechar até [data]. Quer que eu reserve?</pre><button class="btn" type="button" data-copy="n4">Bônus pra fechar</button></div>
+    </div>
+    <p class="group">Objeções</p>
+    <div class="faqs">
+      <details class="faq"><summary>"Achei caro" / "vi mais barato"</summary><div class="a"><p>Não entre em guerra de preço. Mostre o que está incluído (edição, prazo, quantidade, equipamento reserva, direito de uso) e 1 entrega finalizada. Use a resposta "Vi mais barato".</p></div></details>
+      <details class="faq"><summary>"Vou pensar e te chamo depois"</summary><div class="a"><p>"Claro! Ficou alguma dúvida sobre pacote, data ou pagamento?" Muitas vezes a dúvida é pagamento: ofereça parcelamento.</p></div></details>
+      <details class="faq"><summary>"Preciso falar com meu noivo(a) / meus pais"</summary><div class="a"><p>Ofereça uma chamada rápida com os dois ou mande um áudio curto que a pessoa possa encaminhar.</p></div></details>
+      <details class="faq"><summary>"Faz só o dia ou também a edição?"</summary><div class="a"><p>Deixe explícito no pacote antes de perguntarem.</p></div></details>
+      <details class="faq"><summary>"Quanto tempo pra entregar?"</summary><div class="a"><p>Prazo padrão por escrito no contrato (seção 18). Entrega expressa é adicional pago.</p></div></details>
+      <details class="faq"><summary>"Faz por um valor menor?"</summary><div class="a"><p>Ofereça o pacote menor (menos horas ou sem drone) em vez de baixar o preço.</p></div></details>
+      <details class="faq"><summary>"Parcela?"</summary><div class="a"><p>Sinal pra travar a data e o restante até o dia do evento, ou no cartão pela maquininha/link de pagamento (os juros podem ficar pro cliente). Defina sua regra antes e deixe na proposta.</p></div></details>
+      <details class="faq"><summary>"Você tem equipamento reserva?"</summary><div class="a"><p>Responda com segurança: câmera reserva, cartões duplos e backup em 2 lugares. É argumento de venda.</p></div></details>
+    </div>
+  </section>
+
+  <section id="s17">
+    <div class="sec-head"><span class="eyebrow">17 · Promoções</span><h2>Ideias de promoção que não desvalorizam</h2>
+      <p class="lede">Regra: prazo real, poucas vagas e, de preferência, bônus em vez de desconto.</p></div>
+    <div class="grid2">
+      <div class="box"><div class="t">Pré-temporada</div><p>Casamentos de 2027 fechados até 31/12 ganham drone ou save the date. Divulgue em out–dez.</p></div>
+      <div class="box"><div class="t">Datas de baixa procura</div><p>Sexta, domingo ou segunda e meses mais calmos (mai–ago): 10–15% off. Enche a agenda sem baixar o preço do sábado.</p></div>
+      <div class="box"><div class="t">Combo casamento</div><p>Casamento Completo + pré-wedding com 30% off no ensaio. Aumenta o ticket e rende conteúdo pro Instagram.</p></div>
+      <div class="box"><div class="t">Indique e ganhe</div><p>Cliente que indica alguém que fecha ganha R$ 200 no Pix ou um Reels extra. Quem foi indicado ganha 5%.</p></div>
+      <div class="box"><div class="t">Datas livres do mês</div><p>Story "Últimas datas livres em [mês]" com condição especial, só pra quem responder nas próximas 48h.</p></div>
+      <div class="box"><div class="t">Black Friday</div><p>Não baixe o preço: "Reserve 2027 com sinal de 20% em vez de 30%" ou bônus exclusivo, só naquela semana.</p></div>
+      <div class="box"><div class="t">Fidelidade empresa</div><p>Plano mensal de 6 meses ganha 1 vídeo institucional curto de presente.</p></div>
+      <div class="box"><div class="t">Parceiros</div><p>Clientes do buffet ou cerimonialista parceiro ganham um adicional. O parceiro recebe 10% de comissão ou indicação de volta.</p></div>
+      <div class="box"><div class="t">Sorteio no Instagram</div><p>Ensaio de casal grátis. Regra: seguir, comentar marcando o(a) parceiro(a) e morar em Salvador. Faça no máximo 2 por ano: atrai muito seguidor que não compra.</p></div>
+    </div>
+    <p class="group">Textos de promoção</p>
+    <div class="copies">
+      <div class="copy"><pre id="pm1">💍 Vai casar em 2027? Quem fechar até 31/12 ganha o drone no pacote (valor de R$ [valor]).
+São só [X] datas com essa condição. Me chama no WhatsApp pra ver se a sua está livre.</pre><button class="btn" type="button" data-copy="pm1">Pré-temporada</button></div>
+      <div class="copy"><pre id="pm2">📅 Últimas datas livres em [mês]: [dia], [dia] e [dia].
+Pra essas datas tenho uma condição especial até [data]. Responde esse story com "DATA" que eu te mando.</pre><button class="btn" type="button" data-copy="pm2">Datas livres</button></div>
+      <div class="copy"><pre id="pm3">Indicou, ganhou! 🎬 Se alguém que você indicar fechar com a NJ Filmes, você ganha R$ 200 no Pix e quem você indicou ganha 5% de desconto.</pre><button class="btn" type="button" data-copy="pm3">Indicação</button></div>
+    </div>
+    <div class="alert warn"><div class="h">No anúncio pago, cuidado com promoção</div><p>Anúncio com "desconto" atrai quem só quer preço. Use promoção no Instagram orgânico, Stories e pra quem já conversou (remarketing), e mantenha o anúncio principal falando de qualidade.</p></div>
+  </section>
+
+  <section id="s18">
+    <div class="sec-head"><span class="eyebrow">18 · Proteção</span><h2>Contrato, pagamento e backup</h2></div>
+    <ul class="tips">
+      <li><strong>Sinal de 30% a 50%</strong> pra travar a data, mesmo por Pix. Restante até 7 dias antes do evento.</li>
+      <li><strong>Contrato escrito</strong> (pode ser PDF assinado pelo gov.br, de graça): data, horário, local, o que está incluído, prazo de entrega, hora extra, cancelamento, remarcação e força maior (chuva, doença).</li>
+      <li><strong>Cancelamento:</strong> sinal não devolvido, ou devolvido parcialmente se avisar com muita antecedência. Deixe claro.</li>
+      <li><strong>Autorização de uso de imagem</strong> no contrato, pra usar no portfólio e nos anúncios (LGPD).</li>
+      <li><strong>Música:</strong> use trilhas licenciadas (Artlist, Musicbed, Epidemic). Música de rádio derruba o vídeo no Instagram e no YouTube.</li>
+      <li><strong>Drone:</strong> cadastro no SISANT (ANAC) e voo registrado no SARPAS (DECEA), principalmente perto do aeroporto (Stella Maris, Itapuã, Lauro). Deixe isso na proposta: é profissionalismo.</li>
+      <li><strong>Backup 3-2-1:</strong> 3 cópias, em 2 tipos de mídia, 1 fora de casa (nuvem). Não formate cartão antes da 2ª cópia.</li>
+      <li><strong>Entrega:</strong> link com prazo (Google Drive, Dropbox ou galeria tipo Pixieset) e aviso de até quando você guarda o material bruto.</li>
+      <li><strong>Emita nota fiscal pra empresas:</strong> muitas só contratam com NF.</li>
+      <li><strong>Se for atrasar, avise antes do prazo.</strong> Evita a maioria das reclamações.</li>
+    </ul>
+  </section>
+
+  <!-- ============ PARTE 3 ============ -->
+  <div class="part-head" id="p3"><span class="eyebrow">Parte 3</span><h2>Crescer: Instagram, site, Google e medição</h2></div>
+
+  <section id="s19">
+    <div class="sec-head"><span class="eyebrow">19 · Instagram @njfilmes</span><h2>Perfil que vende e conteúdo que cresce</h2>
+      <p class="lede">Quem vê o anúncio entra no perfil pra conferir antes de chamar. Esse momento decide a venda.</p></div>
+    <p class="group">Perfil</p>
+    <ul class="tips">
+      <li><strong>Nome:</strong> "Noberto Junior | Filmmaker SSA" (o campo nome é pesquisável).</li>
+      <li><strong>Categoria:</strong> "Videógrafo" ou "Produtor de vídeo". <strong>Botões de contato:</strong> WhatsApp e e-mail.</li>
+      <li><strong>Link na bio:</strong> njfilmes.com.br/links com <code>?utm_source=instagram&amp;utm_medium=bio</code>, pra ver no Analytics quantas visitas vêm do Instagram.</li>
+      <li><strong>3 posts fixados:</strong> melhor casamento, depoimento de cliente e "como contratar / pacotes".</li>
+      <li><strong>Destaques:</strong> Casamentos, 15 anos, Empresas, Drone, Depoimentos, Bastidores, Pacotes.</li>
+    </ul>
+    <div class="copies"><div class="copy"><pre id="bio1">🎬 Filmmaker · Salvador, BA
+Casamentos · 15 anos · Empresas · Drone
+Já filmei para Band, Skol, Sesc e Record
+👇 Orçamento em minutos</pre><button class="btn" type="button" data-copy="bio1">Copiar bio</button></div></div>
+    <p class="group">Calendário semanal</p>
+    <div class="tbl"><table>
+      <thead><tr><th>Dia</th><th>Formato</th><th>Tamanho</th><th>Horário</th><th>Ideia</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Segunda</strong></td><td>Carrossel</td><td class="num">6–10 fotos</td><td class="num">12h–13h</td><td>Resultado de um evento recente ou dica (gera salvamentos)</td></tr>
+        <tr><td><strong>Quarta</strong></td><td>Reels · bastidor</td><td class="num">7–15s</td><td class="num">18h–19h</td><td>Você gravando numa cobertura (alcance)</td></tr>
+        <tr><td><strong>Sexta</strong></td><td>Reels · prova</td><td class="num">20–40s</td><td class="num">17h–18h</td><td>Depoimento de cliente</td></tr>
+        <tr class="hl"><td><strong>Sábado</strong></td><td>Reels · melhor momento</td><td class="num">30–60s</td><td class="num">19h–21h</td><td>Melhor momento da semana</td></tr>
+        <tr><td><strong>Domingo</strong></td><td>Antes/depois</td><td class="num">15–20s</td><td class="num">20h</td><td>Edição de vídeo ou tratamento de cor</td></tr>
+      </tbody>
+    </table></div>
+    <p class="group">Ideias de conteúdo que atraem cliente</p>
+    <div class="grid2">
+      <div class="box"><div class="t">Educativo (salvam e compartilham)</div><ul>
+        <li>"Quanto custa filmar um casamento em Salvador?"</li>
+        <li>"5 erros ao contratar filmmaker"</li>
+        <li>"Filme ou teaser: qual escolher?"</li>
+        <li>"Melhores lugares pra ensaio em Salvador"</li>
+        <li>"Horário ideal pra casar na praia (luz)"</li>
+      </ul></div>
+      <div class="box"><div class="t">Prova e desejo</div><ul>
+        <li>Reação dos noivos assistindo o filme</li>
+        <li>"1 casamento, 3 câmeras": bastidor com drone</li>
+        <li>Print de mensagem de cliente feliz</li>
+        <li>Mesma cena bruta x finalizada</li>
+        <li>Série "Casamentos de Salvador" (1 por semana)</li>
+      </ul></div>
+      <div class="box"><div class="t">Você (confiança)</div><ul>
+        <li>Seu equipamento e por que usa cada um</li>
+        <li>Um dia de filmmaker</li>
+        <li>Como você começou</li>
+        <li>Responder caixinha de perguntas em Reels</li>
+      </ul></div>
+      <div class="box"><div class="t">Empresas</div><ul>
+        <li>Bastidor de gravação pra marca</li>
+        <li>"Como um vídeo aumenta suas vendas"</li>
+        <li>Resultado do cliente (visualizações, vendas)</li>
+        <li>Reels feito pra restaurante ou clínica</li>
+      </ul></div>
+    </div>
+    <p class="group">Técnicas de alcance</p>
+    <ul class="tips">
+      <li><strong>Gancho nos 2 primeiros segundos:</strong> texto na tela + a cena mais forte. Ex.: "Ela não sabia que o pai ia fazer isso 😭".</li>
+      <li><strong>Reels de teste</strong> (opção "Testar" ao publicar): mostra só pra não seguidores primeiro. Ótimo pra testar gancho sem "gastar" o perfil.</li>
+      <li><strong>Collab</strong> com os noivos, o buffet, a decoradora e o cerimonialista: o post aparece em vários perfis de uma vez.</li>
+      <li><strong>Marque todos os fornecedores</strong> na legenda e na foto: eles repostam nos Stories.</li>
+      <li><strong>SEO no Instagram:</strong> palavras como "filmagem de casamento Salvador" na legenda e no texto alternativo. Hoje pesa mais que hashtag (use 3–5).</li>
+      <li><strong>Áudio em alta</strong> (seta ↗ no áudio) em parte dos Reels, com a sua edição.</li>
+      <li><strong>Responda comentários na 1ª hora:</strong> aumenta a distribuição.</li>
+      <li><strong>Palavra-chave na legenda:</strong> "Comenta ORÇAMENTO que te mando os pacotes" + resposta automática por DM (Meta Business Suite → Caixa de entrada → Automações, ou ManyChat).</li>
+      <li><strong>Canal de transmissão</strong> "Datas livres NJ" pra avisar vagas e promoções.</li>
+      <li><strong>Reaproveite:</strong> todo Reels também no TikTok, YouTube Shorts e Pinterest (noivas pesquisam muito lá).</li>
+      <li><strong>Entrega de Reels em 24h</strong> pros noivos: eles postam enquanto todo mundo ainda está falando do casamento, marcando você.</li>
+      <li><strong>Stories quase todo dia,</strong> 3 a 5: bastidor, enquete, caixinha, contagem regressiva de entrega.</li>
+      <li><strong>Limpeza dos seguidores fake</strong> com o Caça-Fakes: 20 a cada 2 horas, até 80 por dia. Menos fake = melhor taxa de engajamento.</li>
+    </ul>
+    <p class="group">Números que importam (Insights)</p>
+    <div class="tbl"><table>
+      <thead><tr><th>Métrica</th><th>O que diz</th><th>Meta</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Alcance de não seguidores</strong></td><td>Se o conteúdo está atraindo gente nova</td><td class="good">40%+ nos Reels</td></tr>
+        <tr><td><strong>Retenção média do Reels</strong></td><td>Se o vídeo segura (gráfico de retenção)</td><td class="good">Queda pequena nos 3 primeiros segundos</td></tr>
+        <tr><td><strong>Compartilhamentos e salvamentos</strong></td><td>Os sinais que mais aumentam o alcance</td><td class="good">Subindo mês a mês</td></tr>
+        <tr><td><strong>Toques no link e no botão</strong></td><td>Se o perfil gera contato</td><td class="good">Subindo mês a mês</td></tr>
+        <tr><td><strong>Seguidores em Salvador</strong></td><td>Público → Principais cidades</td><td class="good">Salvador em 1º</td></tr>
+      </tbody>
+    </table></div>
+  </section>
+
+  <section id="s20">
+    <div class="sec-head"><span class="eyebrow">20 · Site njfilmes.com.br</span><h2>Site que aparece no Google e converte</h2>
+      <p class="lede">Os itens marcados "Claude faz" são técnicos: é só pedir que o Claude implementa.</p></div>
+    <p class="group">Conteúdo (você, pelo painel /admin)</p>
+    <ul class="tips">
+      <li><strong>7 categorias públicas e vazias</strong> (Casamentos, Eventos, Institucional, Drone, Artistas, Fotografia, Culinária): publique pelo menos 1 projeto em cada ou esconda. Comece por Casamentos.</li>
+      <li><strong>Título de cada categoria</strong> com serviço + cidade: "Filmagem de Casamento em Salvador, BA", e 1–2 frases reais de descrição.</li>
+      <li><strong>Apagar ou renomear</strong> o rascunho duplicado "Ensaio Urbano".</li>
+      <li><strong>Legenda nas fotos</strong> descrevendo a cena (ajuda na busca de imagens).</li>
+      <li><strong>Publicar 1 trabalho novo por mês,</strong> com nome do local e bairro no texto ("Casamento no Wish Hotel da Bahia").</li>
+    </ul>
+    <p class="group">Técnico (Claude faz)</p>
+    <div class="grid2">
+      <div class="box"><div class="t">Páginas de serviço</div><ul>
+        <li>/filmagem-de-casamento-salvador, /filmagem-15-anos-salvador, /video-para-empresas-salvador, /drone-salvador</li>
+        <li>Cada uma com vídeos, "a partir de", perguntas frequentes e formulário</li>
+        <li>Destino ideal pro Google Ads por tema</li>
+      </ul></div>
+      <div class="box"><div class="t">Blog (tráfego grátis do Google)</div><ul>
+        <li>Quanto custa filmagem de casamento em Salvador</li>
+        <li>10 lugares pra ensaio pré-wedding em Salvador</li>
+        <li>Checklist da noiva: fornecedores e prazos</li>
+        <li>Casamento na praia em Salvador: dicas de horário</li>
+        <li>1 texto por mês</li>
+      </ul></div>
+      <div class="box"><div class="t">SEO técnico</div><ul>
+        <li>Dados estruturados LocalBusiness + FAQPage</li>
+        <li>Sitemap atualizado e enviado ao Search Console</li>
+        <li>Imagem de compartilhamento (OG) por página, pra link bonito no WhatsApp</li>
+        <li>Links internos entre portfólio, serviços e /orcamento</li>
+      </ul></div>
+      <div class="box"><div class="t">Velocidade (Core Web Vitals)</div><ul>
+        <li>Testar em pagespeed.web.dev, no celular</li>
+        <li>Meta: carregar o principal (LCP) em menos de 2,5 s</li>
+        <li>Vídeo do topo comprimido, com imagem de capa, e imagens em WebP</li>
+        <li>O servidor gratuito do Render "dorme": o 1º formulário do dia pode demorar. Plano pago (~US$ 7/mês) resolve</li>
+      </ul></div>
+      <div class="box"><div class="t">Conversão</div><ul>
+        <li>Faixa "a partir de R$ X" nos pacotes</li>
+        <li>Perguntas frequentes na /orcamento</li>
+        <li>Avaliações do Google na Home</li>
+        <li>Página "Datas disponíveis" ou aviso de agenda</li>
+      </ul></div>
+      <div class="box"><div class="t">Rastreamento</div><ul>
+        <li>Google Analytics 4 com evento de lead</li>
+        <li>API de Conversões da Meta (envia o Lead também pelo servidor: mede melhor com bloqueador e iPhone)</li>
+        <li>Política de privacidade (LGPD) no rodapé</li>
+      </ul></div>
+    </div>
+  </section>
+
+  <section id="s21">
+    <div class="sec-head"><span class="eyebrow">21 · Google</span><h2>Perfil da Empresa e Google Ads</h2></div>
+    <p class="group">Perfil da Empresa (aparecer no mapa)</p>
+    <ul class="tips">
+      <li><strong>Avaliações:</strong> peça pra 3–5 clientes antigos agora e depois de toda entrega (mensagem "30 dias depois"). É o que mais pesa pra subir no mapa.</li>
+      <li><strong>Fotos reais e atuais:</strong> logo, capa, bastidor e trabalhos entregues, 2–3 novas por mês.</li>
+      <li><strong>Uma postagem por semana</strong> na aba Postagens (trabalho recente, promoção, datas livres).</li>
+      <li><strong>Categorias extras:</strong> "Fotógrafo", "Serviço de fotografia de casamento", "Serviço de drone".</li>
+      <li><strong>Serviços com preço "a partir de"</strong> e a área atendida (os bairros).</li>
+      <li><strong>Perguntas e respostas:</strong> cadastre você mesmo as dúvidas mais comuns.</li>
+      <li><strong>Responder toda avaliação,</strong> boa ou ruim, citando o tipo de evento ("filmagem do casamento").</li>
+    </ul>
+    <p class="group">Google Ads (quando tiver mais avaliações)</p>
+    <ol class="steps">
+      <li><div><div class="t">Conta em ads.google.com no Modo Especialista</div><div class="d">Recuse a "campanha inteligente". Moeda Real, fuso Brasília.</div></div></li>
+      <li><div><div class="t">Criar a conversão do formulário</div><div class="d">Mande o código <code>AW-…</code> pro Claude instalar no site.</div></div></li>
+      <li><div><div class="t">Campanha de Pesquisa, 1 grupo por serviço</div><div class="d"><code>filmagem de casamento salvador</code>, <code>videomaker salvador</code>, <code>filmagem de 15 anos salvador</code>, <code>filmagem com drone salvador</code>, <code>vídeo institucional salvador</code>. Correspondência de frase.</div></div></li>
+      <li><div><div class="t">Palavras negativas</div><div class="d"><code>curso</code>, <code>grátis</code>, <code>emprego</code>, <code>vaga</code>, <code>como fazer</code>, <code>aluguel de câmera</code>.</div></div></li>
+      <li><div><div class="t">Recursos</div><div class="d">Ligação, sitelinks (Casamento, Empresas, Drone, Orçamento), local do Perfil da Empresa.</div></div></li>
+      <li><div><div class="t">Destino /orcamento (ou a página do serviço) · R$ 20 a 30/dia por 2–4 semanas</div><div class="d">Depois, veja em "Termos de pesquisa" o que as pessoas digitaram e negative o que não tem a ver.</div></div></li>
+    </ol>
+  </section>
+
+  <section id="s22">
+    <div class="sec-head"><span class="eyebrow">22 · Técnico</span><h2>Medir tudo: de onde vem cada cliente</h2></div>
+    <p class="group">Links com UTM (use sempre)</p>
+    <div class="tbl"><table>
+      <thead><tr><th>Onde</th><th>Acrescente no fim do link</th></tr></thead>
+      <tbody>
+        <tr><td>Bio do Instagram</td><td><code>?utm_source=instagram&amp;utm_medium=bio</code></td></tr>
+        <tr><td>Stories</td><td><code>?utm_source=instagram&amp;utm_medium=stories</code></td></tr>
+        <tr><td>Perfil do Google</td><td><code>?utm_source=google&amp;utm_medium=perfil</code></td></tr>
+        <tr><td>Status do WhatsApp</td><td><code>?utm_source=whatsapp&amp;utm_medium=status</code></td></tr>
+        <tr><td>Anúncio Meta (site)</td><td><code>?utm_source=meta&amp;utm_medium=paid&amp;utm_campaign=site-leads</code></td></tr>
+        <tr><td>Parceiro (ex.: buffet)</td><td><code>?utm_source=parceiro&amp;utm_medium=indicacao&amp;utm_campaign=nome-do-parceiro</code></td></tr>
+      </tbody>
+    </table></div>
+    <p class="group">Painel do mês (na planilha)</p>
+    <div class="tbl"><table>
+      <thead><tr><th>Indicador</th><th>Conta</th><th>Pra que serve</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Leads</strong></td><td>Conversas + formulários</td><td>Volume de oportunidades</td></tr>
+        <tr><td><strong>Taxa de fechamento</strong></td><td>Contratos ÷ leads</td><td>Qualidade do atendimento (bom: 10–25%)</td></tr>
+        <tr><td><strong>Ticket médio</strong></td><td>Faturamento ÷ contratos</td><td>Se os adicionais estão vendendo</td></tr>
+        <tr><td><strong>Custo por cliente (CAC)</strong></td><td>Gasto em anúncio ÷ contratos vindos de anúncio</td><td>Quanto custa conquistar 1 cliente</td></tr>
+        <tr class="hl"><td><strong>Retorno (ROAS)</strong></td><td>Faturamento dos anúncios ÷ gasto</td><td>Ex.: gastou R$ 750 e fechou 2 × R$ 4.500 = 12×</td></tr>
+        <tr><td><strong>Origem</strong></td><td>Anúncio, Instagram, Google, indicação, parceiro</td><td>Onde investir mais</td></tr>
+      </tbody>
+    </table></div>
+    <p class="group">Meta avançado (depois dos 14 dias)</p>
+    <ul class="tips">
+      <li><strong>Teste A/B</strong> (Gerenciador → Testar e aprender): compare 2 vídeos ou WhatsApp x Site com a verba dividida certinho.</li>
+      <li><strong>API de Conversões:</strong> o Claude liga no servidor do site, com o mesmo ID de evento do Pixel pra não contar duas vezes.</li>
+      <li><strong>Anúncio por tema:</strong> conjunto só de 15 anos (texto e vídeo de 15 anos) e só de empresa (idade 25–55, interesses de empreendedorismo).</li>
+      <li><strong>Público semelhante</strong> dos clientes fechados (suba a lista de telefones) quando passar de 100 contatos.</li>
+    </ul>
+  </section>
+
+  <section id="s23">
+    <div class="sec-head"><span class="eyebrow">23 · Crescimento</span><h2>Todas as outras formas de trazer cliente e renda</h2></div>
+    <div class="grid3">
+      <div class="box"><div class="t">Parcerias locais</div><p>Cerimonialistas, buffets, decoradoras, maquiadoras e casas de festa: indicação mútua, 10% de comissão e troca de link na página /links.</p></div>
+      <div class="box"><div class="t">Fotógrafos e filmmakers</div><p>Seja 2º cinegrafista ou chame parceiros quando a data já estiver ocupada (e fique com uma porcentagem).</p></div>
+      <div class="box"><div class="t">Grupos de fornecedores</div><p>2–3 grupos de WhatsApp/Facebook de fornecedores de casamento e evento em Salvador.</p></div>
+      <div class="box"><div class="t">Portais de casamento</div><p>Casamentos.com.br, Zankyou e guias de noivas de Salvador.</p></div>
+      <div class="box"><div class="t">Feiras de noivas</div><p>Estande ou parceria em feiras de casamento de Salvador: lead de noiva decidida.</p></div>
+      <div class="box"><div class="t">Hotéis e espaços</div><p>Espaços de casamento e hotéis da orla: vídeo do espaço em troca de ser fornecedor indicado.</p></div>
+      <div class="box"><div class="t">Receita recorrente</div><p>Conteúdo mensal pra restaurantes, clínicas, imobiliárias e academias (seção 14).</p></div>
+      <div class="box"><div class="t">Imobiliárias e arquitetos</div><p>Vídeo, foto e drone de imóveis de alto padrão: demanda o ano inteiro.</p></div>
+      <div class="box"><div class="t">Turismo</div><p>Pousadas, hotéis, passeios e agências de Salvador precisam de vídeo pra Instagram e Booking.</p></div>
+      <div class="box"><div class="t">Artistas e shows</div><p>Carnaval, São João, pagode e axé: aftermovie e cortes pra redes.</p></div>
+      <div class="box"><div class="t">Prefeituras e licitações</div><p>Você já atendeu prefeitura: acompanhe editais de produção audiovisual (precisa de CNPJ e certidões em dia).</p></div>
+      <div class="box"><div class="t">LinkedIn</div><p>Cases de Record, Band, Skol e Prefeitura abrem porta com gerentes de marketing.</p></div>
+      <div class="box"><div class="t">YouTube</div><p>Filmes completos com título "Filmagem de casamento em Salvador" e playlists por categoria.</p></div>
+      <div class="box"><div class="t">Banco de imagens</div><p>Tomadas de drone de Salvador vendidas no Adobe Stock, Shutterstock e Pond5: renda passiva.</p></div>
+      <div class="box"><div class="t">Ensinar</div><p>Presets e LUTs, mentoria pra iniciantes e workshop de drone ou de celular.</p></div>
+      <div class="box"><div class="t">Aluguel</div><p>Equipamento parado nos dias livres (com contrato e caução).</p></div>
+    </div>
+  </section>
+
+  <section id="s24">
+    <div class="sec-head"><span class="eyebrow">24 · Calendário</span><h2>Sazonalidade e promoções do ano</h2></div>
+    <div class="tbl"><table>
+      <thead><tr><th>Época</th><th>O que acontece</th><th>O que fazer</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Set–Nov</strong></td><td>Formaturas e pré-temporada de casamentos</td><td>Anúncio de casamento e formatura ligado. Promoção de pré-temporada pra 2027</td></tr>
+        <tr><td><strong>Novembro</strong></td><td>Black Friday</td><td>Condição especial de reserva de data (seção 17)</td></tr>
+        <tr class="hl"><td><strong>Dez–Fev</strong></td><td>Réveillon, verão, confraternizações, muitos pedidos de casamento</td><td>Reforce o orçamento dos anúncios. Conteúdo "acabou de noivar?"</td></tr>
+        <tr><td><strong>Fev–Mar</strong></td><td>Carnaval</td><td>Prospecte agências, camarotes e blocos com meses de antecedência</td></tr>
+        <tr><td><strong>Mar–Abr</strong></td><td>Pré-São João</td><td>Prospecte empresas, condomínios e prefeituras pra junho</td></tr>
+        <tr><td><strong>Maio</strong></td><td>Dia das Mães, mês das noivas</td><td>Conteúdo de casamento forte e promoção de ensaio</td></tr>
+        <tr><td><strong>Jun–Ago</strong></td><td>Agenda mais calma</td><td>Promoção de datas de baixa procura, contratos mensais com empresas, gravar conteúdo próprio</td></tr>
+      </tbody>
+    </table></div>
+  </section>
+
+  <section id="s25">
+    <div class="sec-head"><span class="eyebrow">25 · Banco de ideias</span><h2>60 ideias de conteúdo pra nunca ficar sem post</h2>
+      <p class="lede">Escolha 3–4 por semana. Grave várias no mesmo evento: 1 cobertura rende conteúdo pra 2 semanas.</p></div>
+    <div class="grid2">
+      <div class="box"><div class="t">Casamento (12)</div><ul>
+        <li>Entrada da noiva em câmera lenta</li><li>Reação do noivo ao ver a noiva</li><li>Votos com legenda</li><li>Discurso do pai</li><li>Primeira dança</li><li>Making of da noiva</li><li>Drone revelando a cerimônia na praia</li><li>Detalhes: alianças, vestido, convite</li><li>"Um casamento em 15 segundos"</li><li>Noivos assistindo o filme pela 1ª vez</li><li>Casamento na chuva que ficou lindo</li><li>Trend de áudio com cenas de casamento</li>
+      </ul></div>
+      <div class="box"><div class="t">15 anos e família (8)</div><ul>
+        <li>Valsa com o pai</li><li>Entrada da debutante</li><li>Surpresa da família</li><li>Making of com as amigas</li><li>Troca do vestido</li><li>Depoimento da mãe</li><li>"De bebê aos 15" com fotos antigas</li><li>Ensaio de 15 anos em ponto de Salvador</li>
+      </ul></div>
+      <div class="box"><div class="t">Bastidores e você (12)</div><ul>
+        <li>Um dia de filmmaker em 30s</li><li>O que tem na minha mochila</li><li>Configuração da câmera pra pôr do sol</li><li>Drone decolando na orla</li><li>Timelapse editando</li><li>Erros que já cometi</li><li>Como comecei na NJ Filmes</li><li>POV: filmando um casamento</li><li>Equipamento x celular: a diferença</li><li>Respondendo caixinha de perguntas</li><li>Meu setup de edição</li><li>Correndo atrás da melhor luz</li>
+      </ul></div>
+      <div class="box"><div class="t">Educativo (12)</div><ul>
+        <li>Quanto custa filmar um casamento em Salvador</li><li>Teaser, filme ou os dois?</li><li>5 erros ao contratar filmmaker</li><li>Melhor horário pra casar na praia</li><li>Lugares pra ensaio em Salvador</li><li>Checklist de fornecedores da noiva</li><li>Por que ter drone no evento</li><li>O que perguntar antes de contratar</li><li>Como ficar natural na frente da câmera</li><li>Vídeo x foto: por que ter os dois</li><li>Quanto tempo leva pra editar um filme</li><li>Como um vídeo vende mais pra empresa</li>
+      </ul></div>
+      <div class="box"><div class="t">Empresas e marcas (8)</div><ul>
+        <li>Bastidor de gravação pra marca</li><li>Antes/depois do Instagram de um cliente</li><li>Case Skol / Band / Sesc em 20s</li><li>Reels de restaurante: prato em câmera lenta</li><li>Vídeo de imóvel com drone</li><li>Aftermovie de evento corporativo</li><li>"3 vídeos que toda empresa precisa ter"</li><li>Depoimento do dono da empresa</li>
+      </ul></div>
+      <div class="box"><div class="t">Salvador e prova social (8)</div><ul>
+        <li>Salvador vista de drone (Farol, Rio Vermelho, Pelourinho)</li><li>Pôr do sol na Ponta de Humaitá</li><li>Print de avaliação 5 estrelas</li><li>Mensagem de cliente emocionado</li><li>Números: "X casamentos em 2026"</li><li>Fornecedores parceiros</li><li>Datas livres do mês</li><li>Retrospectiva do ano</li>
+      </ul></div>
+    </div>
+    <p class="group">Ganchos prontos (texto na tela nos 2 primeiros segundos)</p>
+    <div class="copies">
+      <div class="copy"><pre id="g1">Ela não sabia que o pai ia fazer isso 😭
+Ninguém esperava esse momento no casamento…
+Se você vai casar em Salvador, assiste até o final
+O vídeo que fez a noiva chorar de novo
+3 coisas que eu faria diferente no meu casamento
+Isso aqui custa menos do que você imagina
+POV: você contratou filmmaker com drone
+Antes e depois da edição (espera o final)</pre><button class="btn" type="button" data-copy="g1">Copiar ganchos</button></div>
+    </div>
+    <p class="group">Legendas modelo</p>
+    <div class="copies">
+      <div class="copy"><pre id="l1">[Nome] e [Nome] disseram sim em [local], Salvador 💍
+Um dia de [emoção] do começo ao fim. Obrigado pela confiança!
+🎬 Filmagem e drone: @njfilmes
+Vai casar? Comenta ORÇAMENTO que te mando os pacotes.
+#casamentosalvador #filmagemdecasamento #salvadorbahia</pre><button class="btn" type="button" data-copy="l1">Legenda casamento</button></div>
+      <div class="copy"><pre id="l2">Por trás de cada vídeo tem [horas] de gravação e [dias] de edição 🎬
+Hoje foi dia de gravar pra @[marca] em Salvador.
+Sua empresa precisa de vídeo que vende? Me chama no WhatsApp (link na bio).</pre><button class="btn" type="button" data-copy="l2">Legenda empresa</button></div>
+    </div>
+  </section>
+
+  <section id="s26">
+    <div class="sec-head"><span class="eyebrow">26 · Cuidados</span><h2>O que NÃO fazer, em todas as áreas</h2>
+      <p class="lede">Os anúncios já têm a lista deles na seção 11. Aqui está o resto.</p></div>
+    <p class="group">Atendimento e venda</p>
+    <ul class="dont">
+      <li><strong>Não mande só o preço seco.</strong> Sempre com o que está incluído e um trabalho parecido.</li>
+      <li><strong>Não demore horas pra responder</strong> nem deixe conversa sem retorno.</li>
+      <li><strong>Não dê desconto no primeiro "achei caro".</strong> Primeiro mostre o valor, depois ajuste o pacote.</li>
+      <li><strong>Não fale mal de concorrente.</strong> Mostre o seu padrão.</li>
+      <li><strong>Não prometa o que não controla</strong> (prazo impossível, "vai viralizar", tomada de drone em área proibida).</li>
+      <li><strong>Não insista mais de 3 vezes</strong> depois da proposta. Encerre com educação (mensagem "Última").</li>
+      <li><strong>Não mande áudio de 3 minutos.</strong> Até 1 minuto.</li>
+    </ul>
+    <p class="group">Preço e dinheiro</p>
+    <ul class="dont">
+      <li><strong>Não cobre abaixo do seu preço mínimo</strong> (seção 15) sem um motivo claro.</li>
+      <li><strong>Não reserve data sem sinal.</strong></li>
+      <li><strong>Não entregue o material completo antes de receber tudo.</strong> Mande uma prévia com marca d'água se precisar.</li>
+      <li><strong>Não misture dinheiro pessoal com o da empresa.</strong> Conta separada pro CNPJ.</li>
+      <li><strong>Não faça promoção o tempo todo:</strong> o cliente aprende a esperar a promoção.</li>
+      <li><strong>Não esqueça do imposto e do reinvestimento</strong> em equipamento.</li>
+    </ul>
+    <p class="group">Contrato e trabalho</p>
+    <ul class="dont">
+      <li><strong>Não trabalhe sem contrato,</strong> nem com amigo.</li>
+      <li><strong>Não formate cartão antes do backup duplo.</strong></li>
+      <li><strong>Não vá sem bateria, cartão e câmera reserva.</strong></li>
+      <li><strong>Não use música de rádio</strong> em vídeo que vai pra internet.</li>
+      <li><strong>Não voe drone perto do aeroporto, sobre multidão ou sem registro.</strong></li>
+      <li><strong>Não poste o trabalho do cliente sem autorização,</strong> principalmente de empresa ou menor de idade.</li>
+      <li><strong>Não estoure o prazo calado.</strong></li>
+    </ul>
+    <p class="group">Instagram</p>
+    <ul class="dont">
+      <li><strong>Não compre seguidores nem curtidas,</strong> e não use apps de "seguir e deixar de seguir".</li>
+      <li><strong>Não remova fakes além de 20 a cada 2 horas</strong> (até 80 por dia): o Instagram pode bloquear ações.</li>
+      <li><strong>Não poste Reels com marca d'água do TikTok ou CapCut:</strong> o Instagram entrega menos.</li>
+      <li><strong>Não comece o vídeo com logo ou tela preta.</strong></li>
+      <li><strong>Não apague post que foi mal.</strong> Arquive, se quiser.</li>
+      <li><strong>Não use 30 hashtags genéricas.</strong> 3–5 específicas de Salvador e do serviço.</li>
+      <li><strong>Não fique semanas sem postar</strong> enquanto roda anúncio: o perfil parado derruba a confiança.</li>
+      <li><strong>Não deixe comentário e DM sem resposta.</strong></li>
+    </ul>
+    <p class="group">Site e Google</p>
+    <ul class="dont">
+      <li><strong>Não deixe categoria vazia pública</strong> nem projeto de teste publicado.</li>
+      <li><strong>Não mude o endereço (URL) de páginas que já aparecem no Google</strong> sem pedir redirecionamento pro Claude.</li>
+      <li><strong>Não suba vídeo pesado direto no site.</strong> Use YouTube/Vimeo ou versão comprimida.</li>
+      <li><strong>Não compre avaliação nem peça pra amigo avaliar sem ter sido cliente:</strong> o Google remove e pode suspender o perfil.</li>
+      <li><strong>Não copie texto de outros sites:</strong> o Google ignora conteúdo duplicado.</li>
+      <li><strong>Não publique chave de API, senha ou token</strong> em print, grupo ou conversa. Se vazar, apague e gere outra na hora.</li>
+    </ul>
+  </section>
+
+  <!-- ============ DÚVIDAS ============ -->
+  <section id="s27">
+    <div class="sec-head"><span class="eyebrow">27 · Dúvidas</span><h2>Perguntas frequentes</h2>
+      <p class="lede">Toque numa pergunta pra ver a resposta.</p></div>
+    <p class="group">Anúncios</p>
+    <div class="faqs">
+      <details class="faq"><summary>Em quanto tempo começam a chegar clientes?</summary><div class="a"><p>As primeiras conversas costumam chegar já nos primeiros dias. Mas o custo só estabiliza depois de 7 a 14 dias, e fechar contrato depende do seu atendimento e da época do ano.</p></div></details>
+      <details class="faq"><summary>O anúncio foi reprovado. E agora?</summary><div class="a"><p>Abra o anúncio e leia o motivo. Quase sempre é texto: promessa exagerada ("o melhor", "garantido"), muito texto sobre a imagem ou música com direitos autorais. Ajuste e clique em "Solicitar revisão". Se não entender o motivo, mande um print pro Claude.</p></div></details>
+      <details class="faq"><summary>Posso pausar e voltar depois?</summary><div class="a"><p>Pode. Pausas curtas (até uns 7 dias) quase não atrapalham. Pausa longa faz a Meta reaprender, então evite desligar e ligar toda hora.</p></div></details>
+      <details class="faq"><summary>Não veio nenhuma conversa em 3 dias. Faço o quê?</summary><div class="a"><p>Confira se o anúncio está "Ativo" (não "Em análise" ou "Com problema") e se o pagamento passou. Se estiver tudo certo, espere até o dia 7. Se continuar sem nada, o problema costuma ser o vídeo: troque por um da seção 05.</p></div></details>
+      <details class="faq"><summary>Chegam conversas, mas ninguém fecha.</summary><div class="a"><p>Aí o problema não é o anúncio. Revise: tempo de resposta, se você manda trabalho parecido antes do preço, se os pacotes estão claros (seção 14) e anote o motivo de cada perda na planilha.</p></div></details>
+      <details class="faq"><summary>Chegam muitos curiosos só perguntando preço.</summary><div class="a"><p>Normal no WhatsApp. Coloque "a partir de R$ X" no primeiro atendimento e no site, e teste a Campanha 2 (site): o formulário filtra mais.</p></div></details>
+      <details class="faq"><summary>Posso usar o mesmo vídeo nas duas campanhas?</summary><div class="a"><p>Pode e deve: assim a comparação entre WhatsApp e site é justa.</p></div></details>
+      <details class="faq"><summary>Quantos anúncios coloco em cada conjunto?</summary><div class="a"><p>De 2 a 4 (um por vídeo). Mais que isso divide demais o orçamento de R$ 25/dia.</p></div></details>
+      <details class="faq"><summary>Devo mudar o público se não der certo?</summary><div class="a"><p>Primeiro troque o vídeo; ele pesa mais que o público. Se mesmo assim o custo ficar alto, reduza pros bairros que mais trouxeram conversa (Gerenciador → Detalhamento → Região).</p></div></details>
+      <details class="faq"><summary>Vale incluir Lauro de Freitas?</summary><div class="a"><p>Vale testar depois dos primeiros 14 dias, com pino manual e raio de 1–2 km em Vilas do Atlântico e Buraquinho, num conjunto separado pra ver se traz conversa.</p></div></details>
+      <details class="faq"><summary>Impulsionar pelo Instagram não é mais fácil?</summary><div class="a"><p>É mais fácil, mas perde os 20 bairros, o Pixel e a otimização por conversa. Use sempre o Gerenciador de Anúncios.</p></div></details>
+      <details class="faq"><summary>Como a Meta cobra?</summary><div class="a"><p>No cartão, cobra conforme gasta (ao atingir um limite ou no fim do mês). No Pix ou boleto, você coloca saldo antes. O valor diário é uma média: num dia pode gastar um pouco mais, noutro menos, mas no mês fica perto do combinado.</p></div></details>
+      <details class="faq"><summary>Quando trocar de vídeo?</summary><div class="a"><p>Frequência acima de 4, CTR abaixo de 0,7% ou 3–4 semanas no ar, o que vier primeiro.</p></div></details>
+      <details class="faq"><summary>Remarketing não é chato pra pessoa?</summary><div class="a"><p>Com R$ 5/dia e frequência controlada, não. Mostre vídeos diferentes do que a pessoa já viu (depoimento, trailer) em vez de repetir o mesmo.</p></div></details>
+      <details class="faq"><summary>Vale contratar um gestor de tráfego?</summary><div class="a"><p>Com R$ 750–1.200/mês de anúncio, a taxa de um gestor (geralmente R$ 800–2.000/mês) pesa demais. Siga este plano e revise os números com o Claude. Considere gestor quando investir mais de R$ 3.000/mês.</p></div></details>
+    </div>
+    <p class="group">Site e rastreamento</p>
+    <div class="faqs">
+      <details class="faq"><summary>Onde vejo quem preencheu o formulário do site?</summary><div class="a"><p>Chega um e-mail em contato@njfilmes.com.br com nome, WhatsApp e tipo de evento, e a conversa abre no seu WhatsApp. No Gerenciador de Eventos da Meta aparece como "Lead".</p></div></details>
+      <details class="faq"><summary>Como sei se o Pixel continua funcionando?</summary><div class="a"><p>business.facebook.com/events_manager → NJFILMES Pixel → Visão geral. Tem que aparecer PageView com atividade recente. Se aparecer "Nenhuma atividade" por dias, avise o Claude.</p></div></details>
+      <details class="faq"><summary>Minhas visitas no site contam no Pixel?</summary><div class="a"><p>Com o uBlock ligado, não, e isso é bom: não mistura suas visitas com as dos clientes. Pra testar o Pixel, desligue o uBlock só no njfilmes.com.br.</p></div></details>
+      <details class="faq"><summary>O formulário demorou a enviar. É problema?</summary><div class="a"><p>O servidor gratuito "dorme" depois de um tempo sem uso e leva alguns segundos pra acordar. O WhatsApp abre na hora e o e-mail chega depois, então não se perde o lead. Pra acabar com isso, plano pago do Render (~US$ 7/mês).</p></div></details>
+      <details class="faq"><summary>Devo colocar preço no site e no Instagram?</summary><div class="a"><p>Só "a partir de". Filtra quem não tem orçamento e não entrega a proposta completa pra concorrência.</p></div></details>
+    </div>
+    <p class="group">Instagram</p>
+    <div class="faqs">
+      <details class="faq"><summary>Qual o melhor horário pra postar?</summary><div class="a"><p>Comece pelos horários do calendário (seção 19) e confirme em Insights → Público → Horários mais ativos. Poste 30–60 minutos antes do pico.</p></div></details>
+      <details class="faq"><summary>Reels curto ou longo?</summary><div class="a"><p>7–15s pra alcance (gente nova), 30–60s pra quem já te segue e pra depoimento. Olhe o gráfico de retenção: se todo mundo sai no segundo 5, o vídeo pode ter 5 segundos a menos.</p></div></details>
+      <details class="faq"><summary>Hashtag ainda funciona?</summary><div class="a"><p>Pouco. Palavra-chave na legenda e localização pesam mais. Use 3–5 hashtags específicas.</p></div></details>
+      <details class="faq"><summary>Posto no @njfilmes ou no @antoniojuniornj?</summary><div class="a"><p>Trabalho no @njfilmes. No pessoal, bastidor e vida, e Collab nos posts principais pra somar os dois públicos.</p></div></details>
+      <details class="faq"><summary>Meu alcance caiu. O que faço?</summary><div class="a"><p>Veja se mudou algo (menos posts, vídeos mais longos, sem gancho). Volte a postar 3–4 Reels por semana com gancho forte, teste Reels de teste e responda comentários na 1ª hora. Quedas de 1–2 semanas são normais.</p></div></details>
+      <details class="faq"><summary>Vale fazer live?</summary><div class="a"><p>Com parceiros (cerimonialista, decoradora) sobre "como organizar o casamento", sim: aparece pro público dos dois.</p></div></details>
+    </div>
+    <p class="group">Trabalho e entrega</p>
+    <div class="faqs">
+      <details class="faq"><summary>Qual prazo de entrega colocar?</summary><div class="a"><p>Teaser em 7–15 dias e filme em 30–60 dias é o comum. Coloque um prazo que você cumpre com folga mesmo na alta temporada.</p></div></details>
+      <details class="faq"><summary>Por quanto tempo guardo o material bruto?</summary><div class="a"><p>Defina no contrato (ex.: 6 meses). Depois disso, só o material final. Evita pedido de reedição anos depois.</p></div></details>
+      <details class="faq"><summary>Quantas revisões de edição incluo?</summary><div class="a"><p>1 rodada de ajustes incluída, por escrito. Mais que isso, cobra por hora.</p></div></details>
+      <details class="faq"><summary>Preciso de autorização pra voar drone em Salvador?</summary><div class="a"><p>Cadastro do drone no SISANT e solicitação no SARPAS antes do voo. Perto do aeroporto (Stella Maris, Itapuã, Lauro de Freitas) as regras são mais rígidas. Seguro de responsabilidade civil é recomendado pra uso profissional.</p></div></details>
+      <details class="faq"><summary>E se chover no dia?</summary><div class="a"><p>Deixe no contrato o que acontece (remarcação de ensaio, cobertura normal em evento). Tenha capa de chuva pro equipamento.</p></div></details>
+    </div>
+    <p class="group">Vendas e negócio</p>
+    <div class="faqs">
+      <details class="faq"><summary>Devo dar desconto?</summary><div class="a"><p>Só com contrapartida: Pix à vista, fechamento rápido, data de baixa procura ou tirando um item do pacote (seção 16).</p></div></details>
+      <details class="faq"><summary>Quanto cobrar de sinal?</summary><div class="a"><p>30% a 50%. Casamento com muita antecedência: 30%. Evento em menos de 60 dias: 50%.</p></div></details>
+      <details class="faq"><summary>E se o cliente cancelar?</summary><div class="a"><p>Vale o que está no contrato. Por isso a cláusula de cancelamento e remarcação é obrigatória (seção 18).</p></div></details>
+      <details class="faq"><summary>Preciso de nota fiscal ou CNPJ?</summary><div class="a"><p>Não pra anunciar. Com CNPJ (você tem o 48.913.382/0001-70), dá pra colocar os dados fiscais na conta de anúncios e emitir nota pra empresas. Confirme com contador se o seu enquadramento cobre todos os serviços que você vende.</p></div></details>
+      <details class="faq"><summary>Sorteio ajuda a crescer?</summary><div class="a"><p>Ajuda no número de seguidores, mas atrai gente que não compra e perfis fake. Faça no máximo 2 por ano, com regra de morar em Salvador.</p></div></details>
+      <details class="faq"><summary>Comprar seguidores ajuda?</summary><div class="a"><p>Não. Derruba o engajamento, o Instagram entrega menos e as marcas percebem. Continue a limpeza com o Caça-Fakes.</p></div></details>
+      <details class="faq"><summary>E se eu quiser ajuda pra analisar os números?</summary><div class="a"><p>Mande prints do Gerenciador de Anúncios (colunas Resultados, Custo por resultado, Alcance, Frequência e CTR, período de 7 ou 14 dias), do Instagram Insights e da sua planilha de clientes pro Claude.</p></div></details>
+    </div>
+  </section>
+
+  <!-- ============ CHECKLIST ============ -->
+  <section id="s28">
+    <div class="sec-head"><span class="eyebrow">28 · Checklist</span><h2>Tudo o que falta, em ordem</h2>
+      <p class="lede">Marque conforme for fazendo. Fica salvo neste navegador.</p></div>
+    <div class="progress"><span id="prog">0 de 0 feitas</span><div class="bar"><i id="progbar"></i></div></div>
+
+    <p class="group">Esta semana</p>
+    <ul class="tasks">
+      <li><label><input type="checkbox" data-id="a1"><span>Separar ou gravar 3 vídeos: trailer de casamento, bastidores e depoimento</span></label></li>
+      <li><label><input type="checkbox" data-id="a2"><span>Campanha 1: duplicar o anúncio, subir os vídeos e colar os textos</span></label></li>
+      <li><label><input type="checkbox" data-id="a3"><span>Conferir a forma de pagamento da conta de anúncios</span></label></li>
+      <li><label><input type="checkbox" data-id="a4"><span>Publicar a Campanha 1 (WhatsApp)</span></label></li>
+      <li><label><input type="checkbox" data-id="a5"><span>Criar e publicar a Campanha 2 (Site · /orcamento · evento Lead)</span></label></li>
+      <li><label><input type="checkbox" data-id="a6"><span>Configurar o WhatsApp Business: ausência, etiquetas e respostas rápidas</span></label></li>
+      <li><label><input type="checkbox" data-id="a7"><span>Calcular seu preço mínimo (seção 15) e definir os pacotes (seção 14)</span></label></li>
+      <li><label><input type="checkbox" data-id="a8"><span>Criar a planilha de leads com o painel do mês</span></label></li>
+      <li><label><input type="checkbox" data-id="a9"><span>Verificar o domínio njfilmes.com.br na Meta</span></label></li>
+      <li><label><input type="checkbox" data-id="a10"><span>Atualizar bio, nome, categoria e link com UTM do Instagram</span></label></li>
+    </ul>
+
+    <p class="group">Primeiros 14 dias</p>
+    <ul class="tasks">
+      <li><label><input type="checkbox" data-id="b1"><span>Não mexer nas campanhas nos 7 primeiros dias</span></label></li>
+      <li><label><input type="checkbox" data-id="b2"><span>Responder toda conversa em até 15 minutos</span></label></li>
+      <li><label><input type="checkbox" data-id="b3"><span>Criar os 4 públicos de remarketing (seção 04)</span></label></li>
+      <li><label><input type="checkbox" data-id="b5"><span>Montar um modelo de contrato e de proposta em PDF</span></label></li>
+      <li><label><input type="checkbox" data-id="b6"><span>Fixar 3 posts e organizar os destaques do Instagram</span></label></li>
+      <li><label><input type="checkbox" data-id="b4"><span>No dia 14, mandar os prints dos números pro Claude</span></label></li>
+    </ul>
+
+    <p class="group">Mês 1</p>
+    <ul class="tasks">
+      <li><label><input type="checkbox" data-id="c1"><span>Ligar a campanha de remarketing (público com 1.000+ pessoas)</span></label></li>
+      <li><label><input type="checkbox" data-id="c2"><span>Trocar o pior vídeo por um novo</span></label></li>
+      <li><label><input type="checkbox" data-id="c3"><span>Publicar pelo menos 1 projeto em Casamentos e esconder as categorias vazias</span></label></li>
+      <li><label><input type="checkbox" data-id="c4"><span>Ajustar título e descrição das categorias com serviço + Salvador</span></label></li>
+      <li><label><input type="checkbox" data-id="c5"><span>Apagar ou renomear o rascunho "Ensaio Urbano"</span></label></li>
+      <li><label><input type="checkbox" data-id="c6"><span>Pedir avaliação no Google pra 3–5 clientes antigos</span></label></li>
+      <li><label><input type="checkbox" data-id="c7"><span>Completar o Perfil do Google: fotos, serviços, categorias e perguntas</span></label></li>
+      <li><label><input type="checkbox" data-id="c8"><span>Postar no Instagram 3–4 vezes por semana seguindo o calendário</span></label></li>
+      <li><label><input type="checkbox" data-id="c9"><span>Ativar a resposta automática "Comenta ORÇAMENTO"</span></label></li>
+      <li><label><input type="checkbox" data-id="c10"><span>Pedir pro Claude: Google Analytics 4 e API de Conversões</span></label></li>
+      <li><label><input type="checkbox" data-id="c11"><span>Lançar a promoção de indicação</span></label></li>
+      <li><label><input type="checkbox" data-id="c12"><span>Cadastrar o drone no SISANT, se ainda não fez</span></label></li>
+    </ul>
+
+    <p class="group">Mês 2–3</p>
+    <ul class="tasks">
+      <li><label><input type="checkbox" data-id="d1"><span>Criar a conta do Google Ads e mandar o código AW- pro Claude</span></label></li>
+      <li><label><input type="checkbox" data-id="d10"><span>Pedir pro Claude: páginas de serviço e o 1º texto do blog</span></label></li>
+      <li><label><input type="checkbox" data-id="d2"><span>Testar Lauro de Freitas num conjunto separado</span></label></li>
+      <li><label><input type="checkbox" data-id="d3"><span>Criar o público semelhante (depois de ~100 leads)</span></label></li>
+      <li><label><input type="checkbox" data-id="d4"><span>Fechar indicação com 2–3 buffets, casas de festa ou cerimonialistas</span></label></li>
+      <li><label><input type="checkbox" data-id="d11"><span>Oferecer o plano mensal pra 5 empresas (restaurante, clínica, imobiliária)</span></label></li>
+      <li><label><input type="checkbox" data-id="d5"><span>Entrar em 2–3 grupos locais de fornecedores</span></label></li>
+      <li><label><input type="checkbox" data-id="d6"><span>Cadastrar a NJFILMES em 1 portal de casamento</span></label></li>
+      <li><label><input type="checkbox" data-id="d7"><span>Montar o media kit em PDF com os pacotes</span></label></li>
+      <li><label><input type="checkbox" data-id="d8"><span>Otimizar títulos e descrições dos vídeos do YouTube</span></label></li>
+      <li><label><input type="checkbox" data-id="d9"><span>Criar ou ativar o LinkedIn com os cases corporativos</span></label></li>
+      <li><label><input type="checkbox" data-id="d12"><span>Preparar a promoção de pré-temporada (out–dez)</span></label></li>
+    </ul>
+
+    <p class="group">Rotina de todo mês</p>
+    <div class="callout"><strong>Todo mês:</strong> 1 trabalho novo no portfólio, Instagram 3–4× por semana, pedir avaliação depois de cada entrega, mensagem de 30 dias pros clientes, trocar o vídeo mais cansado dos anúncios, preencher o painel do mês (leads, fechamento, ticket, CAC, ROAS) e olhar o Search Console pra ver o que as pessoas buscam.</div>
+  </section>
+
+
+  <footer>
+    <span>NJFILMES · Salvador, BA · Vídeo, foto e drone</span>
+    <span>Plano final · 28/09/2026</span>
+  </footer>
+</div>
+
+<script>
+(function(){
+  document.addEventListener('click', function(e){
+    var b = e.target.closest('[data-copy]'); if (!b) return;
+    var el = document.getElementById(b.getAttribute('data-copy')); if (!el) return;
+    var label = b.textContent;
+    function ok(){ b.textContent = 'Copiado ✓'; b.classList.add('ok'); setTimeout(function(){ b.textContent = label; b.classList.remove('ok'); }, 1800); }
+    function fallback(){ var r = document.createRange(); r.selectNodeContents(el); var s = getSelection(); s.removeAllRanges(); s.addRange(r); b.textContent = 'Selecionado: copie'; setTimeout(function(){ b.textContent = label; }, 2200); }
+    try { navigator.clipboard.writeText(el.textContent).then(ok, fallback); } catch(err){ fallback(); }
+  });
+  var KEY = 'njfilmes-plano-final-v1', saved = {};
+  try { saved = JSON.parse(localStorage.getItem(KEY) || '{}') || {}; } catch(e){ saved = {}; }
+  var boxes = Array.prototype.slice.call(document.querySelectorAll('.tasks input[type="checkbox"]'));
+  function paint(){
+    var n = 0;
+    boxes.forEach(function(b){ b.closest('label').classList.toggle('done', b.checked); if (b.checked) n++; });
+    document.getElementById('prog').textContent = n + ' de ' + boxes.length + ' feitas';
+    document.getElementById('progbar').style.width = (boxes.length ? n / boxes.length * 100 : 0) + '%';
+  }
+  boxes.forEach(function(b){
+    var id = b.getAttribute('data-id');
+    b.checked = !!saved[id];
+    b.addEventListener('change', function(){ saved[id] = b.checked; try { localStorage.setItem(KEY, JSON.stringify(saved)); } catch(e){} paint(); });
+  });
+  paint();
+})();
+</script>
+</body>
+</html>
