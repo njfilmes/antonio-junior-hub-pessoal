@@ -1,0 +1,61 @@
+// NJFILMES - Ajuste de Pele (DCTL)
+// DaVinci Resolve Studio. Use num no depois da correcao basica (imagem em Rec.709).
+// Mexe so nos tons de pele: puxa o tom pra linha de pele do vectorscope,
+// uniformiza manchas de cor (vermelhidao / amarelado) e ajusta brilho e calor.
+
+DEFINE_UI_PARAMS(p_Pull, Corrigir tom (linha de pele), DCTLUI_SLIDER_FLOAT, 0.5, 0.0, 1.0, 0.01)
+DEFINE_UI_PARAMS(p_Uniform, Uniformizar manchas, DCTLUI_SLIDER_FLOAT, 0.3, 0.0, 1.0, 0.01)
+DEFINE_UI_PARAMS(p_Sat, Saturacao da pele, DCTLUI_SLIDER_FLOAT, 0.95, 0.5, 1.5, 0.01)
+DEFINE_UI_PARAMS(p_Bright, Brilho da pele, DCTLUI_SLIDER_FLOAT, 0.02, -0.2, 0.2, 0.005)
+DEFINE_UI_PARAMS(p_Warm, Calor da pele, DCTLUI_SLIDER_FLOAT, 0.0, -0.05, 0.05, 0.001)
+DEFINE_UI_PARAMS(p_Range, Largura da selecao, DCTLUI_SLIDER_FLOAT, 25.0, 10.0, 50.0, 0.5)
+DEFINE_UI_PARAMS(p_Mask, Mostrar mascara, DCTLUI_CHECK_BOX, 0)
+
+__DEVICE__ float nj_smooth(float e0, float e1, float x)
+{
+    float t = (x - e0) / (e1 - e0);
+    t = _fminf(_fmaxf(t, 0.0f), 1.0f);
+    return t * t * (3.0f - 2.0f * t);
+}
+
+__DEVICE__ float3 transform(int p_Width, int p_Height, int p_X, int p_Y, float p_R, float p_G, float p_B)
+{
+    const float PI = 3.14159265f;
+    const float TARGET = 123.0f;   // linha de pele no vectorscope (graus)
+    const float CREF = 0.14f;      // saturacao media de pele
+
+    float Y  = 0.2126f * p_R + 0.7152f * p_G + 0.0722f * p_B;
+    float Cb = (p_B - Y) / 1.8556f;
+    float Cr = (p_R - Y) / 1.5748f;
+    float C  = _sqrtf(Cb * Cb + Cr * Cr);
+    float ang = _atan2f(Cr, Cb) * 180.0f / PI;
+
+    float d = ang - TARGET;
+    if (d > 180.0f) d -= 360.0f;
+    if (d < -180.0f) d += 360.0f;
+
+    float wHue = 1.0f - nj_smooth(p_Range * 0.4f, p_Range, _fabs(d));
+    float wChr = nj_smooth(0.02f, 0.05f, C) * (1.0f - nj_smooth(0.24f, 0.34f, C));
+    float wLum = nj_smooth(0.04f, 0.12f, Y) * (1.0f - nj_smooth(0.9f, 0.98f, Y));
+    float w = wHue * wChr * wLum;
+
+    if (p_Mask) return make_float3(w, w, w);
+
+    // 1. puxa o tom pra linha de pele
+    float na = ang - d * p_Pull * w;
+    // 2. uniformiza e ajusta saturacao
+    float nc = C + (CREF - C) * p_Uniform * w;
+    nc = nc * (1.0f + (p_Sat - 1.0f) * w);
+    float r = na * PI / 180.0f;
+    float nCb = nc * _cosf(r);
+    float nCr = nc * _sinf(r);
+    // 3. calor e brilho
+    nCr = nCr + p_Warm * w;
+    nCb = nCb - p_Warm * 0.5f * w;
+    float nY = Y + p_Bright * w;
+
+    float R = nY + 1.5748f * nCr;
+    float B = nY + 1.8556f * nCb;
+    float G = (nY - 0.2126f * R - 0.0722f * B) / 0.7152f;
+    return make_float3(R, G, B);
+}

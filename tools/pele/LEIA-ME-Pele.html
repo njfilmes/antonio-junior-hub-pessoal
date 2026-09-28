@@ -1,0 +1,249 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>NJFILMES Pele Guia</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  color-scheme:dark;
+  --bg:#0c0c0e; --bg-2:#121215; --card:#17171a;
+  --fg:#f5f4f0; --muted:#a8a7a2; --dim:#6f6e6a;
+  --accent:#c9a227; --hi:#f6c445; --accent-soft:rgba(201,162,39,.14);
+  --line:rgba(255,255,255,.09); --line-2:rgba(255,255,255,.18);
+  --ok:#3fbf6a; --ok-soft:rgba(63,191,106,.12); --bad:#ef6b5b; --bad-soft:rgba(239,107,91,.12); --warn:#e7a33a; --warn-soft:rgba(231,163,58,.1);
+  --display:"Poppins","Arial Narrow",system-ui,sans-serif;
+  --body:"Inter",-apple-system,"Segoe UI",system-ui,sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,Menlo,monospace;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--body);font-size:15.5px;line-height:1.6;padding:0 16px}
+.wrap{max-width:860px;margin:0 auto;padding-block:32px 96px}
+h1,h2,h3{font-family:var(--display);line-height:1.15;margin:0;text-wrap:balance}
+h1{font-size:clamp(30px,6.4vw,46px);font-weight:800;letter-spacing:-.01em}
+h2{font-size:clamp(21px,4.2vw,27px);font-weight:700}
+h3{font-size:16.5px;font-weight:700;margin-top:8px}
+p{margin:0}
+a{color:var(--hi)}
+strong{color:var(--fg)}
+.eyebrow{font:600 11.5px/1 var(--body);letter-spacing:.18em;text-transform:uppercase;color:var(--accent)}
+.mono{font-family:var(--mono);font-size:.9em;color:var(--hi)}
+code{font-family:var(--mono);font-size:.86em;background:var(--bg-2);border:1px solid var(--line);padding:1px 6px;border-radius:4px;word-break:break-word}
+
+.top{display:flex;flex-direction:column;gap:14px;padding-bottom:24px;border-bottom:1px solid var(--line)}
+.top .lead{font-size:17px;color:var(--muted);max-width:64ch}
+.meta{display:flex;flex-wrap:wrap;gap:6px 18px;font:500 12.5px/1.5 var(--mono);color:var(--dim)}
+
+.nav{position:sticky;top:env(safe-area-inset-top,0px);z-index:10;background:linear-gradient(var(--bg) 80%,rgba(12,12,14,0));padding-block:12px 16px;margin-top:6px}
+.nav .row{display:flex;flex-direction:row;flex-wrap:nowrap;gap:6px;overflow-x:auto;scrollbar-width:none}
+.nav .row::-webkit-scrollbar{display:none}
+.nav a{display:inline-flex;align-items:center;gap:6px;white-space:nowrap;text-decoration:none;color:var(--muted);font:600 12.5px/1 var(--body);border:1px solid var(--line-2);border-radius:99px;padding:8px 12px}
+.nav a span{font-family:var(--mono);color:var(--accent);font-size:11px}
+.nav a:hover,.nav a:focus-visible{color:var(--fg);border-color:var(--accent)}
+.nav a.part{border-color:var(--accent);color:var(--hi)}
+
+.part-head{margin-top:40px;padding:22px 0 4px;border-top:2px solid var(--accent);display:flex;flex-direction:column;gap:6px}
+.part-head h2{font-size:clamp(24px,5vw,32px)}
+section{padding-block:32px;border-bottom:1px solid var(--line);scroll-margin-top:64px;display:flex;flex-direction:column;gap:14px}
+.sec-head{display:flex;flex-direction:column;gap:8px}
+.lede{color:var(--muted);max-width:66ch}
+.plain{color:var(--muted);font-size:14.5px;max-width:68ch}
+.group{font:600 11.5px/1 var(--body);letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-top:8px}
+
+/* fluxo */
+.flow{display:grid;grid-template-columns:1fr auto 1fr auto 1fr;gap:10px;align-items:center}
+.node{border:1px solid var(--line-2);border-radius:8px;padding:12px 14px;background:var(--card)}
+.node b{display:block;font-family:var(--display);font-size:14px}
+.node small{color:var(--muted);font-size:12.5px}
+.node.goal{border-color:var(--ok);background:var(--ok-soft)}
+.arrow{color:var(--dim);font-size:18px}
+.paths{display:flex;flex-direction:column;gap:10px}
+@media (max-width:640px){.flow{grid-template-columns:1fr}.arrow{transform:rotate(90deg);justify-self:center}}
+
+.card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:18px 20px}
+.stack{border:1px solid var(--line);border-radius:10px;overflow:hidden;background:var(--card)}
+.stack .row{display:grid;grid-template-columns:130px 1fr;gap:16px;padding:14px 18px;border-top:1px solid var(--line)}
+.stack .row:first-child{border-top:0}
+.stack .k{font:600 11px/1.4 var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--dim);padding-top:3px}
+@media (max-width:540px){.stack .row{grid-template-columns:1fr;gap:4px}}
+.chip-label{font:600 11px/1 var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--dim);margin-top:14px}
+.chip-label:first-child{margin-top:0}
+.chips{display:flex;flex-wrap:wrap;gap:7px;margin-top:9px}
+.chip{font-size:13.5px;font-weight:600;padding:5px 11px;border-radius:99px;background:var(--accent-soft);color:var(--hi)}
+.chip.off{background:var(--bad-soft);color:var(--bad)}
+
+.alert{border-radius:10px;padding:15px 18px;border:1px solid transparent;display:flex;flex-direction:column;gap:6px}
+.alert .h{font-weight:700;font-size:15px}
+.alert p{font-size:14.5px;opacity:.94}
+.alert.ok{background:var(--ok-soft);border-color:rgba(63,191,106,.35)} .alert.ok .h{color:var(--ok)}
+.alert.warn{background:var(--warn-soft);border-color:rgba(231,163,58,.35)} .alert.warn .h{color:var(--warn)}
+.alert.info{background:var(--card);border-color:var(--line-2)} .alert.info .h{color:var(--hi)}
+.alert.new{background:var(--accent-soft);border-color:var(--accent)} .alert.new .h{color:var(--hi)}
+
+ol.steps{list-style:none;margin:0;padding:0;counter-reset:s;display:flex;flex-direction:column}
+ol.steps li{counter-increment:s;display:grid;grid-template-columns:30px 1fr;gap:12px;padding:12px 0;border-top:1px solid var(--line)}
+ol.steps li:first-child{border-top:0}
+ol.steps li::before{content:counter(s);font:600 12.5px/30px var(--mono);text-align:center;width:30px;height:30px;border-radius:50%;border:1px solid var(--line-2);color:var(--hi)}
+ol.steps .t{font-weight:600}
+ol.steps .d{color:var(--muted);font-size:14px;margin-top:2px}
+ol.steps .d ul{margin:6px 0 0;padding-left:18px}
+
+.tips,.dont{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:9px}
+.tips li,.dont li{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:12px 15px;font-size:14.5px}
+.tips li strong{color:var(--hi)}
+.dont li{position:relative;padding-left:40px}
+.dont li::before{content:"✕";position:absolute;left:15px;top:12px;color:var(--bad);font-weight:700;font-size:13px}
+.dont li strong{color:var(--bad)}
+
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.grid3{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
+@media (max-width:560px){.grid2{grid-template-columns:1fr}}
+.box{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:15px 17px;display:flex;flex-direction:column;gap:6px}
+.box .t{font-weight:700;font-size:14.5px;color:var(--hi)}
+.box p,.box ul{font-size:14px;color:var(--muted);margin:0}
+.box ul{padding-left:18px;display:flex;flex-direction:column;gap:4px}
+.box ul li b{color:var(--fg)}
+
+/* vídeos */
+.videos{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+@media (max-width:720px){.videos{grid-template-columns:1fr}}
+.vcard{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:17px;display:flex;flex-direction:column;gap:10px}
+.vcard header{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
+.vcard .num{font-family:var(--mono);color:var(--accent);font-size:12px}
+.tag{font:600 10.5px/1 var(--mono);letter-spacing:.04em;border-radius:99px;padding:5px 8px;white-space:nowrap}
+.tag.wa{background:var(--ok-soft);color:var(--ok)} .tag.site{background:var(--accent-soft);color:var(--hi)} .tag.both{background:rgba(255,255,255,.08);color:var(--fg)}
+.vcard .why{font-size:14px;color:var(--muted)}
+.tc{display:grid;grid-template-columns:auto 1fr;gap:5px 12px;font-size:14px;margin:0;padding:11px 12px;border:1px dashed var(--line-2);border-radius:8px;background:var(--bg-2)}
+.tc dt{font-family:var(--mono);font-size:11.5px;color:var(--hi);padding-top:2px;white-space:nowrap}
+.tc dd{margin:0}
+.vcard .tip{font-size:13px;color:var(--muted)}
+.vcard .tip b{color:var(--fg)}
+
+/* tabelas */
+.tbl{overflow-x:auto;border:1px solid var(--line);border-radius:10px}
+table{border-collapse:collapse;width:100%;font-size:14px;min-width:540px}
+th,td{text-align:left;padding:10px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font:600 11px/1.3 var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--dim);background:var(--bg-2)}
+tr:last-child td{border-bottom:0}
+td.num{font-family:var(--mono);font-size:13px;color:var(--hi);white-space:nowrap}
+tr.hl td{background:var(--accent-soft)}
+.good{color:var(--ok)} .warnc{color:var(--warn)}
+
+/* copiar */
+.copy{display:grid;grid-template-columns:1fr auto;gap:12px;align-items:start;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:13px 15px}
+.copy pre{margin:0;white-space:pre-wrap;font:inherit;font-size:14.5px}
+.copies{display:flex;flex-direction:column;gap:9px}
+.btn{font:600 12px/1 var(--mono);border:1px solid var(--line-2);background:var(--bg-2);color:var(--fg);border-radius:7px;padding:9px 11px;cursor:pointer;white-space:nowrap}
+.btn:hover{border-color:var(--accent)}
+.btn.ok{border-color:var(--ok);color:var(--ok)}
+
+/* dúvidas */
+details.faq{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:0 16px}
+details.faq summary{cursor:pointer;padding:13px 0;font-weight:700;color:var(--hi);font-size:14.5px;list-style:none;display:flex;justify-content:space-between;gap:12px}
+details.faq summary::after{content:"+";font-family:var(--mono);color:var(--dim)}
+details.faq[open] summary::after{content:"–"}
+details.faq .a{padding-bottom:14px;color:var(--muted);font-size:14px;display:flex;flex-direction:column;gap:6px}
+.faqs{display:flex;flex-direction:column;gap:8px}
+
+.callout{border-left:3px solid var(--accent);background:var(--card);border-radius:0 10px 10px 0;padding:13px 16px;font-size:14.5px;color:var(--muted)}
+.callout strong{color:var(--fg)}
+
+/* checklist */
+.progress{display:flex;align-items:center;gap:12px;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:12px 16px;font:600 13px/1 var(--mono);color:var(--muted)}
+.bar{flex:1;height:7px;border-radius:9px;background:var(--bg-2);overflow:hidden}
+.bar i{display:block;height:100%;width:0;background:var(--accent);transition:width .3s}
+.tasks{list-style:none;margin:0;padding:0;background:var(--card);border:1px solid var(--line);border-radius:10px}
+.tasks li{border-top:1px solid var(--line)}
+.tasks li:first-child{border-top:0}
+.tasks label{display:flex;gap:12px;align-items:flex-start;padding:12px 15px;cursor:pointer;font-size:14.5px}
+.tasks input{width:18px;height:18px;margin-top:3px;accent-color:var(--accent);flex:none}
+.tasks label.done span{color:var(--dim);text-decoration:line-through}
+
+.btn:focus-visible,.nav a:focus-visible,.tasks input:focus-visible,details.faq summary:focus-visible{outline:2px solid var(--hi);outline-offset:2px}
+footer{padding-top:28px;font:500 12.5px/1.6 var(--mono);color:var(--dim);display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}html{scroll-behavior:auto}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <span class="eyebrow">NJFILMES · Ajuste de pele pro DaVinci Resolve</span>
+    <h1>Pele NJ</h1>
+    <p class="lead">Mexe só nos tons de pele: puxa pra cor certa, tira vermelhidão e manchas de cor, dá brilho e calor. Céu, mar, verde e areia ficam como estão.</p>
+  </header>
+
+  <section>
+    <div class="sec-head"><span class="eyebrow">01 · O que tem</span><h2>Duas formas de usar</h2></div>
+    <div class="tbl"><table>
+      <thead><tr><th>Arquivo</th><th>DaVinci</th><th>O que faz</th></tr></thead>
+      <tbody>
+        <tr><td><strong>NJ_Pele_Natural.cube</strong></td><td>Grátis e Studio</td><td>Correção leve do dia a dia: tom certo, um pouco mais uniforme</td></tr>
+        <tr><td><strong>NJ_Pele_Uniforme.cube</strong></td><td>Grátis e Studio</td><td>Mais forte: tira vermelhidão, pele manchada, rosto corado de sol ou de choro</td></tr>
+        <tr><td><strong>NJ_Pele_Dourada.cube</strong></td><td>Grátis e Studio</td><td>Pele quente e iluminada, combina com a LUT Dourado Salvador</td></tr>
+        <tr class="hl"><td><strong>NJ_Pele.dctl</strong></td><td>Só Studio (pago)</td><td>O "plugin": a mesma correção com 7 controles deslizantes e visualização da máscara</td></tr>
+      </tbody>
+    </table></div>
+    <p class="plain">A imagem <code>NJ_Pele_antes_depois.png</code> mostra o efeito em 12 cores de teste: 7 tons de pele e 5 cores que não devem mudar. A coluna Máscara mostra onde o ajuste age (branco = age, preto = não mexe).</p>
+  </section>
+
+  <section>
+    <div class="sec-head"><span class="eyebrow">02 · Instalar</span><h2>Colocar no DaVinci</h2></div>
+    <ol class="steps">
+      <li><div><div class="t">Engrenagem (Project Settings) → Color Management → Open LUT Folder</div></div></li>
+      <li><div><div class="t">Copie os 3 arquivos .cube e o NJ_Pele.dctl pra pasta NJFILMES</div><div class="d">A mesma pasta das LUTs do drone. O .dctl também vai na pasta de LUTs.</div></div></li>
+      <li><div><div class="t">Volte e clique em Update Lists → Save</div><div class="d">Se o DCTL não aparecer, feche e abra o DaVinci.</div></div></li>
+    </ol>
+  </section>
+
+  <section>
+    <div class="sec-head"><span class="eyebrow">03 · Usar</span><h2>Onde colocar na ordem dos nós</h2></div>
+    <ol class="steps">
+      <li><div><div class="t">Nó 1: exposição e balanço de branco</div></div></li>
+      <li><div><div class="t">Nó 2: LUT de correção (ex.: NJ FIMI ou sua correção)</div></div></li>
+      <li><div><div class="t">Nó 3: pele</div><div class="d"><strong>Grátis:</strong> botão direito no nó → LUTs → NJFILMES → NJ_Pele_Natural (ou Uniforme / Dourada). Forte demais? Aba Key → Key Output Gain 0,5.<br><strong>Studio:</strong> aba Effects → ResolveFX Color → <strong>DCTL</strong>, arraste pro nó 3 e escolha <strong>NJ_Pele</strong> na lista. Os controles aparecem no painel.</div></div></li>
+      <li><div><div class="t">Nó 4: estilo final (Dourado, contraste, vinheta)</div></div></li>
+    </ol>
+    <div class="callout"><strong>Confira no vectorscope:</strong> menu Workspace → Video Scopes → Vectorscope → engrenagem → marque "Show Skin Tone Indicator". A pele boa fica em cima da linha diagonal (entre o amarelo e o vermelho).</div>
+  </section>
+
+  <section>
+    <div class="sec-head"><span class="eyebrow">04 · Plugin (Studio)</span><h2>O que cada controle faz</h2></div>
+    <div class="tbl"><table>
+      <thead><tr><th>Controle</th><th>Padrão</th><th>Pra que serve</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Corrigir tom (linha de pele)</strong></td><td class="num">0,50</td><td>Puxa a pele pra cor certa. 0 = não mexe, 1 = tudo em cima da linha (artificial). 0,4–0,7 é natural.</td></tr>
+        <tr><td><strong>Uniformizar manchas</strong></td><td class="num">0,30</td><td>Deixa a cor da pele igual no rosto todo: tira vermelhidão no nariz e bochechas, partes amareladas. Acima de 0,7 fica "plástico".</td></tr>
+        <tr><td><strong>Saturação da pele</strong></td><td class="num">0,95</td><td>Menos que 1 = pele mais suave; mais que 1 = mais viva (bom pra pele escura em luz fria).</td></tr>
+        <tr><td><strong>Brilho da pele</strong></td><td class="num">+0,02</td><td>Ilumina só a pele. Ótimo em contraluz e pôr do sol.</td></tr>
+        <tr><td><strong>Calor da pele</strong></td><td class="num">0</td><td>Positivo = mais quente/dourada; negativo = mais fria.</td></tr>
+        <tr><td><strong>Largura da seleção</strong></td><td class="num">25</td><td>Quanto de cor ao redor da pele entra. Aumente (30–35) pra pele muito amarelada ou luz de tungstênio; diminua se estiver mexendo em areia, madeira ou laranja.</td></tr>
+        <tr class="hl"><td><strong>Mostrar máscara</strong></td><td class="num">desligado</td><td>Mostra em branco onde o ajuste age. Use pra conferir a largura e desligue antes de exportar.</td></tr>
+      </tbody>
+    </table></div>
+  </section>
+
+  <section>
+    <div class="sec-head"><span class="eyebrow">05 · Cuidados</span><h2>O que saber</h2></div>
+    <ul class="tips">
+      <li><strong>Age por cor, não por rosto.</strong> Madeira, laranja, areia úmida e paredes cor de pele podem mudar um pouco. Se incomodar, desenhe uma janela (Window) em volta da pessoa e use o Tracker pra seguir o movimento.</li>
+      <li><strong>Use depois da correção básica</strong>, com a imagem já em cor normal (Rec.709). Em Log ou F-Log não funciona.</li>
+      <li><strong>Pele muito amarelada</strong> fica fora da seleção nas LUTs pra não mexer na areia. No DaVinci grátis, use o método manual abaixo; no Studio, aumente a Largura.</li>
+      <li><strong>Pouco é mais:</strong> compare com o nó ligado e desligado (<code>Ctrl + D</code>). A pele deve parecer saudável, não maquiada.</li>
+      <li><strong>Não use em pessoa com pele tingida de propósito</strong> (maquiagem artística, luz colorida de festa): vai "corrigir" o que é intencional.</li>
+    </ul>
+    <p class="group">Método manual (DaVinci grátis, pra casos difíceis)</p>
+    <ol class="steps">
+      <li><div><div class="t">Nó novo → aba Qualifier (conta-gotas) → clique na pele</div></div></li>
+      <li><div><div class="t">Ative o destaque (Highlight, <code>Shift + H</code>) e ajuste Hue, Sat e Lum até pegar só a pele</div></div></li>
+      <li><div><div class="t">Em Matte Finesse, suba Clean Black/White e Blur um pouco</div></div></li>
+      <li><div><div class="t">Corrija com a roda Gamma (tom) e Sat</div></div></li>
+      <li><div><div class="t">Salve como padrão: botão direito na imagem → Grab Still</div><div class="d">Na Gallery, dá pra aplicar em outros clipes com o botão do meio do mouse.</div></div></li>
+    </ol>
+    <div class="alert info"><div class="h">Quer ajustar?</div><p>Mande pro Claude um print de um rosto do seu vídeo sem correção e diga o que não gostou (muito vermelho, amarelado, apagado). Dá pra gerar versões novas das LUTs com outros valores.</p></div>
+  </section>
+  <footer><span>NJFILMES · Pele NJ</span><span>28/09/2026</span></footer>
+</div>
+</body>
+</html>
