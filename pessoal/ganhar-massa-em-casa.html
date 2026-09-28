@@ -1,0 +1,745 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230c0c0e'/%3E%3Crect x='8' y='29' width='48' height='6' rx='2' fill='%23c9a227'/%3E%3Crect x='10' y='18' width='8' height='28' rx='2' fill='%23f6c445'/%3E%3Crect x='46' y='18' width='8' height='28' rx='2' fill='%23f6c445'/%3E%3C/svg%3E">
+<title>Ganhar Massa em Casa</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  color-scheme:dark;
+  --bg:#0c0c0e; --bg-2:#121215; --card:#17171a;
+  --fg:#f5f4f0; --muted:#a8a7a2; --dim:#6f6e6a;
+  --accent:#c9a227; --hi:#f6c445; --accent-soft:rgba(201,162,39,.14);
+  --line:rgba(255,255,255,.09); --line-2:rgba(255,255,255,.18);
+  --ok:#3fbf6a; --ok-soft:rgba(63,191,106,.12); --bad:#ef6b5b; --bad-soft:rgba(239,107,91,.12); --warn:#e7a33a; --warn-soft:rgba(231,163,58,.1);
+  --display:"Poppins","Arial Narrow",system-ui,sans-serif;
+  --body:"Inter",-apple-system,"Segoe UI",system-ui,sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,Menlo,monospace;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--body);font-size:15.5px;line-height:1.6;padding:0 16px}
+.wrap{max-width:860px;margin:0 auto;padding-block:32px 96px}
+h1,h2,h3{font-family:var(--display);line-height:1.15;margin:0;text-wrap:balance}
+h1{font-size:clamp(30px,6.4vw,46px);font-weight:800;letter-spacing:-.01em}
+h2{font-size:clamp(21px,4.2vw,27px);font-weight:700}
+h3{font-size:16.5px;font-weight:700;margin-top:8px}
+p{margin:0}
+a{color:var(--hi)}
+strong{color:var(--fg)}
+.eyebrow{font:600 11.5px/1 var(--body);letter-spacing:.18em;text-transform:uppercase;color:var(--accent)}
+.mono{font-family:var(--mono);font-size:.9em;color:var(--hi)}
+code{font-family:var(--mono);font-size:.86em;background:var(--bg-2);border:1px solid var(--line);padding:1px 6px;border-radius:4px;word-break:break-word}
+
+.top{display:flex;flex-direction:column;gap:14px;padding-bottom:24px;border-bottom:1px solid var(--line)}
+.top .lead{font-size:17px;color:var(--muted);max-width:64ch}
+.meta{display:flex;flex-wrap:wrap;gap:6px 18px;font:500 12.5px/1.5 var(--mono);color:var(--dim)}
+
+.nav{position:sticky;top:env(safe-area-inset-top,0px);z-index:10;background:linear-gradient(var(--bg) 80%,rgba(12,12,14,0));padding-block:12px 16px;margin-top:6px}
+.nav .row{display:flex;flex-direction:row;flex-wrap:nowrap;gap:6px;overflow-x:auto;scrollbar-width:none}
+.nav .row::-webkit-scrollbar{display:none}
+.nav a{display:inline-flex;align-items:center;gap:6px;white-space:nowrap;text-decoration:none;color:var(--muted);font:600 12.5px/1 var(--body);border:1px solid var(--line-2);border-radius:99px;padding:8px 12px}
+.nav a span{font-family:var(--mono);color:var(--accent);font-size:11px}
+.nav a:hover,.nav a:focus-visible{color:var(--fg);border-color:var(--accent)}
+.nav a.part{border-color:var(--accent);color:var(--hi)}
+
+.part-head{margin-top:40px;padding:22px 0 4px;border-top:2px solid var(--accent);display:flex;flex-direction:column;gap:6px}
+.part-head h2{font-size:clamp(24px,5vw,32px)}
+section{padding-block:32px;border-bottom:1px solid var(--line);scroll-margin-top:64px;display:flex;flex-direction:column;gap:14px}
+.sec-head{display:flex;flex-direction:column;gap:8px}
+.lede{color:var(--muted);max-width:66ch}
+.plain{color:var(--muted);font-size:14.5px;max-width:68ch}
+.group{font:600 11.5px/1 var(--body);letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-top:8px}
+
+/* fluxo */
+.flow{display:grid;grid-template-columns:1fr auto 1fr auto 1fr;gap:10px;align-items:center}
+.node{border:1px solid var(--line-2);border-radius:8px;padding:12px 14px;background:var(--card)}
+.node b{display:block;font-family:var(--display);font-size:14px}
+.node small{color:var(--muted);font-size:12.5px}
+.node.goal{border-color:var(--ok);background:var(--ok-soft)}
+.arrow{color:var(--dim);font-size:18px}
+.paths{display:flex;flex-direction:column;gap:10px}
+@media (max-width:640px){.flow{grid-template-columns:1fr}.arrow{transform:rotate(90deg);justify-self:center}}
+
+.card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:18px 20px}
+.stack{border:1px solid var(--line);border-radius:10px;overflow:hidden;background:var(--card)}
+.stack .row{display:grid;grid-template-columns:130px 1fr;gap:16px;padding:14px 18px;border-top:1px solid var(--line)}
+.stack .row:first-child{border-top:0}
+.stack .k{font:600 11px/1.4 var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--dim);padding-top:3px}
+@media (max-width:540px){.stack .row{grid-template-columns:1fr;gap:4px}}
+.chip-label{font:600 11px/1 var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--dim);margin-top:14px}
+.chip-label:first-child{margin-top:0}
+.chips{display:flex;flex-wrap:wrap;gap:7px;margin-top:9px}
+.chip{font-size:13.5px;font-weight:600;padding:5px 11px;border-radius:99px;background:var(--accent-soft);color:var(--hi)}
+.chip.off{background:var(--bad-soft);color:var(--bad)}
+
+.alert{border-radius:10px;padding:15px 18px;border:1px solid transparent;display:flex;flex-direction:column;gap:6px}
+.alert .h{font-weight:700;font-size:15px}
+.alert p{font-size:14.5px;opacity:.94}
+.alert.ok{background:var(--ok-soft);border-color:rgba(63,191,106,.35)} .alert.ok .h{color:var(--ok)}
+.alert.warn{background:var(--warn-soft);border-color:rgba(231,163,58,.35)} .alert.warn .h{color:var(--warn)}
+.alert.info{background:var(--card);border-color:var(--line-2)} .alert.info .h{color:var(--hi)}
+.alert.new{background:var(--accent-soft);border-color:var(--accent)} .alert.new .h{color:var(--hi)}
+
+ol.steps{list-style:none;margin:0;padding:0;counter-reset:s;display:flex;flex-direction:column}
+ol.steps li{counter-increment:s;display:grid;grid-template-columns:30px 1fr;gap:12px;padding:12px 0;border-top:1px solid var(--line)}
+ol.steps li:first-child{border-top:0}
+ol.steps li::before{content:counter(s);font:600 12.5px/30px var(--mono);text-align:center;width:30px;height:30px;border-radius:50%;border:1px solid var(--line-2);color:var(--hi)}
+ol.steps .t{font-weight:600}
+ol.steps .d{color:var(--muted);font-size:14px;margin-top:2px}
+ol.steps .d ul{margin:6px 0 0;padding-left:18px}
+
+.tips,.dont{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:9px}
+.tips li,.dont li{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:12px 15px;font-size:14.5px}
+.tips li strong{color:var(--hi)}
+.dont li{position:relative;padding-left:40px}
+.dont li::before{content:"✕";position:absolute;left:15px;top:12px;color:var(--bad);font-weight:700;font-size:13px}
+.dont li strong{color:var(--bad)}
+
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.grid3{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
+@media (max-width:560px){.grid2{grid-template-columns:1fr}}
+.box{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:15px 17px;display:flex;flex-direction:column;gap:6px}
+.box .t{font-weight:700;font-size:14.5px;color:var(--hi)}
+.box p,.box ul{font-size:14px;color:var(--muted);margin:0}
+.box ul{padding-left:18px;display:flex;flex-direction:column;gap:4px}
+.box ul li b{color:var(--fg)}
+
+/* vídeos */
+.videos{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+@media (max-width:720px){.videos{grid-template-columns:1fr}}
+.vcard{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:17px;display:flex;flex-direction:column;gap:10px}
+.vcard header{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
+.vcard .num{font-family:var(--mono);color:var(--accent);font-size:12px}
+.tag{font:600 10.5px/1 var(--mono);letter-spacing:.04em;border-radius:99px;padding:5px 8px;white-space:nowrap}
+.tag.wa{background:var(--ok-soft);color:var(--ok)} .tag.site{background:var(--accent-soft);color:var(--hi)} .tag.both{background:rgba(255,255,255,.08);color:var(--fg)}
+.vcard .why{font-size:14px;color:var(--muted)}
+.tc{display:grid;grid-template-columns:auto 1fr;gap:5px 12px;font-size:14px;margin:0;padding:11px 12px;border:1px dashed var(--line-2);border-radius:8px;background:var(--bg-2)}
+.tc dt{font-family:var(--mono);font-size:11.5px;color:var(--hi);padding-top:2px;white-space:nowrap}
+.tc dd{margin:0}
+.vcard .tip{font-size:13px;color:var(--muted)}
+.vcard .tip b{color:var(--fg)}
+
+/* tabelas */
+.tbl{overflow-x:auto;border:1px solid var(--line);border-radius:10px}
+table{border-collapse:collapse;width:100%;font-size:14px;min-width:540px}
+th,td{text-align:left;padding:10px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font:600 11px/1.3 var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--dim);background:var(--bg-2)}
+tr:last-child td{border-bottom:0}
+td.num{font-family:var(--mono);font-size:13px;color:var(--hi);white-space:nowrap}
+tr.hl td{background:var(--accent-soft)}
+.good{color:var(--ok)} .warnc{color:var(--warn)}
+
+/* copiar */
+.copy{display:grid;grid-template-columns:1fr auto;gap:12px;align-items:start;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:13px 15px}
+.copy pre{margin:0;white-space:pre-wrap;font:inherit;font-size:14.5px}
+.copies{display:flex;flex-direction:column;gap:9px}
+.btn{font:600 12px/1 var(--mono);border:1px solid var(--line-2);background:var(--bg-2);color:var(--fg);border-radius:7px;padding:9px 11px;cursor:pointer;white-space:nowrap}
+.btn:hover{border-color:var(--accent)}
+.btn.ok{border-color:var(--ok);color:var(--ok)}
+
+/* dúvidas */
+details.faq{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:0 16px}
+details.faq summary{cursor:pointer;padding:13px 0;font-weight:700;color:var(--hi);font-size:14.5px;list-style:none;display:flex;justify-content:space-between;gap:12px}
+details.faq summary::after{content:"+";font-family:var(--mono);color:var(--dim)}
+details.faq[open] summary::after{content:"–"}
+details.faq .a{padding-bottom:14px;color:var(--muted);font-size:14px;display:flex;flex-direction:column;gap:6px}
+.faqs{display:flex;flex-direction:column;gap:8px}
+
+.callout{border-left:3px solid var(--accent);background:var(--card);border-radius:0 10px 10px 0;padding:13px 16px;font-size:14.5px;color:var(--muted)}
+.callout strong{color:var(--fg)}
+
+/* checklist */
+.progress{display:flex;align-items:center;gap:12px;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:12px 16px;font:600 13px/1 var(--mono);color:var(--muted)}
+.bar{flex:1;height:7px;border-radius:9px;background:var(--bg-2);overflow:hidden}
+.bar i{display:block;height:100%;width:0;background:var(--accent);transition:width .3s}
+.tasks{list-style:none;margin:0;padding:0;background:var(--card);border:1px solid var(--line);border-radius:10px}
+.tasks li{border-top:1px solid var(--line)}
+.tasks li:first-child{border-top:0}
+.tasks label{display:flex;gap:12px;align-items:flex-start;padding:12px 15px;cursor:pointer;font-size:14.5px}
+.tasks input{width:18px;height:18px;margin-top:3px;accent-color:var(--accent);flex:none}
+.tasks label.done span{color:var(--dim);text-decoration:line-through}
+
+.btn:focus-visible,.nav a:focus-visible,.tasks input:focus-visible,details.faq summary:focus-visible{outline:2px solid var(--hi);outline-offset:2px}
+footer{padding-top:28px;font:500 12.5px/1.6 var(--mono);color:var(--dim);display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}html{scroll-behavior:auto}}
+.fields{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}
+.fields label{display:flex;flex-direction:column;gap:6px;font-size:13px;color:var(--muted);font-weight:600}
+.fields input,.fields select{width:100%;background:var(--bg-2);color:var(--fg);border:1px solid var(--line-2);border-radius:8px;padding:10px 12px;font:inherit;font-size:15px}
+.fields input:focus,.fields select:focus{outline:2px solid var(--accent);outline-offset:1px}
+.fields .btn{padding:12px}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}
+.stat{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:13px 15px}
+.stat b{display:block;font:700 22px/1.2 var(--mono);color:var(--hi)}
+.stat span{font-size:12.5px;color:var(--muted)}
+.meal .opt{border-top:1px solid var(--line);padding-top:8px;margin-top:4px}
+.meal .opt:first-of-type{border-top:0;padding-top:0}
+.meal .opt b{color:var(--fg);font-size:14px}
+.meal .opt small{display:block;color:var(--dim);font:500 12px/1.4 var(--mono);margin-top:2px}
+.meal .when{font:600 11px/1 var(--mono);color:var(--accent);letter-spacing:.08em;text-transform:uppercase}
+.exgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:12px}
+.ex{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px;display:flex;flex-direction:column;gap:8px}
+.ex h3{margin:0;font-size:15.5px}
+.ex .tag{align-self:flex-start;font:600 10.5px/1 var(--mono);padding:5px 8px;border-radius:99px;background:var(--accent-soft);color:var(--hi)}
+.ex .pics{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:4px;background:var(--bg-2);border-radius:8px;padding:6px}
+.ex .pics svg{width:100%;height:auto;color:var(--fg)}
+.ex .pics .ar{color:var(--accent);font-size:18px}
+.ex ul{margin:0;padding-left:18px;font-size:13.5px;color:var(--muted);display:flex;flex-direction:column;gap:3px}
+.ex ul li b{color:var(--fg)}
+.tabs{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;flex-wrap:wrap}
+.tab{white-space:nowrap;font:600 13px/1 var(--body);border:1px solid var(--line-2);background:transparent;color:var(--muted);border-radius:99px;padding:9px 13px;cursor:pointer}
+.tab[aria-selected="true"]{border-color:var(--accent);color:var(--hi);background:var(--accent-soft)}
+.dishes{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:10px}
+.dish{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:13px 15px;display:flex;flex-direction:column;gap:6px}
+.dish h3{margin:0;font-size:15px}
+.dish p{font-size:13.5px;color:var(--muted)}
+.dish .dn{font:600 11px/1 var(--mono);color:var(--accent)}
+.dish .dm{display:flex;flex-wrap:wrap;gap:5px;margin-top:auto}
+.dish .dm span{font:600 11px/1 var(--mono);padding:5px 7px;border-radius:6px;background:var(--bg-2);color:var(--hi)}
+#week td{font-size:13px}
+@media (min-width:700px){.nav .row{flex-wrap:wrap;overflow:visible}.nav{position:static}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <span class="eyebrow">Plano pessoal · treino em casa · ganho de massa</span>
+    <h1>Ganhar Massa em Casa</h1>
+    <p class="lead">Feito pra quem é bem magro e sente muita fadiga. Treino com o kit de halteres, barra e kettlebell, comida barata e fácil, água e sono. Tudo com horário: manhã, tarde e noite.</p>
+    <div class="meta"><span>3 treinos por semana · 45–60 min</span><span>~R$ 20–25 por dia de comida (estimativa)</span></div>
+  </header>
+
+  <nav class="nav" aria-label="Seções">
+    <div class="row">
+      <a href="#m01"><span>01</span>Como funciona</a>
+      <a class="part" href="#mf"><span>02</span>Fadiga</a>
+      <a class="part" href="#m02"><span>03</span>Calculadora</a>
+      <a href="#m03"><span>04</span>Seu dia</a>
+      <a href="#m04"><span>05</span>Cardápio do dia</a>
+      <a class="part" href="#mb"><span>06</span>34 pratos</a>
+      <a href="#ms"><span>07</span>Semana</a>
+      <a href="#m05"><span>08</span>Compras</a>
+      <a href="#m06"><span>09</span>Água</a>
+      <a href="#m07"><span>10</span>Sono</a>
+      <a href="#m08"><span>11</span>O kit</a>
+      <a class="part" href="#m09"><span>12</span>Treino</a>
+      <a href="#m10"><span>13</span>Exercícios</a>
+      <a href="#m11"><span>14</span>Evoluir</a>
+      <a href="#m12"><span>15</span>Suplementos</a>
+      <a href="#m13"><span>16</span>Não fazer</a>
+      <a href="#m14"><span>17</span>Dúvidas</a>
+      <a class="part" href="#m15"><span>18</span>Checklist</a>
+    </div>
+  </nav>
+
+  <section id="m01">
+    <div class="sec-head"><span class="eyebrow">01 · Como funciona</span><h2>Os 4 pilares do ganho de massa</h2></div>
+    <div class="grid2">
+      <div class="box"><div class="t">1. Treino com progressão</div><p>O músculo cresce quando recebe um estímulo maior que o de costume: mais peso, mais repetições ou mais controle a cada semana.</p></div>
+      <div class="box"><div class="t">2. Comer um pouco a mais</div><p>Um "superávit" de ~500 calorias por dia (quem é bem magro precisa de mais) acima do que você gasta. Sem isso, o corpo não tem material pra construir.</p></div>
+      <div class="box"><div class="t">3. Proteína todo dia</div><p>~2 g por quilo do seu peso, dividida em 6 refeições. Ovo, frango, carne, sardinha, leite e feijão.</p></div>
+      <div class="box"><div class="t">4. Sono e água</div><p>O músculo se constrói dormindo. 7 a 9 horas e ~35–40 ml de água por quilo.</p></div>
+    </div>
+    <div class="callout"><strong>Ritmo realista:</strong> ganhar <strong>0,25 a 0,5 kg por semana</strong> (1 a 2 kg por mês). Mais rápido que isso vira gordura. Em 3 meses bem feitos a diferença no espelho e nas roupas aparece.</div>
+    <div class="alert warn"><div class="h">Antes de começar</div><p>Este é um plano geral, não substitui médico ou nutricionista. Se você tem pressão alta, diabetes, problema de coração, rim, articulação ou dor ao treinar, passe por um médico antes. Dor forte e aguda no treino: pare.</p></div>
+  </section>
+
+  <section id="mf">
+    <div class="sec-head"><span class="eyebrow">02 · Fadiga</span><h2>Muito cansaço: o que pode ser e o que fazer</h2>
+      <p class="lede">Em quem é bem magro, a causa mais comum é simples: comer menos do que o corpo gasta. Mas cansaço forte e frequente merece exame de sangue.</p></div>
+    <div class="alert warn"><div class="h">Procure um médico logo se tiver</div><p>Perda de peso sem motivo, falta de ar, coração disparado, tontura ou desmaio, febre ou suor à noite, sangramento, ou cansaço que não melhora nem dormindo bem.</p></div>
+    <div class="grid2">
+      <div class="box"><div class="t">Causas mais comuns</div><ul>
+        <li><b>Comer pouco</b> ou pular refeições (dia de evento)</li>
+        <li><b>Pouca proteína e ferro</b></li>
+        <li><b>Sono curto ou irregular</b> (eventos até tarde)</li>
+        <li><b>Desidratação</b> no calor de Salvador</li>
+        <li><b>Muito café</b> e picos de açúcar (energia sobe e cai)</li>
+        <li>Estresse e muitas horas de tela editando</li>
+      </ul></div>
+      <div class="box"><div class="t">Exames pra pedir ao médico (SUS ou particular)</div><ul>
+        <li><b>Hemograma completo</b> (anemia)</li>
+        <li><b>Ferritina</b> (estoque de ferro)</li>
+        <li><b>Vitamina B12</b> e <b>ácido fólico</b></li>
+        <li><b>Vitamina D</b></li>
+        <li><b>TSH e T4 livre</b> (tireoide)</li>
+        <li><b>Glicemia de jejum</b></li>
+        <li>Creatinina, TGO e TGP (rim e fígado)</li>
+      </ul></div>
+    </div>
+    <p class="group">O que fazer a partir de hoje</p>
+    <ul class="tips">
+      <li><strong>Nunca fique mais de 3–4 horas sem comer.</strong> Coloque alarme no celular nos horários da seção "Seu dia".</li>
+      <li><strong>Café da manhã sempre,</strong> com proteína (ovo) e carboidrato (cuscuz, pão, aipim).</li>
+      <li><strong>Ferro:</strong> feijão, fígado 1× por semana, carne; junto com laranja ou limão (vitamina C ajuda a absorver). Café e leite longe dessa refeição.</li>
+      <li><strong>Café só até as 14–15 h,</strong> no máximo 3 xícaras.</li>
+      <li><strong>Sol da manhã</strong> por 10–15 min (vitamina D e relógio do sono).</li>
+      <li><strong>Água:</strong> desidratação leve já dá cansaço e dor de cabeça.</li>
+      <li><strong>O treino ajuda:</strong> no começo cansa, mas em 3–4 semanas a disposição costuma melhorar. Por isso o começo é leve (seção Treino).</li>
+    </ul>
+    <p class="group">Dia de muita fadiga</p>
+    <div class="callout"><strong>Treino mínimo:</strong> só agachamento goblet, flexão e remada, 2 séries cada, bem leve (15–20 min). Ou uma caminhada de 20 min. Se estiver exausto de verdade, descanse e coma bem: um dia a menos não atrapalha.</div>
+  </section>
+
+  <section id="m02">
+    <div class="sec-head"><span class="eyebrow">03 · Calculadora</span><h2>Quanto você precisa comer e beber</h2>
+      <p class="lede">Preencha e os números aparecem. Fica salvo neste navegador.</p></div>
+    <div class="fields">
+      <label>Peso (kg)<input type="number" inputmode="decimal" id="cPeso" min="30" max="200" placeholder="ex.: 70"></label>
+      <label>Altura (cm)<input type="number" inputmode="numeric" id="cAlt" min="120" max="220" placeholder="ex.: 175"></label>
+      <label>Idade<input type="number" inputmode="numeric" id="cIdade" min="14" max="90" placeholder="ex.: 30"></label>
+      <label>Sexo<select id="cSexo"><option value="m">Masculino</option><option value="f">Feminino</option></select></label>
+      <label>Rotina fora do treino<select id="cAtiv"><option value="1.45">Sentado a maior parte do dia</option><option value="1.55" selected>Em pé / andando parte do dia (eventos)</option><option value="1.7">Muito ativo, carrega peso</option></select></label>
+    </div>
+    <div class="stats" id="cOut"></div>
+    <p class="plain">Contas usadas: gasto do corpo pela fórmula de Mifflin-St Jeor × sua rotina (já contando 3 treinos por semana), +500 kcal de superávit (pra quem é bem magro); proteína 2 g/kg; água 37 ml/kg + 500 ml nos dias de treino. São pontos de partida: ajuste pela balança (seção Evoluir).</p>
+  </section>
+
+  <section id="m03">
+    <div class="sec-head"><span class="eyebrow">04 · Seu dia</span><h2>Manhã, tarde e noite</h2>
+      <p class="lede">Exemplo com treino no fim da tarde. Treina de manhã? Troque o lanche da tarde pelo da manhã e mantenha o resto.</p></div>
+    <div class="tbl"><table>
+      <thead><tr><th>Horário</th><th>O quê</th><th>Detalhe</th></tr></thead>
+      <tbody>
+        <tr><td class="num">07:00</td><td><strong>Acordar</strong></td><td>500 ml de água logo ao levantar. Luz do dia no rosto por 5–10 min.</td></tr>
+        <tr class="hl"><td class="num">07:30</td><td><strong>Café da manhã</strong></td><td>Cuscuz com ovos + café com leite + fruta</td></tr>
+        <tr><td class="num">10:00</td><td><strong>Lanche da manhã</strong></td><td>Vitamina de banana com aveia e amendoim</td></tr>
+        <tr class="hl"><td class="num">12:30</td><td><strong>Almoço</strong></td><td>Arroz, feijão, frango ou carne, salada</td></tr>
+        <tr><td class="num">16:00</td><td><strong>Pré-treino</strong></td><td>Pão com ovo ou sardinha + fruta, 1h–1h30 antes</td></tr>
+        <tr class="hl"><td class="num">17:30</td><td><strong>Treino</strong></td><td>45–60 min (seção Treino). 500 ml de água durante.</td></tr>
+        <tr><td class="num">19:30</td><td><strong>Jantar (pós-treino)</strong></td><td>Aipim ou batata-doce + proteína + legumes</td></tr>
+        <tr><td class="num">22:00</td><td><strong>Ceia</strong></td><td>Leite ou ovos cozidos. Tela desligando.</td></tr>
+        <tr class="hl"><td class="num">23:00</td><td><strong>Dormir</strong></td><td>7h30–8h de sono (seção Sono)</td></tr>
+      </tbody>
+    </table></div>
+    <div class="callout"><strong>Dia de evento/gravação:</strong> leve marmita e 2 lanches prontos (ovos cozidos, pão com frango desfiado, banana, amendoim). Pular refeição é o que mais atrasa o ganho de massa.</div>
+  </section>
+
+  <section id="m04">
+    <div class="sec-head"><span class="eyebrow">05 · Cardápio</span><h2>Comida barata e fácil, 3 opções por refeição</h2>
+      <p class="lede">O exemplo dá ~2.800 kcal e ~170 g de proteína. Se a calculadora deu menos, diminua arroz, pão, cuscuz e aipim; se deu mais, aumente eles. A proteína fica igual.</p></div>
+    <div class="grid2" id="menu"></div>
+    <p class="plain">Valores aproximados. Os custos são estimativas de mercado e mudam por cidade e época: use como referência.</p>
+    <p class="group">Truques pra comer mais sem gastar</p>
+    <ul class="tips">
+      <li><strong>Cozinhe 2 vezes por semana:</strong> domingo e quarta. Frango desfiado, carne moída, feijão e arroz em potes na geladeira (3 dias) ou freezer.</li>
+      <li><strong>Ovo é o rei do custo-benefício:</strong> ~6 g de proteína por menos de R$ 1. Cozinhe 12 de uma vez pra lanches.</li>
+      <li><strong>Sardinha em lata, fígado, peito de frango e carne moída de patinho</strong> são as proteínas mais baratas depois do ovo.</li>
+      <li><strong>Feijão com arroz</strong> juntos formam proteína completa. Não corte o feijão.</li>
+      <li><strong>Vitamina é a forma mais fácil de "beber" calorias</strong> quando falta fome: leite + banana + aveia + amendoim = ~480 kcal.</li>
+      <li><strong>Azeite ou óleo:</strong> 1 colher de sopa = ~90 kcal. Um fio no arroz e na salada ajuda quem tem pouca fome.</li>
+      <li><strong>Fruta e verdura todo dia:</strong> banana, laranja, mamão (baratos) e o que tiver na feira. Fibra e vitaminas mantêm o intestino e a saúde.</li>
+    </ul>
+  </section>
+
+  <section id="mb">
+    <div class="sec-head"><span class="eyebrow">06 · Banco de pratos</span><h2>34 pratos baratos pra variar</h2>
+      <p class="lede">Escolha por refeição. Calorias e proteína são aproximadas; custo é estimativa por porção.</p></div>
+    <div class="tabs" id="dTabs" role="tablist"></div>
+    <div class="dishes" id="dishes"></div>
+    <p class="group">Pra quem é bem magro: comer mais sem sofrer</p>
+    <ul class="tips">
+      <li><strong>Alarme de 3 em 3 horas.</strong> Magro costuma "esquecer" de comer.</li>
+      <li><strong>Carboidrato em toda refeição</strong> (cuscuz, pão, arroz, aipim, aveia, banana): é o combustível que tira a fadiga.</li>
+      <li><strong>Gorduras boas somam muitas calorias em pouco volume:</strong> amendoim, pasta de amendoim, abacate, azeite, ovo inteiro, queijo.</li>
+      <li><strong>Beba calorias:</strong> uma vitamina "bomba" por dia (750 kcal) resolve metade do problema.</li>
+      <li><strong>Água entre as refeições,</strong> não durante: muita água no prato enche e tira a fome.</li>
+      <li><strong>Aumente o prato aos poucos:</strong> +1 colher de arroz ou +1 ovo por semana.</li>
+      <li><strong>Salada no fim do prato,</strong> não no começo.</li>
+    </ul>
+  </section>
+
+  <section id="ms">
+    <div class="sec-head"><span class="eyebrow">07 · Semana</span><h2>Cardápio da semana com horários</h2>
+      <p class="lede">Os números entre colchetes são os pratos do banco. Treino na segunda, quarta e sexta (semana 1). Troque à vontade por pratos da mesma categoria.</p></div>
+    <div class="tbl"><table id="week" style="min-width:880px"></table></div>
+    <p class="group">Cozinhar em lote (economiza tempo e dinheiro)</p>
+    <div class="grid2">
+      <div class="box"><div class="t">Domingo (~1h30)</div><ul>
+        <li>1,5 kg de frango: metade grelhado, metade desfiado</li>
+        <li>1 kg de carne moída refogada</li>
+        <li>Feijão pra 4 dias (congela o resto)</li>
+        <li>Arroz pra 3 dias</li>
+        <li>12 ovos cozidos</li>
+        <li>1 kg de aipim cozido (porcionado)</li>
+      </ul></div>
+      <div class="box"><div class="t">Quarta (~1h)</div><ul>
+        <li>Mais frango (1 kg) e arroz</li>
+        <li>Fígado acebolado (quinta)</li>
+        <li>Batata-doce cozida</li>
+        <li>Mais 12 ovos cozidos</li>
+        <li>Potes na geladeira até 3 dias; freezer até 3 meses</li>
+      </ul></div>
+    </div>
+  </section>
+
+  <section id="m05">
+    <div class="sec-head"><span class="eyebrow">08 · Compras</span><h2>Lista do mês (1 pessoa)</h2></div>
+    <div class="tbl"><table>
+      <thead><tr><th>Item</th><th>Quantidade/mês</th><th>Custo aproximado</th></tr></thead>
+      <tbody id="shop"></tbody>
+    </table></div>
+    <p class="plain" id="shopTot"></p>
+    <ul class="tips">
+      <li><strong>Atacarejo</strong> (Atakarejo, Assaí, Atacadão) e feira no fim do dia saem bem mais barato.</li>
+      <li><strong>Frango em bandeja grande ou peito congelado</strong> e ovos em bandeja de 30.</li>
+      <li><strong>Compre por proteína, não por marca:</strong> compare o preço por quilo.</li>
+    </ul>
+  </section>
+
+  <section id="m06">
+    <div class="sec-head"><span class="eyebrow">09 · Água</span><h2>Quanto e quando beber</h2></div>
+    <div class="alert new"><div class="h" id="aguaMeta">Meta: ~37 ml por quilo (preencha a calculadora)</div><p>No sol de Salvador e em dia de gravação na rua, some mais 500 ml a 1 litro.</p></div>
+    <div class="tbl"><table>
+      <thead><tr><th>Quando</th><th>Quanto</th></tr></thead>
+      <tbody>
+        <tr><td>Ao acordar</td><td class="num">500 ml</td></tr>
+        <tr><td>Manhã (até o almoço)</td><td class="num">1 garrafa de 1 L</td></tr>
+        <tr><td>Tarde (até o treino)</td><td class="num">1 garrafa de 1 L</td></tr>
+        <tr><td>Durante o treino</td><td class="num">500 ml</td></tr>
+        <tr><td>Noite (até 1h antes de dormir)</td><td class="num">500 ml</td></tr>
+      </tbody>
+    </table></div>
+    <ul class="tips">
+      <li><strong>Garrafa de 1 L sempre do lado</strong>: é mais fácil contar garrafas do que copos.</li>
+      <li><strong>Termômetro simples:</strong> xixi amarelo-claro = bem hidratado. Escuro = beba mais.</li>
+      <li><strong>Café, suco e leite contam</strong>, mas a maior parte deve ser água.</li>
+      <li><strong>Pare 1 hora antes de dormir</strong> pra não acordar pra ir ao banheiro.</li>
+    </ul>
+  </section>
+
+  <section id="m07">
+    <div class="sec-head"><span class="eyebrow">10 · Sono</span><h2>É dormindo que o músculo cresce</h2></div>
+    <div class="stats">
+      <div class="stat"><b>7–9 h</b><span>por noite</span></div>
+      <div class="stat"><b>±30 min</b><span>mesmo horário todo dia</span></div>
+      <div class="stat"><b>6 h</b><span>sem café antes de dormir</span></div>
+      <div class="stat"><b>20–30 min</b><span>cochilo, se dormiu pouco</span></div>
+    </div>
+    <ul class="tips">
+      <li><strong>Quarto escuro, fresco e silencioso.</strong> Cortina blackout ou máscara de dormir ajudam muito.</li>
+      <li><strong>Tela desligando 30 min antes:</strong> celular longe da cama. Se editar à noite, use o modo noturno e pare 1 h antes.</li>
+      <li><strong>Dia de evento que termina tarde:</strong> durma mais no dia seguinte ou tire um cochilo, e deixe o treino pro dia depois.</li>
+      <li><strong>Refeição pesada muito perto de dormir</strong> atrapalha: jante até 2–3 h antes, a ceia leve pode ser mais perto.</li>
+      <li><strong>Dormiu menos de 6 h?</strong> Treine mais leve ou descanse. Sem sono o treino rende pouco e o risco de lesão sobe.</li>
+    </ul>
+  </section>
+
+  <section id="m08">
+    <div class="sec-head"><span class="eyebrow">11 · O kit</span><h2>Kit halteres, barra e kettlebell</h2>
+      <p class="lede">O kit 6 em 1 monta: 2 halteres, 1 barra, 1 kettlebell e flexão com apoio.</p></div>
+    <ul class="tips">
+      <li><strong>Aperte bem as travas (porcas)</strong> antes de cada série. Anilha solta cai no pé.</li>
+      <li><strong>Divida as anilhas igual dos dois lados</strong> da barra e dos halteres.</li>
+      <li><strong>Treine num tapete ou EVA</strong>: protege o chão e as anilhas de plástico.</li>
+      <li><strong>Comece leve:</strong> escolha um peso que dê pra fazer as repetições com técnica boa, sobrando 1–2 no final.</li>
+      <li><strong>Quando o peso ficar leve demais</strong> (vai acontecer em agachamento e terra): desça em 3 segundos, faça pausa de 1 segundo embaixo, faça com uma perna (búlgaro) ou suba as repetições até 20–25. Depois vale comprar anilhas extras.</li>
+      <li><strong>Troca rápida:</strong> monte o treino em ordem pra mexer o mínimo nas anilhas (o treino já está organizado assim).</li>
+    </ul>
+  </section>
+
+  <section id="m09">
+    <div class="sec-head"><span class="eyebrow">12 · Treino</span><h2>Treino A e B, 3 vezes por semana</h2>
+      <p class="lede">Alterne: semana 1 = A, B, A; semana 2 = B, A, B. Ex.: segunda, quarta e sexta. Dia sem treino também faz o músculo crescer.</p></div>
+    <div class="alert new"><div class="h">Começo leve por causa da fadiga</div><p><strong>Semanas 1–2:</strong> 2 treinos por semana (A e B), 2–3 séries, peso leve, sobrando 3 repetições. <strong>Semanas 3–4:</strong> 3 treinos, 3 séries. <strong>A partir da 5ª:</strong> o plano completo abaixo. Se a fadiga piorar em vez de melhorar, volte uma fase e fale com um médico.</p></div>
+    <p class="group">Aquecimento (5–8 min, sempre)</p>
+    <p class="plain">1 min de polichinelo ou corrida parada, 10 rotações de braço, 10 agachamentos sem peso, 10 "bom dia" (inclinar o tronco com as costas retas), 1 série leve do primeiro exercício.</p>
+    <div class="grid2">
+      <div class="box"><div class="t">Treino A · peito, costas, ombro, braço, pernas</div>
+        <div class="tbl"><table style="min-width:0"><thead><tr><th>Exercício</th><th>Séries × reps</th></tr></thead><tbody>
+          <tr><td>Agachamento goblet</td><td class="num">4 × 10–15</td></tr>
+          <tr><td>Supino no chão (halteres)</td><td class="num">4 × 8–12</td></tr>
+          <tr><td>Remada curvada (barra)</td><td class="num">4 × 8–12</td></tr>
+          <tr><td>Desenvolvimento (halteres)</td><td class="num">3 × 10–12</td></tr>
+          <tr><td>Rosca direta (halteres)</td><td class="num">3 × 10–12</td></tr>
+          <tr><td>Prancha</td><td class="num">3 × 30–45 s</td></tr>
+        </tbody></table></div></div>
+      <div class="box"><div class="t">Treino B · posterior, peito, costas, braço, glúteo</div>
+        <div class="tbl"><table style="min-width:0"><thead><tr><th>Exercício</th><th>Séries × reps</th></tr></thead><tbody>
+          <tr><td>Levantamento terra romeno (barra)</td><td class="num">4 × 10–12</td></tr>
+          <tr><td>Flexão de braço</td><td class="num">4 × máx. −2</td></tr>
+          <tr><td>Remada unilateral (halter)</td><td class="num">3 × 10–12 cada</td></tr>
+          <tr><td>Afundo (halteres)</td><td class="num">3 × 10 cada perna</td></tr>
+          <tr><td>Tríceps francês (halter)</td><td class="num">3 × 10–12</td></tr>
+          <tr><td>Elevação pélvica (barra)</td><td class="num">3 × 12–15</td></tr>
+          <tr><td>Kettlebell swing</td><td class="num">3 × 15</td></tr>
+          <tr><td>Panturrilha em pé</td><td class="num">3 × 15–20</td></tr>
+        </tbody></table></div></div>
+    </div>
+    <div class="tbl"><table>
+      <thead><tr><th>Regra</th><th>Como fazer</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Descanso</strong></td><td>60–90 s nos exercícios pequenos, 90–120 s nos grandes (agachamento, terra, remada, supino)</td></tr>
+        <tr><td><strong>Intensidade</strong></td><td>Termine cada série sentindo que faria só mais 1 ou 2 repetições com boa técnica</td></tr>
+        <tr><td><strong>Velocidade</strong></td><td>Suba em 1 s, desça em 2–3 s controlando. Nada de jogar o peso</td></tr>
+        <tr class="hl"><td><strong>Progressão</strong></td><td>Chegou no máximo de repetições em todas as séries? Na próxima vez, mais peso (ou desça mais devagar, se o kit não tiver mais peso)</td></tr>
+        <tr><td><strong>4ª vez na semana?</strong></td><td>Só depois de 2–3 meses e dormindo bem. Até lá, 3 é o ideal</td></tr>
+      </tbody>
+    </table></div>
+  </section>
+
+  <section id="m10">
+    <div class="sec-head"><span class="eyebrow">13 · Exercícios</span><h2>Como fazer cada um</h2>
+      <p class="lede">Desenhos ilustrativos: à esquerda o começo, à direita o fim do movimento. Na dúvida, grave um vídeo seu de lado e compare.</p></div>
+    <div class="exgrid" id="exList"></div>
+  </section>
+
+  <section id="m11">
+    <div class="sec-head"><span class="eyebrow">14 · Evoluir</span><h2>Como saber se está funcionando e ajustar</h2></div>
+    <div class="tbl"><table>
+      <thead><tr><th>Depois de 2 semanas, a balança...</th><th>O que fazer</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Não subiu</strong></td><td>+200 kcal por dia (ex.: +1 pão com ovo ou +1 vitamina)</td></tr>
+        <tr class="hl"><td><strong>Subiu 0,5 a 1 kg</strong></td><td>Perfeito. Mantenha</td></tr>
+        <tr><td><strong>Subiu mais de 1,5 kg e a barriga cresceu</strong></td><td>−200 kcal por dia (menos arroz, pão ou cuscuz)</td></tr>
+      </tbody>
+    </table></div>
+    <ul class="tips">
+      <li><strong>Pese 1 vez por semana,</strong> mesmo dia, ao acordar, depois do banheiro, antes de comer. Anote no checklist (seção Checklist).</li>
+      <li><strong>Foto a cada 30 dias:</strong> mesma luz, mesma posição, frente, lado e costas. O espelho engana; a foto não.</li>
+      <li><strong>Fita métrica:</strong> braço, peito, cintura e coxa 1 vez por mês. Braço e peito subindo com a cintura parada = músculo.</li>
+      <li><strong>Caderno ou notas do celular:</strong> anote peso e repetições de cada exercício. Se os números sobem, você está crescendo.</li>
+      <li><strong>A cada 8–10 semanas,</strong> uma semana mais leve (metade das séries) pra recuperar articulações.</li>
+    </ul>
+  </section>
+
+  <section id="m12">
+    <div class="sec-head"><span class="eyebrow">15 · Suplementos</span><h2>O que vale e o que não vale</h2></div>
+    <div class="tbl"><table>
+      <thead><tr><th>Suplemento</th><th>Vale?</th><th>Como</th></tr></thead>
+      <tbody>
+        <tr class="hl"><td><strong>Creatina monohidratada</strong></td><td class="good">Sim, o mais estudado e barato</td><td>3–5 g por dia, todo dia, qualquer horário, com água. Não precisa de "fase de saturação"</td></tr>
+        <tr><td><strong>Whey protein</strong></td><td>Opcional</td><td>Só se não conseguir bater a proteína com comida. Compare o preço por grama de proteína com ovo e frango</td></tr>
+        <tr><td><strong>Hipercalórico</strong></td><td class="warnc">Não precisa</td><td>A vitamina caseira faz o mesmo por menos</td></tr>
+        <tr><td><strong>"Queimadores", pré-treino forte, BCAA</strong></td><td class="warnc">Não</td><td>Dinheiro melhor gasto em comida</td></tr>
+        <tr><td><strong>Anabolizantes / "bomba"</strong></td><td class="warnc">Nunca por conta própria</td><td>Risco real pro coração, fígado e hormônios</td></tr>
+      </tbody>
+    </table></div>
+  </section>
+
+  <section id="m13">
+    <div class="sec-head"><span class="eyebrow">16 · Cuidados</span><h2>O que NÃO fazer</h2></div>
+    <ul class="dont">
+      <li><strong>Não pule refeições</strong>, principalmente em dia de evento.</li>
+      <li><strong>Não treine o mesmo músculo todo dia.</strong> Ele cresce no descanso.</li>
+      <li><strong>Não sacrifique técnica por peso.</strong> Costas arredondadas no terra e na remada é o caminho da lesão.</li>
+      <li><strong>Não prenda a respiração</strong> por muito tempo: solte o ar na subida.</li>
+      <li><strong>Não faça muito cardio</strong> (corrida longa todo dia): gasta as calorias que iam pro músculo. Caminhada leve pode.</li>
+      <li><strong>Não exagere no álcool:</strong> atrapalha sono, recuperação e o ganho de massa.</li>
+      <li><strong>Não coma "qualquer coisa" pra engordar</strong> (refrigerante, fritura, doce todo dia): vira gordura, não músculo.</li>
+      <li><strong>Não compare seu mês 1 com o ano 5 de alguém na internet.</strong></li>
+      <li><strong>Não treine com dor aguda</strong> ou doente com febre.</li>
+      <li><strong>Não deixe o kit montado com travas frouxas</strong> nem anilhas no chão onde alguém possa tropeçar.</li>
+    </ul>
+  </section>
+
+  <section id="m14">
+    <div class="sec-head"><span class="eyebrow">17 · Dúvidas</span><h2>Perguntas frequentes</h2></div>
+    <div class="faqs">
+      <details class="faq"><summary>Em quanto tempo vejo resultado?</summary><div class="a"><p>Força sobe nas primeiras 2–4 semanas. Mudança visível costuma aparecer entre 8 e 12 semanas de treino e comida certos. Constância vale mais que intensidade.</p></div></details>
+      <details class="faq"><summary>Só com esse kit dá pra ganhar massa?</summary><div class="a"><p>Dá, principalmente no começo. Quando ficar leve, use as técnicas da seção O kit (descer devagar, pausa, uma perna, mais repetições) e depois compre anilhas extras.</p></div></details>
+      <details class="faq"><summary>Não tenho fome pra comer tudo isso.</summary><div class="a"><p>Beba calorias (vitamina), coma de 3 em 3 horas, use um fio de azeite, amendoim e banana nos lanches, e deixe comida pronta. A fome aumenta depois de algumas semanas treinando.</p></div></details>
+      <details class="faq"><summary>Posso treinar de manhã?</summary><div class="a"><p>Pode. O melhor horário é o que você consegue manter. Coma algo leve 1 h antes (banana, pão com ovo) e faça o café da manhã completo depois.</p></div></details>
+      <details class="faq"><summary>Perdi um treino. E agora?</summary><div class="a"><p>Faça no dia seguinte e continue a sequência. Só não faça 2 treinos no mesmo dia pra compensar.</p></div></details>
+      <details class="faq"><summary>Fiquei muito dolorido.</summary><div class="a"><p>Normal nas primeiras semanas (dor de 1–3 dias depois). Treine assim mesmo, mais leve, que melhora. Dor em articulação, pontada ou dor que piora: pare e procure um profissional.</p></div></details>
+      <details class="faq"><summary>Preciso fazer abdominal?</summary><div class="a"><p>A prancha e os exercícios grandes (agachamento, terra, remada) já trabalham o abdômen. Pode acrescentar 3 × 15 de abdominal no fim do treino B.</p></div></details>
+      <details class="faq"><summary>Posso fazer cardio?</summary><div class="a"><p>Caminhada de 20–30 min e esportes leves, sim (é bom pro coração). Só aumente a comida nesses dias.</p></div></details>
+      <details class="faq"><summary>E se eu engordar de barriga?</summary><div class="a"><p>Siga a tabela da seção Evoluir: se passou de ~1 kg em 2 semanas, tire 200 kcal (menos carboidrato), mantendo a proteína.</p></div></details>
+      <details class="faq"><summary>Ovo todo dia faz mal?</summary><div class="a"><p>Pra pessoa saudável, 3 a 4 ovos por dia são considerados seguros na maior parte dos estudos. Se você tem colesterol alto ou algum problema de saúde, confirme com seu médico.</p></div></details>
+    </div>
+  </section>
+
+  <section id="m15">
+    <div class="sec-head"><span class="eyebrow">18 · Checklist</span><h2>Todo dia e toda semana</h2>
+      <p class="lede">Marque o dia. Zera sozinho à meia-noite. O peso semanal fica guardado.</p></div>
+    <div class="progress"><span id="dProg">0 de 0 hoje</span><div class="bar"><i id="dBar"></i></div></div>
+    <ul class="tasks" id="daily"></ul>
+    <p class="group">Peso toda semana</p>
+    <div class="fields"><label>Data<input type="date" id="wData"></label><label>Peso (kg)<input type="number" inputmode="decimal" id="wPeso" step="0.1"></label><label>&nbsp;<button class="btn" type="button" id="wAdd">Anotar peso</button></label></div>
+    <div class="tbl"><table><thead><tr><th>Data</th><th>Peso</th><th>Variação</th><th></th></tr></thead><tbody id="wBody"></tbody></table></div>
+    <p class="plain">As marcações ficam salvas só neste navegador.</p>
+  </section>
+
+  <footer><span>Plano pessoal · ganho de massa em casa</span><span>28/09/2026</span></footer>
+</div>
+<script>
+(function(){
+var $=function(i){return document.getElementById(i)};
+function esc(t){return String(t).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
+var KEY='plano-massa-v1',ST={};try{ST=JSON.parse(localStorage.getItem(KEY)||'{}')||{}}catch(e){}
+ST.calc=ST.calc||{};ST.days=ST.days||{};ST.weights=ST.weights||[];
+function save(){try{localStorage.setItem(KEY,JSON.stringify(ST))}catch(e){}}
+
+/* ---------- calculadora ---------- */
+var ids=['cPeso','cAlt','cIdade','cSexo','cAtiv'];
+ids.forEach(function(i){if(ST.calc[i]!==undefined)$(i).value=ST.calc[i];$(i).addEventListener('input',function(){ST.calc[i]=$(i).value;save();calc()});$(i).addEventListener('change',function(){ST.calc[i]=$(i).value;save();calc()})});
+function calc(){
+ var p=parseFloat($('cPeso').value),a=parseFloat($('cAlt').value),id=parseFloat($('cIdade').value),s=$('cSexo').value,f=parseFloat($('cAtiv').value);
+ if(!(p>0&&a>0&&id>0)){$('cOut').innerHTML='<div class="stat"><b>–</b><span>Preencha peso, altura e idade</span></div>';$('aguaMeta').textContent='Meta: ~37 ml por quilo (preencha a calculadora)';return}
+ var tmb=10*p+6.25*a-5*id+(s==='m'?5:-161),gasto=tmb*f,meta=gasto+500,prot=p*2,agua=p*0.037,aguaT=agua+0.5;
+ var r=function(x){return Math.round(x/10)*10};
+ var S=[[r(meta).toLocaleString('pt-BR')+' kcal','Comer por dia (meta)'],[Math.round(prot)+' g','Proteína por dia'],[(Math.round(prot/6))+' g','Proteína por refeição (6 refeições)'],[agua.toFixed(1).replace('.',',')+' L','Água (dia sem treino)'],[aguaT.toFixed(1).replace('.',',')+' L','Água (dia de treino)'],[r(gasto).toLocaleString('pt-BR')+' kcal','Seu gasto estimado']];
+ $('cOut').innerHTML=S.map(function(x){return '<div class="stat"><b>'+x[0]+'</b><span>'+x[1]+'</span></div>'}).join('');
+ $('aguaMeta').textContent='Sua meta: '+agua.toFixed(1).replace('.',',')+' L por dia · '+aguaT.toFixed(1).replace('.',',')+' L em dia de treino';
+}
+calc();
+
+/* ---------- cardápio ---------- */
+var MENU=[
+ ['07:30','Café da manhã','~640 kcal · ~27 g proteína',[
+  ['Cuscuz de milho (1 prato) + 3 ovos mexidos + café com leite + banana','~R$ 5,00'],
+  ['2 pães franceses com 3 ovos + café com leite + mamão','~R$ 5,50'],
+  ['Tapioca (2 colheres de goma) com 3 ovos e queijo + café com leite','~R$ 6,00']]],
+ ['10:00','Lanche da manhã','~480 kcal · ~18 g proteína',[
+  ['Vitamina: 300 ml de leite + 1 banana + 3 colheres de aveia + 1 colher de pasta de amendoim','~R$ 3,50'],
+  ['2 ovos cozidos + 1 pão + 1 fruta','~R$ 3,00'],
+  ['Iogurte natural + aveia + banana + amendoim torrado','~R$ 4,00']]],
+ ['12:30','Almoço','~600 kcal · ~55 g proteína',[
+  ['Arroz (5 colheres) + feijão (1 concha) + 150 g de frango + salada + fio de azeite','~R$ 6,00'],
+  ['Arroz + feijão + 150 g de carne moída (patinho) + legumes','~R$ 7,50'],
+  ['Arroz + feijão + fígado acebolado 150 g + salada','~R$ 5,00']]],
+ ['16:00','Pré-treino (1h antes)','~460 kcal · ~28 g proteína',[
+  ['2 pães com 1 lata de sardinha + 1 banana','~R$ 5,50'],
+  ['2 pães com frango desfiado + 1 fruta','~R$ 4,50'],
+  ['Cuscuz com 2 ovos + 1 banana','~R$ 3,50']]],
+ ['19:30','Jantar (pós-treino)','~500 kcal · ~45 g proteína',[
+  ['Aipim cozido (200 g) + 150 g de frango + legumes','~R$ 5,50'],
+  ['Batata-doce (200 g) + 3 ovos + salada','~R$ 4,50'],
+  ['Arroz + feijão + omelete de 3 ovos com legumes','~R$ 4,00']]],
+ ['22:00','Ceia','~200 kcal · ~10 g proteína',[
+  ['1 copo grande de leite (300 ml)','~R$ 1,50'],
+  ['2 ovos cozidos','~R$ 1,60'],
+  ['Leite com 2 colheres de aveia','~R$ 2,00']]]
+];
+$('menu').innerHTML=MENU.map(function(m){return '<div class="box meal"><span class="when">'+m[0]+'</span><div class="t">'+m[1]+'</div><p class="plain" style="margin:0">'+m[2]+'</p>'+m[3].map(function(o,i){return '<div class="opt"><b>Opção '+(i+1)+':</b> '+esc(o[0])+'<small>'+o[1]+'</small></div>'}).join('')+'</div>'}).join('');
+
+
+/* ---------- banco de pratos ---------- */
+var CATS={cafe:'Café da manhã',lanche:'Lanches e vitaminas',almoco:'Almoço e jantar',ceia:'Ceia'};
+var D=[
+['cafe','Cuscuz com ovo e queijo coalho','80 g de flocão, 3 ovos mexidos, 30 g de queijo coalho',620,30,'5,50',10],
+['cafe','Tapioca de frango com requeijão','3 colheres de goma, 100 g de frango desfiado, 1 colher de requeijão',480,32,'5,00',10],
+['cafe','Pão com ovo + café com leite','2 pães franceses, 3 ovos, 200 ml de leite com café',640,30,'5,00',8],
+['cafe','Mingau de aveia com banana e amendoim','60 g de aveia, 300 ml de leite, 1 banana, 1 colher de pasta de amendoim',650,25,'4,00',5],
+['cafe','Omelete de 4 ovos com queijo e tomate','4 ovos, 30 g de queijo, tomate + 2 fatias de pão',620,34,'6,00',10],
+['cafe','Cuscuz com carne moída','80 g de flocão + 100 g de carne moída pronta (do lote)',600,32,'6,00',10],
+['cafe','Panqueca de banana e aveia','2 ovos, 1 banana, 40 g de aveia, 1 colher de mel',450,20,'3,50',10],
+['cafe','Aipim com ovo e manteiga','250 g de aipim cozido, 2 ovos, 1 colher de manteiga',620,16,'4,00',5],
+['lanche','Vitamina bomba','400 ml de leite, 1 banana, 4 colheres de aveia, 2 colheres de pasta de amendoim',750,30,'4,50',3],
+['lanche','Vitamina de abacate','300 ml de leite, ½ abacate, 3 colheres de aveia, 1 colher de mel',700,17,'4,50',3],
+['lanche','Sanduíche de frango com requeijão','2 pães, 100 g de frango desfiado, 1 colher de requeijão',480,34,'4,00',5],
+['lanche','Pão com sardinha e tomate','2 pães, 1 lata de sardinha, tomate e cebola',470,26,'5,00',5],
+['lanche','Iogurte com aveia, banana e mel','170 g de iogurte natural, 3 colheres de aveia, 1 banana, mel',450,16,'5,00',2],
+['lanche','Ovos cozidos, banana e amendoim','3 ovos cozidos (do lote), 1 banana, 30 g de amendoim',470,24,'3,50',1],
+['lanche','Batata-doce com ovos (pré-treino)','200 g de batata-doce cozida, 2 ovos',330,15,'3,00',5],
+['lanche','Cuscuz com queijo','80 g de flocão, 40 g de queijo coalho',400,13,'2,50',8],
+['lanche','Bolo de caneca proteico','2 ovos, 3 colheres de aveia, 1 banana, 1 colher de cacau (2 min no micro-ondas)',400,18,'3,00',3],
+['lanche','Amendoim, banana e leite','50 g de amendoim torrado, 1 banana, 250 ml de leite',530,21,'3,50',1],
+['almoco','Arroz, feijão e frango grelhado','150 g de arroz, 1 concha de feijão, 150 g de frango, salada, azeite',700,55,'6,00',10],
+['almoco','Picadinho de carne com batata','Arroz, feijão, 150 g de carne moída com batata e cenoura',800,45,'7,50',10],
+['almoco','Macarrão à bolonhesa','100 g de macarrão (cru), 150 g de carne moída, molho de tomate',750,48,'6,50',20],
+['almoco','Fígado acebolado','150 g de fígado, arroz, feijão, salada com limão',700,45,'5,00',20],
+['almoco','Frango ensopado com aipim','150 g de frango, 200 g de aipim, tomate, cebola, coentro',750,45,'6,00',40],
+['almoco','Arroz de sardinha','Arroz, 1 lata de sardinha, 1 ovo, cheiro-verde',700,35,'5,00',20],
+['almoco','Feijão tropeiro caseiro','Feijão, farinha, 2 ovos, 100 g de carne moída, couve + arroz',800,40,'6,00',25],
+['almoco','Frango xadrez simples','150 g de frango em cubos, pimentão, cebola, shoyu + arroz',700,45,'7,00',25],
+['almoco','Escondidinho de aipim com carne','Purê de aipim com 150 g de carne moída, queijo por cima (rende 3)',750,40,'7,00',45],
+['almoco','Arroz, feijão e 3 ovos','Arroz, feijão, 3 ovos fritos ou cozidos, banana-da-terra cozida',800,30,'4,50',15],
+['almoco','Moqueca de ovos','4 ovos cozidos em molho de tomate, pimentão, leite de coco e um fio de dendê + arroz',800,32,'6,00',20],
+['almoco','Cuscuz recheado com frango','100 g de flocão com 150 g de frango desfiado e legumes',650,40,'5,50',15],
+['ceia','Leite com aveia e canela','300 ml de leite, 30 g de aveia',300,14,'2,00',3],
+['ceia','Ovos cozidos com queijo','2 ovos cozidos, 1 fatia de queijo',230,18,'2,50',1],
+['ceia','Iogurte com pasta de amendoim','170 g de iogurte natural, 1 colher de pasta de amendoim',300,14,'3,50',1],
+['ceia','Queijo coalho grelhado + leite','2 fatias de queijo coalho, 250 ml de leite',350,22,'4,00',5]
+];
+var dcat='cafe';
+function drender(){
+ $('dTabs').innerHTML=Object.keys(CATS).map(function(k){return '<button class="tab" type="button" role="tab" data-cat="'+k+'" aria-selected="'+(k===dcat)+'">'+CATS[k]+'</button>'}).join('');
+ $('dishes').innerHTML=D.map(function(d,i){return [d,i]}).filter(function(x){return x[0][0]===dcat}).map(function(x){var d=x[0];return '<article class="dish"><span class="dn">['+(x[1]+1)+']</span><h3>'+esc(d[1])+'</h3><p>'+esc(d[2])+'</p><div class="dm"><span>'+d[3]+' kcal</span><span>'+d[4]+' g prot.</span><span>R$ '+d[5]+'</span><span>'+d[6]+' min</span></div></article>'}).join('');
+}
+$('dTabs').addEventListener('click',function(e){var b=e.target.closest('[data-cat]');if(!b)return;dcat=b.getAttribute('data-cat');drender()});
+drender();
+/* ---------- semana ---------- */
+var WK=[['Segunda ●',1,9,19,15,23,31],['Terça',4,11,21,14,22,32],['Quarta ●',2,10,20,12,30,33],['Quinta',3,13,22,18,28,31],['Sexta ●',5,9,24,15,27,34],['Sábado',6,17,25,16,29,32],['Domingo',8,9,27,11,19,31]];
+var H=['Dia','07:30 Café','10:00 Lanche','12:30 Almoço','16:00 Pré-treino','19:30 Jantar','22:00 Ceia'];
+$('week').innerHTML='<thead><tr>'+H.map(function(h){return '<th>'+h+'</th>'}).join('')+'</tr></thead><tbody>'+WK.map(function(w){return '<tr'+(w[0].indexOf('●')>0?' class="hl"':'')+'><td><strong>'+w[0].replace(' ●','')+'</strong>'+(w[0].indexOf('●')>0?'<br><small class="mono">treino 17:30</small>':'')+'</td>'+w.slice(1).map(function(n){return '<td>['+n+'] '+esc(D[n-1][1])+'</td>'}).join('')+'</tr>'}).join('')+'</tbody>';
+
+/* ---------- compras ---------- */
+var SHOP=[['Ovos','8 bandejas de 30 (240 un)',200],['Peito de frango','5 kg',100],['Carne moída de patinho','2 kg',80],['Sardinha em lata','8 latas',50],['Fígado bovino','1 kg',25],['Leite','20 L',100],['Arroz','5 kg',30],['Feijão','3 kg',25],['Flocão de milho (cuscuz)','3 pacotes de 500 g',12],['Pão francês','~90 un',65],['Aveia','2 kg',30],['Banana','8 kg',45],['Outras frutas (mamão, laranja)','—',30],['Aipim / batata-doce','6 kg',35],['Legumes e salada','—',50],['Pasta de amendoim','1 kg',30],['Azeite / óleo','1 L',25],['Café','500 g',20]];
+var tot=0;$('shop').innerHTML=SHOP.map(function(s){tot+=s[2];return '<tr><td><strong>'+esc(s[0])+'</strong></td><td>'+esc(s[1])+'</td><td class="num">R$ '+s[2]+'</td></tr>'}).join('');
+$('shopTot').innerHTML='<strong>Total estimado: ~R$ '+tot.toLocaleString('pt-BR')+' por mês</strong> (~R$ '+Math.round(tot/30)+' por dia). Preços variam: confira no seu mercado e troque itens caros pelos mais baratos da mesma categoria.';
+
+/* ---------- desenhos ---------- */
+function L(a,b){return '<line x1="'+a[0]+'" y1="'+a[1]+'" x2="'+b[0]+'" y2="'+b[1]+'"/>'}
+function W(t,p,q){ // pesos
+ var g='';
+ if(t==='db'){[p,q].forEach(function(h){if(!h)return;g+='<rect x="'+(h[0]-7)+'" y="'+(h[1]-1.5)+'" width="14" height="3" rx="1"/><rect x="'+(h[0]-8)+'" y="'+(h[1]-5)+'" width="4" height="10" rx="1"/><rect x="'+(h[0]+4)+'" y="'+(h[1]-5)+'" width="4" height="10" rx="1"/>'})}
+ if(t==='bb'){g+='<circle cx="'+p[0]+'" cy="'+p[1]+'" r="9" fill="none" stroke-width="3"/><circle cx="'+p[0]+'" cy="'+p[1]+'" r="2"/>'}
+ if(t==='kb'){g+='<path d="M'+(p[0]-4)+' '+(p[1]+1)+' a4 4 0 0 1 8 0" fill="none" stroke-width="2"/><circle cx="'+p[0]+'" cy="'+(p[1]+8)+'" r="6"/>'}
+ return '<g fill="var(--accent)" stroke="var(--accent)" stroke-width="1">'+g+'</g>';
+}
+function fig(j,t){
+ var s='<svg viewBox="0 0 120 120" role="img" aria-hidden="true"><line x1="4" y1="112" x2="116" y2="112" stroke="var(--line-2)" stroke-width="1.5"/>';
+ if(j.bench)s+='<rect x="'+j.bench[0]+'" y="'+j.bench[1]+'" width="'+j.bench[2]+'" height="'+(112-j.bench[1])+'" fill="var(--line)"/>';
+ s+='<g stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" fill="none">';
+ s+=L(j.n,j.h)+L(j.h,j.k)+L(j.k,j.f)+L(j.h,j.k2||j.k)+L(j.k2||j.k,j.f2||j.f)+L(j.n,j.e)+L(j.e,j.w)+L(j.n,j.e2||j.e)+L(j.e2||j.e,j.w2||j.w);
+ s+='</g><circle cx="'+j.hd[0]+'" cy="'+j.hd[1]+'" r="7" fill="currentColor"/>';
+ if(t)s+=W(t,j.w,null);
+ return s+'</svg>';
+}
+var ST_=function(o){var b={hd:[60,18],n:[60,28],h:[60,62],k:[61,86],f:[60,110],e:[61,45],w:[62,63]};for(var k in o)b[k]=o[k];return b};
+var EX=[
+ ['Agachamento goblet','A','kb',ST_({e:[65,42],w:[68,34]}),{hd:[66,40],n:[62,49],h:[42,76],k:[68,80],f:[62,110],e:[64,62],w:[72,55]},
+  ['Segure o kettlebell no peito, pés na largura dos ombros','<b>Desça</b> como se fosse sentar, joelhos na direção dos pés','Coxas pelo menos paralelas ao chão, costas retas','<b>Suba</b> empurrando o chão, soltando o ar']],
+ ['Supino no chão (halteres)','A','db',{hd:[20,98],n:[30,102],h:[62,104],k:[78,86],f:[92,110],e:[34,88],w:[34,74]},{hd:[20,98],n:[30,102],h:[62,104],k:[78,86],f:[92,110],e:[44,106],w:[36,92]},
+  ['Deitado, joelhos dobrados, halteres acima do peito','<b>Desça</b> até os cotovelos encostarem no chão (45° do corpo)','Pausa de 1 s e <b>empurre</b> pra cima','Escápulas "presas" no chão, sem arquear demais a lombar']],
+ ['Remada curvada (barra)','A','bb',{hd:[82,42],n:[73,46],h:[46,58],k:[54,84],f:[50,110],e:[72,62],w:[72,80]},{hd:[82,42],n:[73,46],h:[46,58],k:[54,84],f:[50,110],e:[58,56],w:[64,66]},
+  ['Incline o tronco ~45°, joelhos levemente dobrados','Costas <b>retas</b> (nunca arredondadas)','<b>Puxe</b> a barra até a barriga, cotovelos pra trás','Desça controlando']],
+ ['Desenvolvimento (halteres)','A','db',ST_({e:[66,38],w:[64,26]}),ST_({e:[62,14],w:[61,0]}),
+  ['Em pé ou sentado, halteres na altura dos ombros','Abdômen firme, sem jogar o quadril','<b>Empurre</b> pra cima até esticar os braços','Desça até a altura das orelhas']],
+ ['Rosca direta (halteres)','A','db',ST_({}),ST_({w:[70,34]}),
+  ['Cotovelos colados no corpo','<b>Suba</b> girando a palma pra cima','Sem balançar o tronco','Desça em 2–3 s']],
+ ['Prancha','A',null,{hd:[94,86],n:[84,90],h:[54,97],k:[34,103],f:[14,109],e:[82,110],w:[98,110]},{hd:[94,86],n:[84,90],h:[54,97],k:[34,103],f:[14,109],e:[82,110],w:[98,110]},
+  ['Antebraços no chão, cotovelos embaixo dos ombros','Corpo reto da cabeça ao pé','Aperte abdômen e glúteo','Respire normalmente. Quadril caindo = pare a série']],
+ ['Levantamento terra romeno (barra)','B','bb',ST_({e:[62,46],w:[64,66]}),{hd:[86,48],n:[77,50],h:[48,60],k:[54,84],f:[50,110],e:[76,66],w:[74,84]},
+  ['Barra na frente das coxas, joelhos levemente dobrados','<b>Empurre o quadril pra trás</b> descendo a barra rente às pernas','Costas retas; desça até sentir alongar atrás da coxa','<b>Suba</b> apertando o glúteo']],
+ ['Flexão de braço','B',null,{hd:[94,72],n:[84,76],h:[50,90],k:[32,99],f:[14,108],e:[84,92],w:[84,108]},{hd:[94,92],n:[84,96],h:[50,100],k:[32,104],f:[14,108],e:[74,94],w:[84,108]},
+  ['Mãos um pouco mais abertas que os ombros','Corpo reto, abdômen firme','<b>Desça</b> o peito quase até o chão','Difícil? Faça com os joelhos no chão ou com as mãos no sofá']],
+ ['Remada unilateral (halter)','B','db',{hd:[82,42],n:[74,46],h:[46,56],k:[54,84],f:[50,110],e:[74,62],w:[74,80],e2:[86,62],w2:[88,74],bench:[80,76,24]},{hd:[82,42],n:[74,46],h:[46,56],k:[54,84],f:[50,110],e:[58,52],w:[66,64],e2:[86,62],w2:[88,74],bench:[80,76,24]},
+  ['Uma mão apoiada (cadeira ou sofá), costas retas','<b>Puxe</b> o halter até o quadril','Cotovelo rente ao corpo','Faça todas de um lado, depois o outro']],
+ ['Afundo (halteres)','B','db',ST_({}),{hd:[58,32],n:[58,42],h:[58,76],k:[76,86],f:[78,110],k2:[44,104],f2:[28,108],e:[58,60],w:[58,78]},
+  ['Halteres ao lado do corpo, passo grande pra frente','<b>Desça</b> até o joelho de trás quase tocar o chão','Tronco reto, joelho da frente sem passar muito do pé','<b>Volte</b> empurrando com o pé da frente']],
+ ['Tríceps francês (halter)','B','db',ST_({e:[61,12],w:[61,0]}),ST_({e:[64,8],w:[50,22]}),
+  ['Halter com as duas mãos acima da cabeça','Cotovelos apontando pra cima, parados','<b>Desça</b> o halter atrás da cabeça','<b>Estique</b> os braços sem abrir os cotovelos']],
+ ['Elevação pélvica (barra)','B','bb',{hd:[18,102],n:[27,105],h:[56,104],k:[76,86],f:[86,110],e:[40,106],w:[56,98]},{hd:[18,102],n:[27,104],h:[56,84],k:[76,82],f:[86,110],e:[42,92],w:[56,78]},
+  ['Deitado, barra (com toalha) em cima do quadril','Pés firmes no chão, joelhos dobrados','<b>Suba</b> o quadril apertando o glúteo','Pausa de 1 s em cima e desça']],
+ ['Kettlebell swing','B','kb',{hd:[82,44],n:[73,48],h:[46,58],k:[54,82],f:[50,110],e:[64,70],w:[58,84]},ST_({e:[72,32],w:[86,30]}),
+  ['Pés afastados, kettlebell entre as pernas','Movimento vem do <b>quadril</b> (como o terra), não dos braços','<b>Estoure</b> o quadril pra frente e o peso sobe até o peito','Deixe descer e repita no ritmo']],
+ ['Panturrilha em pé','B','db',ST_({}),{hd:[60,12],n:[60,22],h:[60,56],k:[61,80],f:[60,104],e:[61,39],w:[62,57]},
+  ['Halteres nas mãos, ponta dos pés num degrau (opcional)','<b>Suba</b> na ponta dos pés o máximo','Pausa de 1 s em cima','Desça devagar até alongar']]
+];
+$('exList').innerHTML=EX.map(function(x){return '<article class="ex"><span class="tag">Treino '+x[1]+'</span><h3>'+x[0]+'</h3><div class="pics">'+fig(x[3],x[2])+'<span class="ar" aria-hidden="true">→</span>'+fig(x[4],x[2])+'</div><ul>'+x[5].map(function(t){return '<li>'+t+'</li>'}).join('')+'</ul></article>'}).join('');
+
+/* ---------- checklist diário ---------- */
+var DAILY=['Bebi a meta de água','Bati a proteína (ovos, frango, carne, sardinha, leite)','Fiz as 5–6 refeições, sem pular','Treinei (ou hoje é descanso)','Tomei a creatina (se usa)','Dormi 7 h ou mais','Comi fruta e verdura'];
+function today(){var d=new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')}
+var T=today();ST.days[T]=ST.days[T]||{};
+Object.keys(ST.days).forEach(function(k){if(k<T&&Object.keys(ST.days).length>60)delete ST.days[k]});
+$('daily').innerHTML=DAILY.map(function(t,i){var on=!!ST.days[T][i];return '<li><label class="'+(on?'done':'')+'"><input type="checkbox" data-d="'+i+'"'+(on?' checked':'')+'><span>'+esc(t)+'</span></label></li>'}).join('');
+function dprog(){var n=Object.keys(ST.days[T]).filter(function(k){return ST.days[T][k]}).length;$('dProg').textContent=n+' de '+DAILY.length+' hoje';$('dBar').style.width=n/DAILY.length*100+'%'}
+$('daily').addEventListener('change',function(e){var i=e.target.getAttribute('data-d');if(i===null)return;if(e.target.checked)ST.days[T][i]=1;else delete ST.days[T][i];e.target.closest('label').classList.toggle('done',e.target.checked);save();dprog()});
+dprog();
+/* ---------- peso ---------- */
+$('wData').value=T;
+function wrender(){var w=ST.weights.slice().sort(function(a,b){return a.d<b.d?-1:1});
+ $('wBody').innerHTML=w.length?w.map(function(x,i){var v=i?(x.p-w[i-1].p):0;return '<tr><td>'+x.d.split('-').reverse().join('/')+'</td><td class="num">'+x.p.toFixed(1).replace('.',',')+' kg</td><td class="num '+(v>0?'good':v<0?'warnc':'')+'">'+(i?(v>0?'+':'')+v.toFixed(1).replace('.',','):'–')+'</td><td><button class="btn" type="button" data-del="'+x.d+'" aria-label="Apagar">✕</button></td></tr>'}).reverse().join(''):'<tr><td colspan="4">Nenhum peso anotado ainda.</td></tr>'}
+$('wAdd').addEventListener('click',function(){var d=$('wData').value,p=parseFloat($('wPeso').value);if(!d||!(p>0))return;ST.weights=ST.weights.filter(function(x){return x.d!==d});ST.weights.push({d:d,p:p});save();$('wPeso').value='';wrender()});
+$('wBody').addEventListener('click',function(e){var b=e.target.closest('[data-del]');if(!b)return;ST.weights=ST.weights.filter(function(x){return x.d!==b.getAttribute('data-del')});save();wrender()});
+wrender();
+})();
+</script>
+</body></html>
