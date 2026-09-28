@@ -1,0 +1,59 @@
+{
+	Tools = ordered() {
+		NJ_Legenda_Pop = MacroOperator {
+			CtrlWZoom = false,
+			NameSet = true,
+			Inputs = ordered() {
+				Input1 = InstanceInput { SourceOp = "Texto", Source = "StyledText", Name = "Texto", },
+				Input2 = InstanceInput { SourceOp = "Texto", Source = "Font", },
+				Input3 = InstanceInput { SourceOp = "Texto", Source = "Style", },
+				Input4 = InstanceInput { SourceOp = "Texto", Source = "Size", Name = "Tamanho", },
+				Input5 = InstanceInput { SourceOp = "Texto", Source = "Center", Name = "Posicao", },
+				Input6 = InstanceInput { SourceOp = "Texto", Source = "Red1", Name = "Cor do texto", ControlGroup = 1, },
+				Input7 = InstanceInput { SourceOp = "Texto", Source = "Green1", ControlGroup = 1, },
+				Input8 = InstanceInput { SourceOp = "Texto", Source = "Blue1", ControlGroup = 1, },
+			},
+			Outputs = {
+				MainOutput1 = InstanceOutput { SourceOp = "Anim", Source = "Output", },
+			},
+			ViewInfo = GroupInfo { Pos = { 0, 0 } },
+			Tools = ordered() {
+		Texto = TextPlus {
+			CtrlWZoom = false,
+			Inputs = {
+				GlobalOut = Input { Value = 119, },
+				Width = Input { Value = 1080, },
+				Height = Input { Value = 1920, },
+				UseFrameFormatSettings = Input { Value = 1, },
+				StyledText = Input { Value = "SUA LEGENDA AQUI", },
+				Font = Input { Value = "Montserrat", },
+				Style = Input { Value = "Bold", },
+				Size = Input { Value = 0.075, },
+				VerticalJustificationNew = Input { Value = 3, },
+				HorizontalJustificationNew = Input { Value = 3, },
+				Center = Input { Value = { 0.5, 0.28 }, },
+				Red1 = Input { Value = 1, },
+				Green1 = Input { Value = 1, },
+				Blue1 = Input { Value = 1, },
+				Enabled2 = Input { Value = 1, },
+				ElementShape2 = Input { Value = 1, },
+				Thickness2 = Input { Value = 0.06, },
+				Red2 = Input { Value = 0, },
+				Green2 = Input { Value = 0, },
+				Blue2 = Input { Value = 0, },
+			},
+			ViewInfo = OperatorInfo { Pos = { 0, 0 } },
+		},
+		Anim = Transform {
+			CtrlWZoom = false,
+			Inputs = {
+				Size = Input { Value = 1, Expression = "((1-(1-min(time,7)/7)^3) + 0.12*sin(min(time,7)/7*3.14159)) * min(1, max(0, (comp.RenderEnd - time)/5))", },
+				Input = Input { SourceOp = "Texto", Source = "Output", },
+			},
+			ViewInfo = OperatorInfo { Pos = { 110, 0 } },
+		},
+			},
+		},
+	},
+	ActiveTool = "NJ_Legenda_Pop"
+}
