@@ -1,0 +1,243 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>NJFILMES LUTs FIMI</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  color-scheme:dark;
+  --bg:#0c0c0e; --bg-2:#121215; --card:#17171a;
+  --fg:#f5f4f0; --muted:#a8a7a2; --dim:#6f6e6a;
+  --accent:#c9a227; --hi:#f6c445; --accent-soft:rgba(201,162,39,.14);
+  --line:rgba(255,255,255,.09); --line-2:rgba(255,255,255,.18);
+  --ok:#3fbf6a; --ok-soft:rgba(63,191,106,.12); --bad:#ef6b5b; --bad-soft:rgba(239,107,91,.12); --warn:#e7a33a; --warn-soft:rgba(231,163,58,.1);
+  --display:"Poppins","Arial Narrow",system-ui,sans-serif;
+  --body:"Inter",-apple-system,"Segoe UI",system-ui,sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,Menlo,monospace;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--body);font-size:15.5px;line-height:1.6;padding:0 16px}
+.wrap{max-width:860px;margin:0 auto;padding-block:32px 96px}
+h1,h2,h3{font-family:var(--display);line-height:1.15;margin:0;text-wrap:balance}
+h1{font-size:clamp(30px,6.4vw,46px);font-weight:800;letter-spacing:-.01em}
+h2{font-size:clamp(21px,4.2vw,27px);font-weight:700}
+h3{font-size:16.5px;font-weight:700;margin-top:8px}
+p{margin:0}
+a{color:var(--hi)}
+strong{color:var(--fg)}
+.eyebrow{font:600 11.5px/1 var(--body);letter-spacing:.18em;text-transform:uppercase;color:var(--accent)}
+.mono{font-family:var(--mono);font-size:.9em;color:var(--hi)}
+code{font-family:var(--mono);font-size:.86em;background:var(--bg-2);border:1px solid var(--line);padding:1px 6px;border-radius:4px;word-break:break-word}
+
+.top{display:flex;flex-direction:column;gap:14px;padding-bottom:24px;border-bottom:1px solid var(--line)}
+.top .lead{font-size:17px;color:var(--muted);max-width:64ch}
+.meta{display:flex;flex-wrap:wrap;gap:6px 18px;font:500 12.5px/1.5 var(--mono);color:var(--dim)}
+
+.nav{position:sticky;top:env(safe-area-inset-top,0px);z-index:10;background:linear-gradient(var(--bg) 80%,rgba(12,12,14,0));padding-block:12px 16px;margin-top:6px}
+.nav .row{display:flex;flex-direction:row;flex-wrap:nowrap;gap:6px;overflow-x:auto;scrollbar-width:none}
+.nav .row::-webkit-scrollbar{display:none}
+.nav a{display:inline-flex;align-items:center;gap:6px;white-space:nowrap;text-decoration:none;color:var(--muted);font:600 12.5px/1 var(--body);border:1px solid var(--line-2);border-radius:99px;padding:8px 12px}
+.nav a span{font-family:var(--mono);color:var(--accent);font-size:11px}
+.nav a:hover,.nav a:focus-visible{color:var(--fg);border-color:var(--accent)}
+.nav a.part{border-color:var(--accent);color:var(--hi)}
+
+.part-head{margin-top:40px;padding:22px 0 4px;border-top:2px solid var(--accent);display:flex;flex-direction:column;gap:6px}
+.part-head h2{font-size:clamp(24px,5vw,32px)}
+section{padding-block:32px;border-bottom:1px solid var(--line);scroll-margin-top:64px;display:flex;flex-direction:column;gap:14px}
+.sec-head{display:flex;flex-direction:column;gap:8px}
+.lede{color:var(--muted);max-width:66ch}
+.plain{color:var(--muted);font-size:14.5px;max-width:68ch}
+.group{font:600 11.5px/1 var(--body);letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-top:8px}
+
+/* fluxo */
+.flow{display:grid;grid-template-columns:1fr auto 1fr auto 1fr;gap:10px;align-items:center}
+.node{border:1px solid var(--line-2);border-radius:8px;padding:12px 14px;background:var(--card)}
+.node b{display:block;font-family:var(--display);font-size:14px}
+.node small{color:var(--muted);font-size:12.5px}
+.node.goal{border-color:var(--ok);background:var(--ok-soft)}
+.arrow{color:var(--dim);font-size:18px}
+.paths{display:flex;flex-direction:column;gap:10px}
+@media (max-width:640px){.flow{grid-template-columns:1fr}.arrow{transform:rotate(90deg);justify-self:center}}
+
+.card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:18px 20px}
+.stack{border:1px solid var(--line);border-radius:10px;overflow:hidden;background:var(--card)}
+.stack .row{display:grid;grid-template-columns:130px 1fr;gap:16px;padding:14px 18px;border-top:1px solid var(--line)}
+.stack .row:first-child{border-top:0}
+.stack .k{font:600 11px/1.4 var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--dim);padding-top:3px}
+@media (max-width:540px){.stack .row{grid-template-columns:1fr;gap:4px}}
+.chip-label{font:600 11px/1 var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--dim);margin-top:14px}
+.chip-label:first-child{margin-top:0}
+.chips{display:flex;flex-wrap:wrap;gap:7px;margin-top:9px}
+.chip{font-size:13.5px;font-weight:600;padding:5px 11px;border-radius:99px;background:var(--accent-soft);color:var(--hi)}
+.chip.off{background:var(--bad-soft);color:var(--bad)}
+
+.alert{border-radius:10px;padding:15px 18px;border:1px solid transparent;display:flex;flex-direction:column;gap:6px}
+.alert .h{font-weight:700;font-size:15px}
+.alert p{font-size:14.5px;opacity:.94}
+.alert.ok{background:var(--ok-soft);border-color:rgba(63,191,106,.35)} .alert.ok .h{color:var(--ok)}
+.alert.warn{background:var(--warn-soft);border-color:rgba(231,163,58,.35)} .alert.warn .h{color:var(--warn)}
+.alert.info{background:var(--card);border-color:var(--line-2)} .alert.info .h{color:var(--hi)}
+.alert.new{background:var(--accent-soft);border-color:var(--accent)} .alert.new .h{color:var(--hi)}
+
+ol.steps{list-style:none;margin:0;padding:0;counter-reset:s;display:flex;flex-direction:column}
+ol.steps li{counter-increment:s;display:grid;grid-template-columns:30px 1fr;gap:12px;padding:12px 0;border-top:1px solid var(--line)}
+ol.steps li:first-child{border-top:0}
+ol.steps li::before{content:counter(s);font:600 12.5px/30px var(--mono);text-align:center;width:30px;height:30px;border-radius:50%;border:1px solid var(--line-2);color:var(--hi)}
+ol.steps .t{font-weight:600}
+ol.steps .d{color:var(--muted);font-size:14px;margin-top:2px}
+ol.steps .d ul{margin:6px 0 0;padding-left:18px}
+
+.tips,.dont{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:9px}
+.tips li,.dont li{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:12px 15px;font-size:14.5px}
+.tips li strong{color:var(--hi)}
+.dont li{position:relative;padding-left:40px}
+.dont li::before{content:"✕";position:absolute;left:15px;top:12px;color:var(--bad);font-weight:700;font-size:13px}
+.dont li strong{color:var(--bad)}
+
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.grid3{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
+@media (max-width:560px){.grid2{grid-template-columns:1fr}}
+.box{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:15px 17px;display:flex;flex-direction:column;gap:6px}
+.box .t{font-weight:700;font-size:14.5px;color:var(--hi)}
+.box p,.box ul{font-size:14px;color:var(--muted);margin:0}
+.box ul{padding-left:18px;display:flex;flex-direction:column;gap:4px}
+.box ul li b{color:var(--fg)}
+
+/* vídeos */
+.videos{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+@media (max-width:720px){.videos{grid-template-columns:1fr}}
+.vcard{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:17px;display:flex;flex-direction:column;gap:10px}
+.vcard header{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
+.vcard .num{font-family:var(--mono);color:var(--accent);font-size:12px}
+.tag{font:600 10.5px/1 var(--mono);letter-spacing:.04em;border-radius:99px;padding:5px 8px;white-space:nowrap}
+.tag.wa{background:var(--ok-soft);color:var(--ok)} .tag.site{background:var(--accent-soft);color:var(--hi)} .tag.both{background:rgba(255,255,255,.08);color:var(--fg)}
+.vcard .why{font-size:14px;color:var(--muted)}
+.tc{display:grid;grid-template-columns:auto 1fr;gap:5px 12px;font-size:14px;margin:0;padding:11px 12px;border:1px dashed var(--line-2);border-radius:8px;background:var(--bg-2)}
+.tc dt{font-family:var(--mono);font-size:11.5px;color:var(--hi);padding-top:2px;white-space:nowrap}
+.tc dd{margin:0}
+.vcard .tip{font-size:13px;color:var(--muted)}
+.vcard .tip b{color:var(--fg)}
+
+/* tabelas */
+.tbl{overflow-x:auto;border:1px solid var(--line);border-radius:10px}
+table{border-collapse:collapse;width:100%;font-size:14px;min-width:540px}
+th,td{text-align:left;padding:10px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font:600 11px/1.3 var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--dim);background:var(--bg-2)}
+tr:last-child td{border-bottom:0}
+td.num{font-family:var(--mono);font-size:13px;color:var(--hi);white-space:nowrap}
+tr.hl td{background:var(--accent-soft)}
+.good{color:var(--ok)} .warnc{color:var(--warn)}
+
+/* copiar */
+.copy{display:grid;grid-template-columns:1fr auto;gap:12px;align-items:start;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:13px 15px}
+.copy pre{margin:0;white-space:pre-wrap;font:inherit;font-size:14.5px}
+.copies{display:flex;flex-direction:column;gap:9px}
+.btn{font:600 12px/1 var(--mono);border:1px solid var(--line-2);background:var(--bg-2);color:var(--fg);border-radius:7px;padding:9px 11px;cursor:pointer;white-space:nowrap}
+.btn:hover{border-color:var(--accent)}
+.btn.ok{border-color:var(--ok);color:var(--ok)}
+
+/* dúvidas */
+details.faq{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:0 16px}
+details.faq summary{cursor:pointer;padding:13px 0;font-weight:700;color:var(--hi);font-size:14.5px;list-style:none;display:flex;justify-content:space-between;gap:12px}
+details.faq summary::after{content:"+";font-family:var(--mono);color:var(--dim)}
+details.faq[open] summary::after{content:"–"}
+details.faq .a{padding-bottom:14px;color:var(--muted);font-size:14px;display:flex;flex-direction:column;gap:6px}
+.faqs{display:flex;flex-direction:column;gap:8px}
+
+.callout{border-left:3px solid var(--accent);background:var(--card);border-radius:0 10px 10px 0;padding:13px 16px;font-size:14.5px;color:var(--muted)}
+.callout strong{color:var(--fg)}
+
+/* checklist */
+.progress{display:flex;align-items:center;gap:12px;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:12px 16px;font:600 13px/1 var(--mono);color:var(--muted)}
+.bar{flex:1;height:7px;border-radius:9px;background:var(--bg-2);overflow:hidden}
+.bar i{display:block;height:100%;width:0;background:var(--accent);transition:width .3s}
+.tasks{list-style:none;margin:0;padding:0;background:var(--card);border:1px solid var(--line);border-radius:10px}
+.tasks li{border-top:1px solid var(--line)}
+.tasks li:first-child{border-top:0}
+.tasks label{display:flex;gap:12px;align-items:flex-start;padding:12px 15px;cursor:pointer;font-size:14.5px}
+.tasks input{width:18px;height:18px;margin-top:3px;accent-color:var(--accent);flex:none}
+.tasks label.done span{color:var(--dim);text-decoration:line-through}
+
+.btn:focus-visible,.nav a:focus-visible,.tasks input:focus-visible,details.faq summary:focus-visible{outline:2px solid var(--hi);outline-offset:2px}
+footer{padding-top:28px;font:500 12.5px/1.6 var(--mono);color:var(--dim);display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}html{scroll-behavior:auto}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <span class="eyebrow">NJFILMES · LUTs pro DaVinci Resolve</span>
+    <h1>LUTs NJ · FIMI Mini 3</h1>
+    <p class="lead">3 LUTs feitas pro drone FIMI Mini 3 gravado no modo de cor Normal (o padrão, não Log). Funcionam no DaVinci grátis e no Studio, e também no Premiere, Final Cut e CapCut.</p>
+  </header>
+
+  <section>
+    <div class="sec-head"><span class="eyebrow">01 · O que tem no pacote</span><h2>Qual LUT usar</h2></div>
+    <div class="tbl"><table>
+      <thead><tr><th>Arquivo</th><th>Use quando</th><th>O que faz</th></tr></thead>
+      <tbody>
+        <tr class="hl"><td><strong>NJ_FIMI_Mini3_Normal_Correcao</strong></td><td>O dia a dia: a maioria das tomadas</td><td>Tira o azulado, abre as sombras, segura céu e sol estourando, deixa céu, mar e verde menos berrantes. Cor natural.</td></tr>
+        <tr><td><strong>NJ_FIMI_Mini3_Normal_Suave</strong></td><td>Imagem que já veio boa, luz nublada ou fim de tarde</td><td>A mesma correção com metade da força.</td></tr>
+        <tr><td><strong>NJ_FIMI_Mini3_Normal_Dourado_Salvador</strong></td><td>Pôr do sol, casamento, orla, Reels</td><td>A correção + tom quente de cinema: areia e pele douradas, sombras levemente frias.</td></tr>
+      </tbody>
+    </table></div>
+    <p class="plain">A imagem <code>NJ_LUTs_antes_depois.jpg</code> mostra o efeito de cada uma numa cena de praia gerada por computador, imitando o modo Normal do drone (frio, contrastado e saturado). No seu vídeo o resultado muda conforme a luz e a exposição.</p>
+  </section>
+
+  <section>
+    <div class="sec-head"><span class="eyebrow">02 · Instalar</span><h2>Colocar as LUTs no DaVinci</h2></div>
+    <ol class="steps">
+      <li><div><div class="t">Abra o DaVinci e um projeto qualquer</div></div></li>
+      <li><div><div class="t">Engrenagem no canto de baixo à direita (Project Settings) → Color Management</div></div></li>
+      <li><div><div class="t">Clique em "Open LUT Folder"</div><div class="d">Abre a pasta de LUTs. Crie dentro dela uma pasta chamada <code>NJFILMES</code> e copie os 3 arquivos <code>.cube</code> pra lá.</div></div></li>
+      <li><div><div class="t">Volte no DaVinci e clique em "Update Lists"</div><div class="d">Depois em Save. Se não aparecer, feche e abra o DaVinci.</div></div></li>
+    </ol>
+    <div class="callout"><strong>Caminho da pasta, se precisar:</strong> Windows: <code>C:\ProgramData\Blackmagic Design\DaVinci Resolve\Support\LUT</code> (a pasta ProgramData fica oculta: digite o caminho na barra do Explorador) · Mac: <code>/Library/Application Support/Blackmagic Design/DaVinci Resolve/LUT</code></div>
+  </section>
+
+  <section>
+    <div class="sec-head"><span class="eyebrow">03 · Usar</span><h2>Aplicar do jeito certo</h2>
+      <p class="lede">A LUT não substitui a exposição e o balanço de branco: ela funciona bem quando a imagem chega nela correta.</p></div>
+    <ol class="steps">
+      <li><div><div class="t">Página Color (a paleta de cores embaixo)</div></div></li>
+      <li><div><div class="t">Nó 1: exposição e balanço de branco</div><div class="d">Ajuste com as rodas Lift, Gamma, Gain e a temperatura, olhando o scope (Waveform): pretos perto de 0 e brancos abaixo de 1023, sem estourar.</div></div></li>
+      <li><div><div class="t">Nó 2: a LUT</div><div class="d"><code>Alt + S</code> cria um nó novo. Botão direito nele → LUTs → NJFILMES → escolha a LUT.</div></div></li>
+      <li><div><div class="t">Forte demais? Diminua a intensidade</div><div class="d">Selecione o nó 2 → aba Key (ícone de chave) → Key Output Gain: 0,5 = metade da força.</div></div></li>
+      <li><div><div class="t">Nó 3: ajustes finais</div><div class="d">Pele, céu, vinheta, o seu toque.</div></div></li>
+      <li><div><div class="t">Mesma cor em todos os clipes</div><div class="d">Ajuste um clipe, depois selecione os outros na linha do tempo, clique com o botão do meio do mouse no clipe pronto (ou botão direito → Apply Grade).</div></div></li>
+    </ol>
+    <div class="grid2">
+      <div class="box"><div class="t">Vários clipes de uma vez</div><p>Na página Color, selecione todos os clipes do drone na faixa de miniaturas (Ctrl + clique), clique com o botão direito numa delas → LUTs → NJFILMES. A LUT vai pra todos.</p></div>
+      <div class="box"><div class="t">Economize tempo</div><p>Depois de montar os 3 nós, clique com o botão direito na imagem → Grab Still. Em outro projeto, aplique o still da Gallery com o botão do meio.</p></div>
+    </div>
+  </section>
+
+  <section>
+    <div class="sec-head"><span class="eyebrow">04 · FIMI Mini 3</span><h2>Como gravar pra cor ficar boa</h2></div>
+    <ul class="tips">
+      <li><strong>Balanço de branco fixo</strong> (ex.: 5500–5600K no sol), nunca automático: no automático a cor muda no meio do voo.</li>
+      <li><strong>ISO no mínimo</strong> (100) de dia.</li>
+      <li><strong>Obturador no dobro do fps:</strong> 1/50 pra 25 fps, 1/60 pra 30 fps. De dia isso pede <strong>filtro ND</strong> (ND16 ou ND32 no sol de Salvador); sem ND, a imagem fica "picotada" no movimento.</li>
+      <li><strong>Proteja o céu:</strong> é melhor a imagem um pouco escura do que o céu estourado. O que estoura não volta na cor.</li>
+      <li><strong>Nitidez baixa</strong>, se o app tiver a opção: fica mais cinema e dá pra ajustar depois.</li>
+      <li><strong>Deixe no modo de cor Normal:</strong> essas LUTs foram feitas pra ele. Em Log (F-Log) elas deixam a imagem errada.</li>
+      <li><strong>Mesmo fps da câmera principal</strong> (25 ou 30), pra editar junto sem problema.</li>
+    </ul>
+  </section>
+
+  <section>
+    <div class="sec-head"><span class="eyebrow">05 · Importante</span><h2>O que saber</h2></div>
+    <div class="alert warn"><div class="h">Feitas pro modo Normal</div><p>Não use em imagem gravada em F-Log nem em outras câmeras em Log: vão ficar erradas. Numa câmera comum no perfil normal elas até funcionam, mas foram ajustadas pro jeito que o drone entrega a cor.</p></div>
+    <ul class="tips">
+      <li><strong>Não empilhe as 3 LUTs.</strong> Use uma por clipe, conforme a tabela. Pra deixar a Dourado mais leve, baixe o Key Output Gain.</li>
+      <li><strong>Ajustes finos:</strong> se quiser mais quente, mais contraste ou outro estilo, peça pro Claude uma versão nova. Mande um print de uma tomada do drone sem nada aplicado: com imagem real dá pra acertar bem melhor.</li>
+    </ul>
+  </section>
+
+  <footer><span>NJFILMES · Pacote de LUTs</span><span>28/09/2026</span></footer>
+</div>
+</body>
+</html>
