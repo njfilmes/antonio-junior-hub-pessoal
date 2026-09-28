@@ -204,8 +204,9 @@ textarea:focus,.fields input:focus{outline:2px solid var(--accent);outline-offse
 @media print{.nav,.actions,.monthbar button,.sorteio,#ideias,#historico .alert{display:none!important}body{background:#fff;color:#000}.wrap{padding:0}}
 @media (min-width:700px){.nav .row,.tabs{flex-wrap:wrap;overflow:visible}}
 
-.switch{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:4px}
+.switch{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:4px}
 .switch button{font:700 15px/1.2 var(--display);padding:14px 12px;border-radius:10px;border:1px solid var(--line-2);background:var(--card);color:var(--muted);cursor:pointer;display:flex;flex-direction:column;align-items:flex-start;gap:4px;text-align:left}
+@media (max-width:480px){.switch button{font-size:13.5px;padding:12px 9px}}
 .switch button small{font:500 12px/1.3 var(--body);color:var(--dim)}
 .switch button[aria-selected="true"]{border-color:var(--accent);background:var(--accent-soft);color:var(--hi)}
 .switch button:focus-visible{outline:2px solid var(--hi);outline-offset:2px}
@@ -218,12 +219,212 @@ textarea:focus,.fields input:focus{outline:2px solid var(--accent);outline-offse
   <header class="top">
     <span class="eyebrow">NJFILMES · Salvador, BA · plano e rotina · 28/09/2026</span>
     <h1>Plano e Rotina NJFILMES</h1>
-    <p class="lead">Tudo num arquivo só. <strong>Rotina do mês</strong>: o que fazer todo mês, com caixinhas, números e ideias de vídeo. <strong>Plano completo</strong>: como fazer cada coisa (anúncios, preços, vendas, Instagram, site e dúvidas).</p>
+    <p class="lead">Tudo num arquivo só. <strong>Rotina do mês</strong>: o que fazer todo mês, com caixinhas, números e ideias de vídeo. <strong>Plano completo</strong>: como fazer cada coisa (anúncios, preços, vendas, Instagram, site e dúvidas). <strong>Como usar</strong>: explica o arquivo, os números e o backup.</p>
     <div class="switch" role="tablist" aria-label="Escolha a parte">
+      <button type="button" role="tab" id="tabAjuda" aria-controls="viewAjuda" aria-selected="false">Como usar<small>Leia primeiro</small></button>
       <button type="button" role="tab" id="tabRotina" aria-controls="viewRotina" aria-selected="true">Rotina do mês<small>Use todo mês</small></button>
       <button type="button" role="tab" id="tabPlano" aria-controls="viewPlano" aria-selected="false">Plano completo<small>Consulte quando precisar</small></button>
     </div>
   </header>
+
+  <div id="viewAjuda" role="tabpanel" aria-labelledby="tabAjuda" hidden>
+  <nav class="nav" aria-label="Seções do guia">
+    <div class="row">
+      <a href="#ah1"><span>01</span>As abas</a>
+      <a href="#ah2"><span>02</span>Primeira vez</a>
+      <a href="#ah3"><span>03</span>O mês</a>
+      <a href="#ah4"><span>04</span>Partes da Rotina</a>
+      <a href="#ah5"><span>05</span>Números</a>
+      <a href="#ah6"><span>06</span>Resultados</a>
+      <a class="part" href="#ah7"><span>07</span>Backup</a>
+      <a href="#ah8"><span>08</span>Onde fica salvo</a>
+      <a href="#ah9"><span>09</span>Plano completo</a>
+      <a href="#ah10"><span>10</span>Dúvidas</a>
+    </div>
+  </nav>
+
+  <section id="ah1">
+    <div class="sec-head"><span class="eyebrow">01 · Visão geral</span><h2>Pra que serve cada aba</h2></div>
+    <div class="grid3">
+      <div class="box"><div class="t">Como usar</div><p>Este guia. Leia uma vez com calma e volte quando tiver dúvida sobre o arquivo.</p></div>
+      <div class="box"><div class="t">Rotina do mês</div><p>O que fazer <b>todo mês</b>: tarefas pra marcar, hábitos diários, números do mês e ideias de vídeo. É a aba do dia a dia.</p></div>
+      <div class="box"><div class="t">Plano completo</div><p><b>Como</b> fazer cada coisa: anúncios, preços, negociação, Instagram, site e dúvidas. Um manual pra consultar. O checklist dele é feito uma vez só.</p></div>
+    </div>
+    <div class="callout"><strong>Resumindo:</strong> a Rotina diz <strong>o que</strong> fazer e <strong>quando</strong>. O Plano explica <strong>como</strong>. Quando uma tarefa da Rotina citar "aba Plano completo", é lá que está o passo a passo.</div>
+  </section>
+
+  <section id="ah2">
+    <div class="sec-head"><span class="eyebrow">02 · Começando</span><h2>Primeira vez: faça isto</h2></div>
+    <ol class="steps">
+      <li><div><div class="t">Guarde o arquivo num lugar fixo</div><div class="d">Ex.: uma pasta "NJFILMES" em Documentos. Evite deixar em Downloads, onde fica misturado e às vezes é apagado.</div></div></li>
+      <li><div><div class="t">Abra sempre pelo Chrome, no computador</div><div class="d">Clique com o botão direito no arquivo → Abrir com → Google Chrome.</div></div></li>
+      <li><div><div class="t">Salve nos favoritos</div><div class="d">Com o arquivo aberto, aperte <code>Ctrl + D</code>. Da próxima vez, é só clicar no favorito.</div></div></li>
+      <li><div><div class="t">Leia a aba Plano completo por cima uma vez</div><div class="d">Não precisa decorar: é pra saber o que tem lá.</div></div></li>
+      <li><div><div class="t">Faça o checklist "Esta semana" do Plano</div><div class="d">Última seção do Plano. São as tarefas de configuração: publicar os anúncios, WhatsApp Business, pacotes etc.</div></div></li>
+      <li><div><div class="t">Vá pra Rotina do mês e escreva suas metas</div><div class="d">No quadro do "Foco do mês". A partir daí, siga a Rotina.</div></div></li>
+    </ol>
+  </section>
+
+  <section id="ah3">
+    <div class="sec-head"><span class="eyebrow">03 · O mês</span><h2>O que fazer em cada momento</h2></div>
+    <div class="tbl"><table>
+      <thead><tr><th>Quando</th><th>Onde (Rotina do mês)</th><th>O que fazer</th><th>Tempo</th></tr></thead>
+      <tbody>
+        <tr class="hl"><td><strong>Dias 1 a 3</strong></td><td>01 Foco do mês · 02 Dia 1</td><td>Ler o foco, escrever as metas, planejar Reels e agenda, conferir anúncios</td><td class="num">~2 h</td></tr>
+        <tr><td><strong>Todo dia</strong></td><td>03 Todo dia</td><td>Tocar no dia de cada hábito cumprido</td><td class="num">10 s</td></tr>
+        <tr><td><strong>Cada dia da semana</strong></td><td>04 Toda semana</td><td>Fazer e marcar as tarefas do dia (segunda, terça...)</td><td class="num">varia</td></tr>
+        <tr><td><strong>Domingo à noite</strong></td><td>04 Toda semana</td><td>30 minutos olhando os números da semana</td><td class="num">30 min</td></tr>
+        <tr><td><strong>Por volta do dia 15</strong></td><td>05 Dia 15</td><td>Revisão do meio do mês e vídeo novo nos anúncios</td><td class="num">~1 h</td></tr>
+        <tr class="hl"><td><strong>Últimos 3 dias</strong></td><td>06 Fechamento · 07 Números · 10 Histórico</td><td>Fechar o mês, preencher os números, ler os alertas e <strong>baixar o backup</strong></td><td class="num">~1 h</td></tr>
+        <tr><td><strong>Jan, abr, jul e out</strong></td><td>08 Trimestral e anual</td><td>Revisar preços, metas, equipamento e site</td><td class="num">~2 h</td></tr>
+        <tr><td><strong>Sem ideia de post</strong></td><td>09 Ideias de vídeo</td><td>Tocar em "Sortear 3 ideias"</td><td class="num">10 s</td></tr>
+      </tbody>
+    </table></div>
+  </section>
+
+  <section id="ah4">
+    <div class="sec-head"><span class="eyebrow">04 · Rotina do mês</span><h2>Cada parte, explicada</h2></div>
+    <div class="tbl"><table>
+      <thead><tr><th>Parte</th><th>Pra que serve</th><th>Como usar</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Setas ‹ ›</strong></td><td>Trocar de mês</td><td>Abre sempre no mês atual. Use as setas pra ver ou completar meses anteriores. Cada mês guarda suas marcações separadas.</td></tr>
+        <tr><td><strong>Barra "X de Y feitas"</strong></td><td>Seu progresso no mês</td><td>Conta as tarefas marcadas do mês (hábitos não entram).</td></tr>
+        <tr><td><strong>01 Foco do mês</strong></td><td>O que importa naquela época em Salvador</td><td>Muda sozinho a cada mês. Escreva suas metas no quadro: fica salvo.</td></tr>
+        <tr><td><strong>02 Dia 1</strong></td><td>Planejar o mês</td><td>Marque cada tarefa ao terminar. O texto cinza embaixo explica o que fazer.</td></tr>
+        <tr><td><strong>03 Todo dia</strong></td><td>Hábitos que mais trazem resultado</td><td>Toque no número do dia quando cumprir (fica dourado). Tocou errado? Toque de novo pra desmarcar. O dia de hoje tem contorno.</td></tr>
+        <tr><td><strong>04 Toda semana</strong></td><td>A lista da semana, dia a dia</td><td>Abre na semana atual. Use os botões "Semana 1, 2, 3..." pra trocar. Cada semana tem suas marcações.</td></tr>
+        <tr><td><strong>05 Dia 15</strong></td><td>Corrigir o rumo no meio do mês</td><td>Marque ao fazer.</td></tr>
+        <tr><td><strong>06 Fechamento</strong></td><td>Encerrar o mês direito</td><td>Inclui preencher os números e baixar o backup.</td></tr>
+        <tr><td><strong>07 Números</strong></td><td>Saber se o mês foi bom e por quê</td><td>Preencha no fechamento (seção 05 deste guia). Os resultados e alertas aparecem sozinhos.</td></tr>
+        <tr><td><strong>08 Trimestral e anual</strong></td><td>Tarefas que não são todo mês</td><td>Só aparecem em janeiro, abril, julho e outubro. Nos outros meses mostra quando é a próxima.</td></tr>
+        <tr><td><strong>09 Ideias de vídeo</strong></td><td>Nunca ficar sem o que postar</td><td>Escolha a categoria pelos botões. Marque a ideia depois de postar. "Sortear" nunca sorteia ideia já marcada; quando todas forem usadas, ele recomeça do zero.</td></tr>
+        <tr><td><strong>10 Histórico</strong></td><td>Comparar os meses</td><td>Mostra os números de cada mês preenchido. O mês aberto aparece destacado. Aqui ficam os botões de backup.</td></tr>
+      </tbody>
+    </table></div>
+  </section>
+
+  <section id="ah5">
+    <div class="sec-head"><span class="eyebrow">05 · Painel</span><h2>O que colocar em cada campo</h2>
+      <p class="lede">Anote durante o mês na planilha de leads; no fechamento é só somar e digitar. Campo sem informação: deixe em branco.</p></div>
+    <div class="tbl"><table>
+      <thead><tr><th>Campo</th><th>O que é</th><th>Onde achar</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Anúncio WhatsApp</strong></td><td>Conversas que vieram do anúncio</td><td>Gerenciador de Anúncios → coluna Resultados (período: este mês)</td></tr>
+        <tr><td><strong>Anúncio site</strong></td><td>Formulários enviados vindos do anúncio</td><td>Gerenciador → Resultados da Campanha 2, ou e-mails com origem "meta"</td></tr>
+        <tr><td><strong>Instagram orgânico</strong></td><td>Pedidos pelo direct, bio ou comentário (sem anúncio)</td><td>Sua planilha de leads</td></tr>
+        <tr><td><strong>Google</strong></td><td>Pedidos vindos do Google (mapa, pesquisa, anúncio Google)</td><td>Planilha de leads. Pergunte "como me conheceu?"</td></tr>
+        <tr><td><strong>Indicação e parceiros</strong></td><td>Clientes indicados por alguém</td><td>Planilha de leads</td></tr>
+        <tr><td><strong>Contratos fechados</strong></td><td>Contratos com sinal pago no mês (de qualquer origem)</td><td>Seu controle de contratos</td></tr>
+        <tr><td><strong>Contratos de anúncio</strong></td><td>Desses, quantos vieram de anúncio pago</td><td>Planilha de leads (coluna origem)</td></tr>
+        <tr><td><strong>Faturamento fechado</strong></td><td>Valor total dos contratos fechados no mês (não só o sinal)</td><td>Seu controle de contratos</td></tr>
+        <tr><td><strong>Faturamento de anúncio</strong></td><td>Valor dos contratos que vieram de anúncio</td><td>Planilha de leads</td></tr>
+        <tr><td><strong>Gasto com anúncios</strong></td><td>Quanto a Meta (e o Google) cobrou no mês</td><td>Gerenciador → coluna Valor usado (período: este mês)</td></tr>
+        <tr><td><strong>Reels postados</strong></td><td>Quantos Reels foram publicados no mês</td><td>Seu perfil</td></tr>
+        <tr><td><strong>Seguidores</strong></td><td>Número de seguidores no último dia do mês</td><td>Seu perfil</td></tr>
+        <tr><td><strong>Alcance de não seguidores</strong></td><td>% das pessoas alcançadas que não te seguem</td><td>Instagram → Painel profissional → Insights → Contas alcançadas (últimos 30 dias)</td></tr>
+        <tr><td><strong>Avaliações novas</strong></td><td>Avaliações que chegaram no Google no mês</td><td>Perfil da Empresa no Google → Avaliações</td></tr>
+        <tr><td><strong>Cliques do Google</strong></td><td>Quantas vezes clicaram no seu site pela pesquisa</td><td>search.google.com/search-console → Desempenho (último mês)</td></tr>
+      </tbody>
+    </table></div>
+  </section>
+
+  <section id="ah6">
+    <div class="sec-head"><span class="eyebrow">06 · Resultados</span><h2>O que significa cada resultado</h2></div>
+    <div class="tbl"><table>
+      <thead><tr><th>Resultado</th><th>Conta</th><th>O que diz</th><th>Bom</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Leads no mês</strong></td><td>Soma de todas as origens</td><td>Quantas oportunidades você teve</td><td class="good">Subindo mês a mês</td></tr>
+        <tr><td><strong>Taxa de fechamento</strong></td><td>Contratos ÷ leads</td><td>Quanto do que chega vira cliente. Mede atendimento e preço</td><td class="good">10–25%</td></tr>
+        <tr><td><strong>Ticket médio</strong></td><td>Faturamento ÷ contratos</td><td>Quanto vale cada cliente, em média</td><td class="good">Subindo (adicionais vendendo)</td></tr>
+        <tr><td><strong>Custo por lead</strong></td><td>Gasto ÷ leads de anúncio</td><td>Quanto custa cada pedido de orçamento</td><td class="good">R$ 3–15</td></tr>
+        <tr><td><strong>Custo por cliente</strong></td><td>Gasto ÷ contratos de anúncio</td><td>Quanto custa conquistar 1 cliente pelo anúncio</td><td class="good">Bem menor que o ticket</td></tr>
+        <tr class="hl"><td><strong>Retorno dos anúncios</strong></td><td>Faturamento de anúncio ÷ gasto</td><td>Quantos reais voltaram pra cada R$ 1 investido</td><td class="good">5× ou mais</td></tr>
+      </tbody>
+    </table></div>
+    <p class="group">Cores dos alertas</p>
+    <div class="grid3">
+      <div class="alert warn"><div class="h">Amarelo</div><p>Atenção: algo abaixo do esperado, com o que fazer.</p></div>
+      <div class="alert ok"><div class="h">Verde</div><p>Está bom: às vezes sugere crescer (subir preço ou verba).</p></div>
+      <div class="alert info"><div class="h">Cinza</div><p>Dica ou informação pra acompanhar.</p></div>
+    </div>
+    <p class="plain">Anote no quadro "O que funcionou e o que mudar" 1 ou 2 decisões pro mês seguinte. É o que faz o próximo mês ser melhor.</p>
+  </section>
+
+  <section id="ah7">
+    <div class="sec-head"><span class="eyebrow">07 · Backup</span><h2>O que é o backup e por que fazer</h2>
+      <p class="lede">Tudo que você marca e digita fica guardado <strong>dentro do Chrome</strong>, não no arquivo. O backup é uma cópia disso num arquivo separado, pra você não perder nada.</p></div>
+    <div class="grid2">
+      <div class="box"><div class="t">O que vai no backup</div><ul>
+        <li>Todas as marcações de todos os meses da Rotina</li>
+        <li>Hábitos, metas, números e anotações</li>
+        <li>Ideias de vídeo já usadas</li>
+        <li>Checklist do Plano completo</li>
+      </ul></div>
+      <div class="box"><div class="t">Quando você perderia tudo sem backup</div><ul>
+        <li>Limpar os dados de navegação do Chrome</li>
+        <li>Formatar ou trocar de computador</li>
+        <li>Usar outro navegador ou outro aparelho</li>
+        <li>Às vezes, mover o arquivo de pasta</li>
+      </ul></div>
+    </div>
+    <p class="group">Baixar (todo fim de mês)</p>
+    <ol class="steps">
+      <li><div><div class="t">Aba Rotina do mês → 10 Histórico (fim da página)</div></div></li>
+      <li><div><div class="t">Clique em "Baixar backup"</div><div class="d">Salva <code>njfilmes-rotina-backup-AAAA-MM.json</code> na pasta Downloads.</div></div></li>
+      <li><div><div class="t">Guarde num lugar seguro</div><div class="d">Google Drive, na pasta NJFILMES, ou mande pro seu próprio WhatsApp. O último backup já tem todos os meses: pode apagar os antigos.</div></div></li>
+    </ol>
+    <p class="group">Restaurar (se perder as marcações)</p>
+    <ol class="steps">
+      <li><div><div class="t">Aba Rotina do mês → 10 Histórico → "Restaurar backup"</div></div></li>
+      <li><div><div class="t">Escolha o arquivo .json mais recente</div><div class="d">Aparece "Backup restaurado" e a página recarrega com tudo de volta.</div></div></li>
+    </ol>
+    <div class="alert warn"><div class="h">Restaurar substitui o que está na tela</div><p>Se você marcou coisas depois do último backup, elas são trocadas pelo que está no arquivo. Use sempre o backup mais novo.</p></div>
+    <p class="plain">O arquivo .json não abre como página: ele só serve pra ser restaurado aqui. Não precisa abrir nem editar.</p>
+  </section>
+
+  <section id="ah8">
+    <div class="sec-head"><span class="eyebrow">08 · Onde fica salvo</span><h2>O que salva sozinho e o que não</h2></div>
+    <ul class="tips">
+      <li><strong>Salva sozinho, na hora:</strong> cada marcação, cada número e cada texto digitado. Não existe botão de salvar.</li>
+      <li><strong>Só neste navegador:</strong> o que marcar no computador não aparece no celular. Escolha um aparelho principal (de preferência o computador, no Chrome).</li>
+      <li><strong>Não marca nada por você:</strong> ele guarda o que você marcou e muda sozinho só o mês, a semana aberta e o dia destacado.</li>
+      <li><strong>Mês novo começa desmarcado.</strong> Os meses anteriores continuam guardados: use a seta ‹.</li>
+      <li><strong>No celular:</strong> se abrir o arquivo pelo app de arquivos ou pelo WhatsApp, ele pode abrir num visualizador que não salva. Use no computador ou peça pro Claude publicar como página com link.</li>
+      <li><strong>Sem internet funciona.</strong> Só a fonte das letras muda um pouco.</li>
+      <li><strong>Versão nova do arquivo:</strong> baixe o backup antes, troque o arquivo e, se as marcações não aparecerem, restaure.</li>
+    </ul>
+  </section>
+
+  <section id="ah9">
+    <div class="sec-head"><span class="eyebrow">09 · Plano completo</span><h2>Como usar o manual</h2></div>
+    <ul class="tips">
+      <li><strong>Barra de botões:</strong> leva direto pra cada seção. Os dourados marcam as partes (Anúncios, Vender, Crescer).</li>
+      <li><strong>"Seção 15", "seção 31":</strong> quando um texto citar uma seção, procure o número na barra.</li>
+      <li><strong>Botão "Copiar":</strong> copia textos de anúncio, mensagens de WhatsApp, bio e legendas. Depois é só colar. Troque o que está entre colchetes, como <code>[nome]</code>.</li>
+      <li><strong>Perguntas com +:</strong> clique pra abrir a resposta.</li>
+      <li><strong>Tabelas largas no celular:</strong> deslize a tabela pro lado com o dedo.</li>
+      <li><strong>Checklist (seção 32):</strong> tarefas de uma vez só, pra montar tudo. Não reinicia a cada mês (isso é a Rotina).</li>
+      <li><strong>Valores de pacotes e metas</strong> são referências: ajuste com seus números depois do 1º mês.</li>
+    </ul>
+  </section>
+
+  <section id="ah10">
+    <div class="sec-head"><span class="eyebrow">10 · Dúvidas</span><h2>Perguntas sobre o arquivo</h2></div>
+    <div class="faqs">
+      <details class="faq"><summary>Se eu apagar o arquivo, perco as marcações?</summary><div class="a"><p>As marcações ficam no Chrome, não no arquivo. Se baixar o arquivo de novo e abrir no mesmo Chrome, normalmente aparecem. Na dúvida, restaure o backup. O arquivo também fica guardado no seu GitHub, na pasta planos/.</p></div></details>
+      <details class="faq"><summary>Marquei errado. Como desfaço?</summary><div class="a"><p>Toque de novo na caixinha ou no dia: desmarca.</p></div></details>
+      <details class="faq"><summary>Esqueci de marcar um dia ou uma semana passada.</summary><div class="a"><p>Pode marcar a qualquer momento: nos hábitos, toque no dia; nas semanas, escolha a semana pelos botões; pra outro mês, use as setas ‹ ›.</p></div></details>
+      <details class="faq"><summary>Por que o mês novo abriu todo desmarcado?</summary><div class="a"><p>É assim mesmo: cada mês começa do zero. O mês passado está guardado, é só voltar com a seta ‹.</p></div></details>
+      <details class="faq"><summary>Não preenchi os números de um mês. Tem problema?</summary><div class="a"><p>Não. Volte com a seta e preencha quando puder. O histórico e a comparação com o mês anterior ficam mais úteis com todos os meses preenchidos.</p></div></details>
+      <details class="faq"><summary>Não tenho algum número (ex.: Search Console).</summary><div class="a"><p>Deixe em branco. Os resultados e alertas usam só o que foi preenchido.</p></div></details>
+      <details class="faq"><summary>O sorteio repete ideias?</summary><div class="a"><p>Nunca sorteia ideia já marcada como postada. Pode repetir entre um sorteio e outro enquanto você não marcar.</p></div></details>
+      <details class="faq"><summary>Posso usar no celular e no computador ao mesmo tempo?</summary><div class="a"><p>Não sincroniza. Pra passar de um pro outro: baixe o backup num e restaure no outro.</p></div></details>
+      <details class="faq"><summary>Posso mandar o arquivo pra alguém da equipe?</summary><div class="a"><p>Pode. A pessoa recebe a página limpa, sem as suas marcações (elas ficam no seu Chrome).</p></div></details>
+      <details class="faq"><summary>Como imprimo?</summary><div class="a"><p>Rotina do mês → 10 Histórico → "Imprimir o mês". Ou <code>Ctrl + P</code> em qualquer aba.</p></div></details>
+      <details class="faq"><summary>Quero mudar uma tarefa, meta ou valor do arquivo.</summary><div class="a"><p>Peça pro Claude: ele altera e manda a versão nova. Antes de trocar, baixe o backup.</p></div></details>
+    </div>
+  </section>
+  </div>
 
   <div id="viewRotina" role="tabpanel" aria-labelledby="tabRotina">
     <div class="view-head">
@@ -1552,28 +1753,24 @@ Sua empresa precisa de vídeo que vende? Me chama no WhatsApp (link na bio).</pr
 
   <footer>
     <span>NJFILMES · Salvador, BA · Vídeo, foto e drone</span>
-    <span>Plano e Rotina · 28/09/2026</span>
+    <span>Plano, Rotina e Guia · 28/09/2026</span>
   </footer>
 </div>
 <script>
 (function(){
-  var KEY='njfilmes-aba';
-  function show(which,scroll){
-    var r=which!=='plano';
-    document.getElementById('viewRotina').hidden=!r;
-    document.getElementById('viewPlano').hidden=r;
-    document.getElementById('tabRotina').setAttribute('aria-selected',r);
-    document.getElementById('tabPlano').setAttribute('aria-selected',!r);
-    try{localStorage.setItem(KEY,r?'rotina':'plano')}catch(e){}
+  var KEY='njfilmes-aba',V={ajuda:'viewAjuda',rotina:'viewRotina',plano:'viewPlano'},T={ajuda:'tabAjuda',rotina:'tabRotina',plano:'tabPlano'};
+  function show(w,scroll){
+    if(!V[w])w='rotina';
+    Object.keys(V).forEach(function(k){document.getElementById(V[k]).hidden=k!==w;document.getElementById(T[k]).setAttribute('aria-selected',k===w)});
+    try{localStorage.setItem(KEY,w)}catch(e){}
     if(scroll)window.scrollTo(0,document.querySelector('.switch').offsetTop-12);
   }
-  document.getElementById('tabRotina').addEventListener('click',function(){show('rotina',true)});
-  document.getElementById('tabPlano').addEventListener('click',function(){show('plano',true)});
-  var h=location.hash.slice(1),start='rotina';
-  if(h&&document.getElementById(h)&&document.getElementById('viewPlano').contains(document.getElementById(h)))start='plano';
-  else if(!h){try{start=localStorage.getItem(KEY)||'rotina'}catch(e){}}
-  show(start,false);
-  if(h&&document.getElementById(h))document.getElementById(h).scrollIntoView();
+  Object.keys(T).forEach(function(k){document.getElementById(T[k]).addEventListener('click',function(){show(k,true)})});
+  var h=location.hash.slice(1),el=h&&document.getElementById(h),start=null;
+  if(el)Object.keys(V).forEach(function(k){if(document.getElementById(V[k]).contains(el))start=k});
+  if(!start){try{start=localStorage.getItem(KEY)}catch(e){}}
+  show(start||'ajuda',false);
+  if(el)el.scrollIntoView();
 })();
 </script>
 <script>
@@ -1787,10 +1984,10 @@ document.addEventListener('click',function(e){var t=e.target.closest('button');i
  else if(t.hasAttribute('data-cat')){ideaCat=t.getAttribute('data-cat');renderIdeas()}
  else if(t.id==='prevM'||t.id==='nextM'){cur.m+=t.id==='nextM'?1:-1;if(cur.m<0){cur.m=11;cur.y--}if(cur.m>11){cur.m=0;cur.y++}week=0;all()}
  else if(t.id==='sortear')sortear();
- else if(t.id==='exp'){var a=document.createElement('a');a.href=URL.createObjectURL(new Blob([JSON.stringify(ST,null,1)],{type:'application/json'}));a.download='njfilmes-rotina-backup-'+mk()+'.json';document.body.appendChild(a);a.click();a.remove()}
+ else if(t.id==='exp'){var a=document.createElement('a');var o=JSON.parse(JSON.stringify(ST));try{o.plano=JSON.parse(localStorage.getItem('njfilmes-plano-final-v1')||'{}')}catch(e){}a.href=URL.createObjectURL(new Blob([JSON.stringify(o,null,1)],{type:'application/json'}));a.download='njfilmes-rotina-backup-'+mk()+'.json';document.body.appendChild(a);a.click();a.remove()}
  else if(t.id==='prt')window.print();
 });
-$('imp').addEventListener('change',function(){var f=this.files[0];if(!f)return;var r=new FileReader();r.onload=function(){try{var d=JSON.parse(r.result);if(!d||!d.months)throw 0;ST=d;ST.ideas=ST.ideas||{};save();all();renderIdeas();alert('Backup restaurado.')}catch(e){alert('Arquivo de backup inválido.')}};r.readAsText(f);this.value=''});
+$('imp').addEventListener('change',function(){var f=this.files[0];if(!f)return;var r=new FileReader();r.onload=function(){try{var d=JSON.parse(r.result);if(!d||!d.months)throw 0;if(d.plano){try{localStorage.setItem('njfilmes-plano-final-v1',JSON.stringify(d.plano))}catch(e){}delete d.plano}ST=d;ST.ideas=ST.ideas||{};save();alert('Backup restaurado.');location.reload()}catch(e){alert('Arquivo de backup inválido.')}};r.readAsText(f);this.value=''});
 if(now.getDate()<=7){var d=now.getDate();week=Math.min(Math.floor((d-1)/7),weeksIn()-1)}else week=Math.min(Math.floor((now.getDate()-1)/7),weeksIn()-1);
 all();renderIdeas();
 })();
